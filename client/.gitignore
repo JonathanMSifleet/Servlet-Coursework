@@ -1,0 +1,5 @@
+# files that should be removed go here:
+**/.DS_Store
+**/Folder.jpg
+**/thumbs.db
+node_modules
