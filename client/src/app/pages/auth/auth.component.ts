@@ -1,10 +1,8 @@
-import { UserData } from './user-data.model';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import bcrypt from 'bcryptjs';
-import * as EmailValidator from 'email-validator';
+import { AuthService } from './auth.service';
+import { UserData } from './user-data.model';
 
 @Component({
   selector: 'app-auth',
@@ -79,7 +77,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.validateUserInputs(postData);
 
     if (this.friendlyErrors.length === 0) {
-      postData.password = bcrypt.hashSync(postData.password, 12); // second parameter defines salt rounds
+      // postData.password = bcrypt.hashSync(postData.password, 12); // second parameter defines salt rounds
 
       this.isLoading = true;
       this.authService
@@ -203,9 +201,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
   }
 
-  private validateIsEmail(value: string): string {
-    if (!EmailValidator.validate(value)) {
-      return `Email must be valid`;
-    }
+  private validateIsEmail(_value: string): string {
+    // if (!EmailValidator.validate(value)) {
+    //   return `Email must be valid`;
+    // }
+    return 'Implement'
   }
 }

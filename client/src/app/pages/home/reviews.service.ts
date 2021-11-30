@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Review } from './home-review.model';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
+import { map } from 'rxjs/operators';
+import { Review } from './home-review.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReviewsService {
@@ -11,7 +11,10 @@ export class ReviewsService {
   fetchReviews(): Observable<Review> {
     return this.http
       .get<{ [key: string]: Review }>(
-        'https://lvsrmt8ev9.execute-api.eu-west-2.amazonaws.com/dev/getreviews'
+        'http://127.0.0.1:8080/ServletTemplate/getAllFilms'
+        // {
+        //   headers: { 'Access-Control-Allow-Origin': '*' }
+        // }
       )
       .pipe(
         map((responseData) => {
@@ -19,4 +22,16 @@ export class ReviewsService {
         })
       );
   }
+  //   return this.http
+  //     .get<{ [key: string]: Review }>(
+  //       'http://127.0.0.1:8080/ServletTemplate/getAllFilms', {
+  //         headers: {'Access-Control-Allow-Origin': '*'}
+  //       }
+  //     )
+  //     .pipe(
+  //       map((responseData) => {
+  //         return responseData.reviews;
+  //       })
+  //     );
+  // }
 }
