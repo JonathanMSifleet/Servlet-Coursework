@@ -4,11 +4,11 @@ import { from, map } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({ providedIn: 'root' })
-export class ReviewsService {
+export class FilmsService {
   // @ts-expect-error
   constructor(private http: HttpClient) {}
 
-  fetchReviews(): Observable<Response> {
+  fetchFilms(): Observable<Response> {
     return from(
       fetch('http://localhost:8080/ServletCoursework/getAllFilms', {
         method: 'GET',
@@ -26,7 +26,7 @@ export class ReviewsService {
   }
 
   //   return this.http
-  //     .get<{ [key: string]: Review }>(
+  //     .get<{ [key: string]: Film }>(
   //       'http://127.0.0.1:8080/ServletCoursework/getAllFilms', {
   //         headers: {'Access-Control-Allow-Origin': '*'}
   //       }

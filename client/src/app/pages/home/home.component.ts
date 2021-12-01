@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
+import { FilmsService } from './films.service';
 import { Review } from './home-review.model';
-import { ReviewsService } from './reviews.service';
 
 @Component({
   selector: 'app-home',
@@ -12,16 +12,16 @@ export class HomeComponent implements OnInit {
   loadedReviews: Review;
   isLoading = false;
 
-  constructor(private reviewsService: ReviewsService) {}
+  constructor(private filmsService: FilmsService) {}
 
   ngOnInit(): void {
-    this.fetchReviews();
+    this.fetchFilms();
   }
 
-  private fetchReviews(): void {
+  private fetchFilms(): void {
     this.isLoading = true;
-    this.reviewsService
-      .fetchReviews()
+    this.filmsService
+      .fetchFilms()
       .pipe(take(1))
       .subscribe((reviews) => {
         console.log(
