@@ -8,33 +8,16 @@ export class FilmsService {
   // @ts-expect-error
   constructor(private http: HttpClient) {}
 
-  fetchFilms(): Observable<Response> {
+  fetchFilms(): Observable<any> {
     return from(
-      fetch('http://localhost:8080/ServletCoursework/getAllFilms', {
+      fetch('http://127.0.0.1:8080/ServletCoursework/getAllFilms', {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        mode: 'no-cors' // the most important option
+        headers: { 'Access-Control-Allow-Origin': '*' }
       })
     ).pipe(
       map((responseData) => {
         return responseData;
-        // return responseData.reviews;
       })
     );
   }
-
-  //   return this.http
-  //     .get<{ [key: string]: Film }>(
-  //       'http://127.0.0.1:8080/ServletCoursework/getAllFilms', {
-  //         headers: {'Access-Control-Allow-Origin': '*'}
-  //       }
-  //     )
-  //     .pipe(
-  //       map((responseData) => {
-  //         return responseData.reviews;
-  //       })
-  //     );
-  // }
 }
