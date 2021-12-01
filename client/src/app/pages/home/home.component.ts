@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
-
 import { Review } from './home-review.model';
 import { ReviewsService } from './reviews.service';
 
@@ -25,7 +24,11 @@ export class HomeComponent implements OnInit {
       .fetchReviews()
       .pipe(take(1))
       .subscribe((reviews) => {
-        this.loadedReviews = reviews;
+        console.log(
+          '🚀 ~ file: home.component.ts ~ line 28 ~ HomeComponent ~ .subscribe ~ reviews',
+          reviews
+        );
+        // this.loadedReviews = reviews;
         this.isLoading = false;
       });
   }
