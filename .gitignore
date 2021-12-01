@@ -2,5 +2,6 @@
 **/.DS_Store
 **/Folder.jpg
 **/thumbs.db
+**/*.class
 node_modules
 client/.angular
