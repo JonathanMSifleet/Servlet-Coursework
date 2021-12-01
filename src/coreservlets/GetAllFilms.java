@@ -22,47 +22,25 @@ public class GetAllFilms extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.setHeader("Cache-Control", "no-cache");
-		response.setHeader("Pragma", "no-cache");
-		response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
+//		response.setHeader("Cache-Control", "no-cache");
+//		response.setHeader("Pragma", "no-cache");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 //		response.setContentType("text/plain");
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
-//		response.setContentType("text/xml");
-
 		FilmDAO filmDAO = new FilmDAO();
-
-		ArrayList<Film> allFilms = new ArrayList<>();
-		allFilms.addAll(filmDAO.loadAllFilms());
-
-		Gson gson = new Gson();
-		String jsonFilms = gson.toJson(allFilms);
-		System.out.println(jsonFilms);
-		
-		response.getWriter().write(jsonFilms);
-	}
-
-	// request.setAttribute("testJsonString", testJsonString);
-
-	// String format = request.getParameter("format");
-	// String outputPage = "";
-
-	// if ("xml".equals(format)) {
-	// response.setContentType("text/xml");
-	// String outputPage = "/WEB-INF/outputXML.jsp";
-	// // }
-	// RequestDispatcher dispatcher = request.getRequestDispatcher(outputPage);
-	// dispatcher.forward(request, response);
+		ArrayList<Film> allFilms = filmDAO.getAllFilms();
+		System.out.println(allFilms);
 	
-	@Override
-	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    response.setHeader("Access-Control-Allow-Origin", "*");
-	    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");   
-	    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-	    response.setStatus(HttpServletResponse.SC_OK);
+		Gson gson = new Gson();
+		PrintWriter out = response.getWriter();
+		String jsonFilms = gson.toJson(allFilms);
+
+		out.print(jsonFilms);
+		out.flush();
 	}
 
 }

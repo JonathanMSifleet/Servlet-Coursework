@@ -17,7 +17,7 @@ public class FilmDAO {
 	private String username = "root";
 	private String password = "Phantom2011!";
 
-	public ArrayList<Film> loadAllFilms() {
+	public ArrayList<Film> getAllFilms() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 
