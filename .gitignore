@@ -5,3 +5,4 @@
 **/*.class
 node_modules
 client/.angular
+*.class
