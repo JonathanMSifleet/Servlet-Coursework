@@ -1,32 +1,20 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 
 import com.mysql.jdbc.ResultSet;
-import com.mysql.jdbc.Statement;
 
+import Utils.SQLFactory;
 import models.Film;
 
 public class FilmDAO {
 
-	private Connection conn = null;
-	private String dbName = "";
-	private String url = "jdbc:mysql://localhost:3306/eecoursework?characterEncoding=utf8" + dbName;
-	private String username = "root";
-	private String password = "Phantom2011!";
+	private SQLFactory sqlFactory = new SQLFactory();
 
 	public ArrayList<Film> getAllFilms() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-			conn = DriverManager.getConnection(url, username, password);
-			Statement stmt = (Statement) conn.createStatement();
-			
 			String SQL = "SELECT * FROM eecoursework.films";
-			
-			ResultSet rs = (ResultSet) stmt.executeQuery(SQL);
+			ResultSet rs = sqlFactory.sqlResult(SQL, null);
 
 			ArrayList<Film> allFilms = new ArrayList<Film>();
 
@@ -43,11 +31,45 @@ public class FilmDAO {
 
 				allFilms.add(newFilm);
 			}
-			
 			return allFilms;
-			
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ArrayList<Film> getFilm(String title) {
+
+		try {
+			String SQL = "SELECT * FROM eecoursework.films WHERE title LIKE ?";
+			title = "%" + title + "%";
+
+			ResultSet rs = sqlFactory.sqlResult(SQL, title);
+			ArrayList<Film> allFilms = new ArrayList<Film>();
+
+			while (rs.next()) {
+				allFilms.add(resultToFilm(rs));
+			}
+			return allFilms;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private Film resultToFilm(ResultSet rs) {
+		Film newFilm = new Film();
+
+		try {
+			newFilm.setId((int) rs.getObject(1));
+			newFilm.setTitle((String) rs.getObject(2));
+			newFilm.setYear((int) rs.getObject(3));
+			newFilm.setDirector((String) rs.getObject(4));
+			newFilm.setStars((String) rs.getObject(5));
+			newFilm.setReview((String) rs.getObject(6));
+			return newFilm;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

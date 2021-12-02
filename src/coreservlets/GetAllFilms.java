@@ -17,7 +17,7 @@ import models.Film;
 
 @WebServlet("/getAllFilms")
 public class GetAllFilms extends HttpServlet {
-
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -33,8 +33,8 @@ public class GetAllFilms extends HttpServlet {
 
 		FilmDAO filmDAO = new FilmDAO();
 		ArrayList<Film> allFilms = filmDAO.getAllFilms();
-		System.out.println(allFilms);
-	
+//		ArrayList<Film> film = filmDAO.getFilm("alien");
+
 		Gson gson = new Gson();
 		PrintWriter out = response.getWriter();
 		String jsonFilms = gson.toJson(allFilms);
