@@ -27,17 +27,22 @@ public class SQLFactory {
 	public ResultSet sqlResult(String SQL, ArrayList<Object> paramVals) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
-			
-			System.out.println()
-			
-			for(int i = 0; i < paramVals.size(); i++) {
-				if(paramVals.get(i) != null) {
-					statement.setString(i, (String) paramVals.get(i));
+
+			System.out.println("paramvals");
+			System.out.println(paramVals);
+
+			int paramIndex = 1;
+
+			for (Object param : paramVals) {
+				if (paramVals != null) {
+					statement.setString(paramIndex, (String) param);
 				} else {
-					statement.setString(i, null);
+					statement.setString(paramIndex, null);
 				}
+				paramIndex++;
 			}
 			return (ResultSet) statement.executeQuery();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
