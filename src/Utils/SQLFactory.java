@@ -28,11 +28,13 @@ public class SQLFactory {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			
+			System.out.println()
+			
 			for(int i = 0; i < paramVals.size(); i++) {
 				if(paramVals.get(i) != null) {
-					statement.setString(i++, (String) paramVals.get(i));
+					statement.setString(i, (String) paramVals.get(i));
 				} else {
-					statement.setString(i++, null);
+					statement.setString(i, null);
 				}
 			}
 			return (ResultSet) statement.executeQuery();

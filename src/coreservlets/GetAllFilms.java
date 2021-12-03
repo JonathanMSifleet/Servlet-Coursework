@@ -32,12 +32,12 @@ public class GetAllFilms extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		FilmDAO filmDAO = new FilmDAO();
-		ArrayList<Film> allFilms = filmDAO.getAllFilms();
-//		ArrayList<Film> film = filmDAO.getFilm("alien");
+//		ArrayList<Film> films = filmDAO.getAllFilms();
+		ArrayList<Film> films = filmDAO.getFilm("alien");
 
 		Gson gson = new Gson();
 		PrintWriter out = response.getWriter();
-		String jsonFilms = gson.toJson(allFilms);
+		String jsonFilms = gson.toJson(films);
 
 		out.print(jsonFilms);
 		out.flush();
