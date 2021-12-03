@@ -15,8 +15,8 @@ import com.google.gson.Gson;
 import dao.FilmDAO;
 import models.Film;
 
-@WebServlet("/getAllFilms")
-public class GetAllFilms extends HttpServlet {
+@WebServlet("/getFilmByTitle")
+public class GetFilmByTitle extends HttpServlet {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -33,7 +33,7 @@ public class GetAllFilms extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		FilmDAO filmDAO = new FilmDAO();
-		ArrayList<Film> films = filmDAO.getAllFilms();
+		ArrayList<Film> films = filmDAO.getFilm("alien");
 
 		Gson gson = new Gson();
 		PrintWriter out = response.getWriter();

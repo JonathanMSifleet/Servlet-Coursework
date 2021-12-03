@@ -15,8 +15,8 @@ import com.google.gson.Gson;
 import dao.FilmDAO;
 import models.Film;
 
-@WebServlet("/getAllFilms")
-public class GetAllFilms extends HttpServlet {
+@WebServlet("/insertFilm")
+public class InsertFilm extends HttpServlet {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -33,11 +33,13 @@ public class GetAllFilms extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		FilmDAO filmDAO = new FilmDAO();
-		ArrayList<Film> films = filmDAO.getAllFilms();
+
+		Film dummyFilm = filmDAO.generateDummyFilm();
+		int result = filmDAO.insertFilm(dummyFilm);
 
 		Gson gson = new Gson();
 		PrintWriter out = response.getWriter();
-		String jsonFilms = gson.toJson(films);
+		String jsonFilms = gson.toJson(result);
 
 		out.print(jsonFilms);
 		out.flush();
