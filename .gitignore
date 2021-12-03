@@ -6,4 +6,3 @@
 node_modules
 client/.angular
 *.class
-build
