@@ -32,8 +32,10 @@ public class GetFilmByTitle extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
+		String title = request.getParameter("title");
+
 		FilmDAO filmDAO = new FilmDAO();
-		ArrayList<Film> films = filmDAO.getFilm("alien");
+		ArrayList<Film> films = filmDAO.getFilm(title);
 
 		Gson gson = new Gson();
 		PrintWriter out = response.getWriter();
