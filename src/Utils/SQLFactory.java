@@ -28,11 +28,10 @@ public class SQLFactory {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 
-			System.out.println("paramvals");
-			System.out.println(paramVals);
+			// for loop returns index out of bounds error:
+			// Index: 1, Size: 1
 
 			int paramIndex = 1;
-
 			for (Object param : paramVals) {
 				if (paramVals != null) {
 					statement.setString(paramIndex, (String) param);
@@ -41,6 +40,7 @@ public class SQLFactory {
 				}
 				paramIndex++;
 			}
+
 			return (ResultSet) statement.executeQuery();
 
 		} catch (Exception e) {

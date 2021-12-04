@@ -3,6 +3,7 @@ package coreservlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,7 +36,7 @@ public class GetFilmByTitle extends HttpServlet {
 		String title = request.getParameter("title");
 
 		FilmDAO filmDAO = new FilmDAO();
-		ArrayList<Film> films = filmDAO.getFilm(title);
+		HashMap<Integer, Film> films = filmDAO.getFilm(title);
 
 		Gson gson = new Gson();
 		PrintWriter out = response.getWriter();

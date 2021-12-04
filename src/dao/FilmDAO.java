@@ -1,8 +1,11 @@
 package dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.mysql.jdbc.ResultSet;
+
+import java.util.HashMap;
 
 import Utils.SQLFactory;
 import models.Film;
@@ -11,27 +14,27 @@ public class FilmDAO {
 
 	private SQLFactory sqlFactory = new SQLFactory();
 
-	public ArrayList<Film> getAllFilms() {
+	public HashMap<Integer, Film> getAllFilms() {
 		try {
 			String SQL = "SELECT * FROM eecoursework.films";
 
 			ResultSet rs = sqlFactory.sqlResult(SQL, null);
-			return filmQueryToResults(rs);
+			return resultsToHashMap(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public ArrayList<Film> getFilm(String title) {
+	public HashMap<Integer, Film> getFilm(String title) {
 		String SQL = "SELECT * FROM eecoursework.films WHERE title LIKE ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<Object>();
 			paramVals.add("%" + title + "%");
 
-			ResultSet rs = sqlFactory.sqlResult(SQL, paramVals);
-			return filmQueryToResults(rs);
+			ResultSet results = sqlFactory.sqlResult(SQL, paramVals);
+			return resultsToHashMap(results);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -58,22 +61,26 @@ public class FilmDAO {
 		return 0;
 	}
 
-	private ArrayList<Film> filmQueryToResults(ResultSet rs) {
-		ArrayList<Film> films = new ArrayList<Film>();
+	private HashMap<Integer, Film> resultsToHashMap(ResultSet results) {
+
+		HashMap<Integer, Film> filmHashMap = new HashMap<Integer, Film>();
 
 		try {
-			while (rs.next()) {
-				films.add(resultToFilm(rs));
+			while (results.next()) {
+				Film film = resultToFilm(results);
+				filmHashMap.put(film.getId(), film);
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 
-		return films;
+		return filmHashMap;
 	}
 
 	private Film resultToFilm(ResultSet rs) {
 		Film newFilm = new Film();
 
+		// must be wrapped in try catch
 		try {
 			newFilm.setId((int) rs.getObject(1));
 			newFilm.setTitle((String) rs.getObject(2));
@@ -95,7 +102,7 @@ public class FilmDAO {
 		dummyFilm.setYear(2017);
 		dummyFilm.setDirector("Dennis Villenvue");
 		dummyFilm.setStars("RYAN GOSLING, HARRISON FORD, ANA DE ARMAS");
-		dummyFilm.setReview("10/10, easy");
+		dummyFilm.setReview("GOAT");
 		return dummyFilm;
 	}
 

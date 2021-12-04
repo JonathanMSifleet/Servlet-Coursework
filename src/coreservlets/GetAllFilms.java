@@ -3,6 +3,7 @@ package coreservlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,7 +34,7 @@ public class GetAllFilms extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		FilmDAO filmDAO = new FilmDAO();
-		ArrayList<Film> films = filmDAO.getAllFilms();
+		HashMap<Integer, Film> films = filmDAO.getAllFilms();
 
 		Gson gson = new Gson();
 		PrintWriter out = response.getWriter();
