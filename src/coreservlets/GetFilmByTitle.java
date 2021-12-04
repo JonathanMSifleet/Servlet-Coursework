@@ -31,19 +31,7 @@ public class GetFilmByTitle extends HttpServlet {
 		FilmDAO filmDAO = new FilmDAO();
 		ArrayList<Film> films = filmDAO.getFilm(title);
 
-		String format = request.getParameter("format");
-
-		switch (format) {
-		case "json":
-			ResponseFormatting.handleJSON(response, films);
-			break;
-		case "xml":
-			ResponseFormatting.handleXML(response, films);
-			break;
-		default:
-			ResponseFormatting.handleJSON(response, films);
-			break;
-		}
+		ResponseFormatting.handleFormat(request, response, films);
 	}
 
 }

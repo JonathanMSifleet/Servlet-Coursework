@@ -1,7 +1,6 @@
 package coreservlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -10,10 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-
 import dao.FilmDAO;
 import models.Film;
+import sharedUtils.ResponseFormatting;
 
 @WebServlet("/getAllFilms")
 public class GetAllFilms extends HttpServlet {
@@ -32,12 +30,7 @@ public class GetAllFilms extends HttpServlet {
 		FilmDAO filmDAO = new FilmDAO();
 		ArrayList<Film> films = filmDAO.getAllFilms();
 
-		Gson gson = new Gson();
-		PrintWriter out = response.getWriter();
-		String jsonFilms = gson.toJson(films);
-
-		out.print(jsonFilms);
-		out.flush();
+		ResponseFormatting.handleFormat(request, response, films);
 	}
 
 }

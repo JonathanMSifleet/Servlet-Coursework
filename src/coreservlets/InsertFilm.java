@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 
 import dao.FilmDAO;
 import models.Film;
+import sharedUtils.ResponseFormatting;
 
 @WebServlet("/insertFilm")
 public class InsertFilm extends HttpServlet {
@@ -34,12 +35,7 @@ public class InsertFilm extends HttpServlet {
 		Film dummyFilm = filmDAO.generateDummyFilm();
 		int result = filmDAO.insertFilm(dummyFilm);
 
-		Gson gson = new Gson();
-		PrintWriter out = response.getWriter();
-		String jsonFilms = gson.toJson(result);
-
-		out.print(jsonFilms);
-		out.flush();
+		ResponseFormatting.handleFormat(request, response, result);
 	}
 
 }
