@@ -18,7 +18,7 @@ public class FilmDAO {
 		try {
 			String SQL = "SELECT * FROM eecoursework.films";
 
-			ResultSet rs = sqlFactory.sqlResult(SQL, null);
+			ResultSet rs = sqlFactory.sqlSelect(SQL, null);
 			return resultsToHashMap(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,7 +33,7 @@ public class FilmDAO {
 			ArrayList<Object> paramVals = new ArrayList<Object>();
 			paramVals.add("%" + title + "%");
 
-			ResultSet results = sqlFactory.sqlResult(SQL, paramVals);
+			ResultSet results = sqlFactory.sqlSelect(SQL, paramVals);
 			return resultsToHashMap(results);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,7 +42,7 @@ public class FilmDAO {
 	}
 
 	public int insertFilm(Film film) {
-		String SQL = "INSERT INTO FROM eecoursework.films VALUES (?, ?, ?, ?, ?, ?)";
+		String SQL = "INSERT INTO eecoursework.films VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -53,16 +53,14 @@ public class FilmDAO {
 			paramVals.add(film.getStars());
 			paramVals.add(film.getReview());
 
-			sqlFactory.sqlResult(SQL, paramVals);
-			return 1;
+			return sqlFactory.sqlInsert(SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return 0;
 		}
-		return 0;
 	}
 
 	private HashMap<Integer, Film> resultsToHashMap(ResultSet results) {
-
 		HashMap<Integer, Film> filmHashMap = new HashMap<Integer, Film>();
 
 		try {
@@ -70,11 +68,11 @@ public class FilmDAO {
 				Film film = resultToFilm(results);
 				filmHashMap.put(film.getId(), film);
 			}
+			return filmHashMap;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
-
-		return filmHashMap;
 	}
 
 	private Film resultToFilm(ResultSet rs) {
@@ -91,8 +89,8 @@ public class FilmDAO {
 			return newFilm;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	public Film generateDummyFilm() {
@@ -103,6 +101,7 @@ public class FilmDAO {
 		dummyFilm.setDirector("Dennis Villenvue");
 		dummyFilm.setStars("RYAN GOSLING, HARRISON FORD, ANA DE ARMAS");
 		dummyFilm.setReview("GOAT");
+
 		return dummyFilm;
 	}
 
