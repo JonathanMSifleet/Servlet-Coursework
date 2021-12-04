@@ -1,11 +1,8 @@
 package dao;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.mysql.jdbc.ResultSet;
-
-import java.util.HashMap;
 
 import Utils.SQLFactory;
 import models.Film;
@@ -14,19 +11,19 @@ public class FilmDAO {
 
 	private SQLFactory sqlFactory = new SQLFactory();
 
-	public HashMap<Integer, Film> getAllFilms() {
+	public ArrayList<Film> getAllFilms() {
 		try {
 			String SQL = "SELECT * FROM eecoursework.films";
 
 			ResultSet rs = sqlFactory.sqlSelect(SQL, null);
-			return resultsToHashMap(rs);
+			return resultsToList(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public HashMap<Integer, Film> getFilm(String title) {
+	public ArrayList<Film> getFilm(String title) {
 		String SQL = "SELECT * FROM eecoursework.films WHERE title LIKE ?";
 
 		try {
@@ -34,7 +31,7 @@ public class FilmDAO {
 			paramVals.add("%" + title + "%");
 
 			ResultSet results = sqlFactory.sqlSelect(SQL, paramVals);
-			return resultsToHashMap(results);
+			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -60,15 +57,15 @@ public class FilmDAO {
 		}
 	}
 
-	private HashMap<Integer, Film> resultsToHashMap(ResultSet results) {
-		HashMap<Integer, Film> filmHashMap = new HashMap<Integer, Film>();
+	private ArrayList<Film> resultsToList(ResultSet results) {
+		ArrayList<Film> films = new ArrayList<Film>();
 
 		try {
 			while (results.next()) {
 				Film film = resultToFilm(results);
-				filmHashMap.put(film.getId(), film);
+				films.add(film);
 			}
-			return filmHashMap;
+			return films;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

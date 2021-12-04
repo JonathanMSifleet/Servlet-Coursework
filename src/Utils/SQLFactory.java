@@ -11,8 +11,7 @@ import com.mysql.jdbc.ResultSet;
 public class SQLFactory {
 
 	private Connection conn;
-	private static String dbName = "";
-	private static String url = "jdbc:mysql://localhost:3306/eecoursework?characterEncoding=utf8" + dbName;
+	private static String url = "jdbc:mysql://localhost:3306/eecoursework?characterEncoding=utf8";
 	private static String username = "root";
 	private static String password = "Phantom2011!";
 
@@ -68,7 +67,7 @@ public class SQLFactory {
 				paramIndex++;
 			}
 		}
-		
+
 		return statement;
 	}
 
