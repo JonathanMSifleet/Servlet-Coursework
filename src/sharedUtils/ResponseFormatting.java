@@ -2,14 +2,13 @@ package sharedUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXB;
 
 import com.google.gson.Gson;
-
-import models.Film;
 
 public interface ResponseFormatting {
 
@@ -46,8 +45,12 @@ public interface ResponseFormatting {
 	static void handleXML(HttpServletResponse response, Object data) throws IOException {
 		response.setContentType("text/xml");
 
+		StringWriter writer = new StringWriter();
+		JAXB.marshal(data, writer);
+		String xmlString = writer.toString();
+
 		PrintWriter out = response.getWriter();
-		out.print(data);
+		out.print(xmlString);
 		out.flush();
 	}
 
