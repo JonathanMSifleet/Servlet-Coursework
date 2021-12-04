@@ -1,8 +1,7 @@
 package coreservlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,10 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-
 import dao.FilmDAO;
 import models.Film;
+import sharedUtils.ResponseFormatting;
 
 @WebServlet("/getFilmByTitle")
 public class GetFilmByTitle extends HttpServlet {
@@ -23,26 +21,29 @@ public class GetFilmByTitle extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-//		response.setHeader("Cache-Control", "no-cache");
-//		response.setHeader("Pragma", "no-cache");
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-//		response.setContentType("text/plain");
-		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
 		String title = request.getParameter("title");
 
 		FilmDAO filmDAO = new FilmDAO();
-		HashMap<Integer, Film> films = filmDAO.getFilm(title);
+		ArrayList<Film> films = filmDAO.getFilm(title);
 
-		Gson gson = new Gson();
-		PrintWriter out = response.getWriter();
-		String jsonFilms = gson.toJson(films);
+		String format = request.getParameter("format");
 
-		out.print(jsonFilms);
-		out.flush();
+		switch (format) {
+		case "json":
+			ResponseFormatting.handleJSON(response, films);
+			break;
+		case "xml":
+			ResponseFormatting.handleXML(response, films);
+			break;
+		default:
+			ResponseFormatting.handleJSON(response, films);
+			break;
+		}
 	}
 
 }

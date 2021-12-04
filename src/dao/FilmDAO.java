@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Utils.SQLFactory;
 import models.Film;
+import sharedUtils.SQLFactory;
 
 public class FilmDAO {
 
