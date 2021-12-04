@@ -20,13 +20,13 @@ public class InsertFilm extends HttpServlet {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 //		response.setHeader("Cache-Control", "no-cache");
 //		response.setHeader("Pragma", "no-cache");
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
+		response.setHeader("Access-Control-Allow-Methods", "POST");
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 //		response.setContentType("text/plain");
 		response.setContentType("application/json");

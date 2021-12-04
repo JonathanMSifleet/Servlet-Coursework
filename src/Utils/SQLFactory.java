@@ -32,13 +32,16 @@ public class SQLFactory {
 			// Index: 1, Size: 1
 
 			int paramIndex = 1;
-			for (Object param : paramVals) {
-				if (paramVals != null) {
-					statement.setString(paramIndex, (String) param);
-				} else {
-					statement.setString(paramIndex, null);
+
+			if (paramVals != null) {
+				for (Object param : paramVals) {
+					if (paramVals != null) {
+						statement.setString(paramIndex, (String) param);
+					} else {
+						statement.setString(paramIndex, null);
+					}
+					paramIndex++;
 				}
-				paramIndex++;
 			}
 
 			return (ResultSet) statement.executeQuery();
