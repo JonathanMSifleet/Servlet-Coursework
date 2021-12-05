@@ -3,5 +3,4 @@ Read me:
 
 ---
 To do:
-- Update servlets to receive params
-- Link insert film to front-end
+- Delete request
