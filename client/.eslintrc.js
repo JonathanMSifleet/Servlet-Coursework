@@ -9,6 +9,7 @@ module.exports = {
     'eslint-config-prettier'
   ],
   parserOptions: {
+    project: './jsconfig.json',
     ecmaFeatures: {
       jsx: true,
       experimentalDecorators: true
@@ -18,13 +19,13 @@ module.exports = {
   },
   plugins: ['react', 'prettier'],
   rules: {
-    indent: ['error', 2],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'linebreak-style': ['error', 'windows'],
     'react/jsx-closing-bracket-location': [2, 'tag-aligned'],
     'react/jsx-first-prop-new-line': [2, 'multiline'],
     'react/jsx-indent-props': [2, 2],
-    'react/jsx-max-props-per-line': [2, { maximum: 1, when: 'multiline' }]
+    'react/jsx-max-props-per-line': [2, { maximum: 1, when: 'multiline' }],
+    'react/prop-types': 0
   }
 };
