@@ -2,7 +2,6 @@ package coreservlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,11 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-
 import dao.FilmDAO;
 import models.Film;
-import sharedUtils.ResponseFormatting;
 
 @WebServlet("/insertFilm")
 public class InsertFilm extends HttpServlet {
@@ -27,15 +23,17 @@ public class InsertFilm extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
 		FilmDAO filmDAO = new FilmDAO();
 
 		Film dummyFilm = filmDAO.generateDummyFilm();
+
 		int result = filmDAO.insertFilm(dummyFilm);
 
-		ResponseFormatting.handleFormat(request, response, result);
+		PrintWriter out = response.getWriter();
+		out.print(result);
+		out.flush();
 	}
 
 }
