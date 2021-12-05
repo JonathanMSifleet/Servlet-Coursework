@@ -2,12 +2,12 @@ package models;
 
 public class Film {
 
-	int id;
-	String title;
-	int year;
-	String director;
-	String stars;
-	String review;
+	private int id;
+	private String title;
+	private int year;
+	private String director;
+	private String stars;
+	private String review;
 
 	public int getId() {
 		return id;
@@ -55,6 +55,14 @@ public class Film {
 
 	public void setReview(String review) {
 		this.review = review;
+	}
+
+	public String getObjectValues(Film film) {
+
+		// Java equivalent of JS Obj.values
+		// attributes potentially containing commas are wrapped in quotes
+		return String.format("%s,%s,%s,%s,\"%s\",\"%s\"", film.getId(), film.getTitle(), film.getYear(),
+				film.getDirector(), film.getStars(), film.getReview());
 	}
 
 }
