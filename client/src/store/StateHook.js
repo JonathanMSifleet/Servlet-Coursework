@@ -1,17 +1,10 @@
 import { useState } from 'react';
 import * as actionTypes from './actionTypes';
 
-interface IPayload {
-  test: unknown;
-}
+const StateHook = ()=> {
+  const [test, setTest] = useState(null);
 
-const StateHook = (): {
-  globalState: IPayload;
-  actions: any;
-} => {
-  const [test, setTest] = useState(null as unknown as boolean | null);
-
-  const actions = (action: { type: string; payload?: IPayload }) => {
+  const actions = (action) => {
     const { type, payload } = action;
 
     switch (type) {
