@@ -10,14 +10,15 @@ module.exports = {
   ],
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
+      experimentalDecorators: true
     },
     ecmaVersion: 2020,
     sourceType: 'module'
   },
   plugins: ['react', 'prettier'],
   rules: {
-    indent: ['error', 4],
+    indent: ['error', 2],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'linebreak-style': ['error', 'windows'],
