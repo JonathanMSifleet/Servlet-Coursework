@@ -2,6 +2,7 @@ package sharedUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,51 +11,68 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 
-public interface ResponseFormatting {
+import models.Film;
 
-	static void handleFormat(HttpServletRequest request, HttpServletResponse response, Object result) {
+public class ResponseFormatting {
+
+	public static void handleFormat(HttpServletRequest request, HttpServletResponse response, ArrayList<Film> result) {
 		String format = request.getParameter("format");
 		if (format == null)
 			format = "json";
 
+		Object payload = null;
+
 		try {
+
 			switch (format) {
 			case "json":
-				handleJSON(response, result);
+				response.setContentType("application/json");
+				payload = handleJSON(result);
 				break;
 			case "xml":
-				handleXML(response, result);
+				response.setContentType("text/xml");
+				payload = handleXML(result);
+				break;
+			case "csv":
+				response.setContentType("text/csv");
+				payload = handleCSV(result);
 				break;
 			}
+
+			sendResponse(response, payload);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	static void handleJSON(HttpServletResponse response, Object data) throws IOException {
-		response.setContentType("application/json");
-
+	private static String handleJSON(ArrayList<Film> data) throws IOException {
 		Gson gson = new Gson();
-		String jsonFilms = gson.toJson(data);
-
-		PrintWriter out = response.getWriter();
-		out.print(jsonFilms);
-		out.flush();
+		return gson.toJson(data);
 	}
 
-	static void handleXML(HttpServletResponse response, Object data) throws IOException {
-		response.setContentType("text/xml");
-
+	private static String handleXML(ArrayList<Film> data) throws IOException {
 		XStream xstream = new XStream();
 		xstream.alias("root", List.class);
 		xstream.alias("film", models.Film.class);
 
 		String xmlString = xstream.toXML(data);
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\">" + "\n" + xmlString;
+	}
 
-		xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\">" + "\n" + xmlString;
+	private static String handleCSV(ArrayList<Film> data) throws IOException {
+		String csvString = "";
+		for (Film film : (ArrayList<Film>) data) {
+			csvString += film.getObjectValues(film);
+			csvString += "\n";
+		}
 
+		return csvString;
+	}
+
+	private static void sendResponse(HttpServletResponse response, Object payload) throws IOException {
 		PrintWriter out = response.getWriter();
-		out.print(xmlString);
+		out.print(payload);
 		out.flush();
 	}
 
