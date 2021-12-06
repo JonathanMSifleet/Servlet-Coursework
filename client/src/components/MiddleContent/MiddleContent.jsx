@@ -37,7 +37,25 @@ const MiddleContent = ({ films, format }) => {
     // to do: xml to json
   };
 
-  const convertXMLtoJSON = (xml) => {};
+  const convertXMLtoJSON = (xml) => {
+    const json = {};
+    let children = xml.children;
+    let childrenLength = children.length;
+
+    for (let i = 0; i < childrenLength; i++) {
+      let child = children[i];
+      let childName = child.nodeName;
+      let childValue = child.textContent;
+
+      if (child.children.length > 0) {
+        childValue = convertXMLtoJSON(child);
+      }
+
+      json[childName] = childValue;
+    }
+
+    return json;
+  };
 
   const printFilms = (preparedFilms) => {
     return (
