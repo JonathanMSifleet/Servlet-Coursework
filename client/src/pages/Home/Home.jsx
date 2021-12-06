@@ -9,8 +9,8 @@ import {
   MDBRow
 } from 'mdb-react-ui-kit';
 import { getAllFilmsEndpoint, getFilmByTitleEndpoint } from '../../endpoints';
-import RightContent from 'src/components/RightContent/RightContent';
-import MiddleContent from 'src/components/MiddleContent/MiddleContent';
+import RightContent from '../../components/RightContent/RightContent';
+import MiddleContent from '../../components/MiddleContent/MiddleContent';
 
 const Home = () => {
   const [shouldGetFilm, setShouldGetFilm] = useState(false);
@@ -20,10 +20,6 @@ const Home = () => {
   const [format, setFormat] = useState('json');
 
   const [formData, setFormData] = useState({});
-
-  useEffect(() => {
-    console.log(format);
-  }, [format]);
 
   useEffect(() => {
     async function getFilms() {
@@ -38,10 +34,8 @@ const Home = () => {
 
   const generateEndpoint = () => {
     let localEndpoint = endpoint;
-
-    if (formData.filmTitle) {
+    if (formData.filmTitle)
       localEndpoint = localEndpoint.concat(`title=${formData.filmTitle}`);
-    }
 
     return localEndpoint.concat(`?format=${format}`);
   };
@@ -101,8 +95,11 @@ const Home = () => {
             />
           </MDBBtnGroup>
         </MDBCol>
-        <MiddleContent films={films ? films : null} />
-        <RightContent />
+
+        <div className={classes.ContentWrapper}>
+          <MiddleContent films={films ? films : null} />
+          <RightContent films={films ? films : null} />
+        </div>
       </MDBRow>
     </MDBContainer>
   );

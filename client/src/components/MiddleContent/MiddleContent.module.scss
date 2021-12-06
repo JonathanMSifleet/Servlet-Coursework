@@ -1,5 +1,37 @@
+@import '../../styles/variables';
+
 .MiddleContent {
   float: left;
   width: 50%;
-  padding: 0 !important;
+  height: 100%;
+  border: 1px solid #ccc;
+  padding: 1% !important;
+}
+
+.Header {
+  color: $mdbootstrapBlue;
+}
+
+.List {
+  padding: 0;
+  list-style-type: none;
+}
+
+.Card {
+  height: 20vh;
+  max-height: 20vh;
+  margin-bottom: 2%;
+}
+
+.CardBody {
+  height: 100%;
+  padding: 0;
+  margin: 2%;
+}
+
+.ReviewText {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 }

@@ -1,31 +1,30 @@
 import React from 'react';
 import classes from './MiddleContent.module.scss';
-import {
-  MDBCol,
-  MDBCard,
-  MDBCardBody,
-  MDBCardText,
-  MDBCardTitle
-} from 'mdb-react-ui-kit';
+import { MDBCol, MDBCard, MDBCardBody, MDBCardTitle } from 'mdb-react-ui-kit';
 
 const MiddleContent = ({ films }) => {
   return (
-    <MDBCol className={classes.RightContent}>
-      <ul>
+    <MDBCol className={classes.MiddleContent}>
+      <h1 className={classes.Header}>Formatted</h1>
+      <ul className={classes.List}>
         {films
           ? films.map((film) => {
               return (
                 <li key={film.id}>
-                  <MDBCard>
-                    <MDBCardBody>
+                  <MDBCard className={classes.Card}>
+                    <MDBCardBody className={classes.CardBody}>
                       <MDBCardTitle>
                         {film.title} ({film.year})
                       </MDBCardTitle>
-                      <MDBCardText>
-                        {film.director} {' \n '}
-                        {film.stars} {' \n '}
-                        {film.review}
-                      </MDBCardText>
+                      <p>
+                        <b>Director:</b> {film.director}
+                      </p>
+                      <p>
+                        <b>Starring:</b> {film.stars}
+                      </p>
+                      <p className={classes.ReviewText}>
+                        <b>Review:</b> {film.review}
+                      </p>
                     </MDBCardBody>
                   </MDBCard>
                 </li>

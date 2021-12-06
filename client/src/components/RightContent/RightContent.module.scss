@@ -1,5 +1,12 @@
+@import '../../styles/variables';
+
 .RightContent {
   float: left;
   width: 50%;
-  padding: 0 !important;
+  padding: 1% !important;
+  border: 1px solid #ccc;
+}
+
+.Header {
+  color: $mdbootstrapBlue;
 }
