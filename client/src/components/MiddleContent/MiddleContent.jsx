@@ -2,13 +2,48 @@ import React from 'react';
 import classes from './MiddleContent.module.scss';
 import { MDBCol, MDBCard, MDBCardBody, MDBCardTitle } from 'mdb-react-ui-kit';
 
-const MiddleContent = ({ films }) => {
-  return (
-    <MDBCol className={classes.MiddleContent}>
-      <h1 className={classes.Header}>Formatted</h1>
-      <ul className={classes.List}>
-        {films
-          ? films.map((film) => {
+const MiddleContent = ({ films, format }) => {
+  const handleFormat = () => {
+    let preparedFilms;
+
+    switch (format) {
+      case 'json':
+        preparedFilms = films;
+        break;
+      case 'xml':
+        preparedFilms = handleXML(films);
+        break;
+      case 'csv':
+        break;
+      default:
+        return null;
+    }
+
+    return printFilms(preparedFilms);
+  };
+
+  const handleXML = (films) => {
+    const deserialisedFilms = new DOMParser().parseFromString(
+      films,
+      'application/xml'
+    );
+    console.log(
+      '🚀 ~ file: MiddleContent.jsx ~ line 29 ~ handleXML ~ deserialisedFilms',
+      deserialisedFilms
+    );
+
+    console.log(convertXMLtoJSON(deserialisedFilms));
+
+    // to do: xml to json
+  };
+
+  const convertXMLtoJSON = (xml) => {};
+
+  const printFilms = (preparedFilms) => {
+    return (
+      <>
+        {preparedFilms
+          ? preparedFilms.map((film) => {
               return (
                 <li key={film.id}>
                   <MDBCard className={classes.Card}>
@@ -31,7 +66,14 @@ const MiddleContent = ({ films }) => {
               );
             })
           : null}
-      </ul>
+      </>
+    );
+  };
+
+  return (
+    <MDBCol className={classes.MiddleContent}>
+      <h1 className={classes.Header}>Formatted</h1>
+      <ul className={classes.List}>{handleFormat()}</ul>
     </MDBCol>
   );
 };

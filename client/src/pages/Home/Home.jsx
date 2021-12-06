@@ -19,55 +19,65 @@ const Home = () => {
   const [endpoint, setEndpoint] = useState('');
   const [format, setFormat] = useState('json');
 
+  // eslint-disable-next-line no-unused-vars
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
     async function getFilms() {
-      let response = await fetch(generateEndpoint(), {
-        method: 'GET'
-      });
-      response = await response.json();
-      setFilms(response);
+      const url = generateEndpoint();
+      console.log('🚀 ~ file: Home.jsx ~ line 27 ~ getFilms ~ url', url);
+
+      switch (format) {
+        case 'json':
+          setFilms(await getJSONFilms(url));
+          break;
+        case 'xml':
+          setFilms(await getXMLFilms(url));
+          break;
+        // case 'csv':
+        //   films = getCSVFilms(url);
+        //   break;
+        default:
+          setFilms(await getJSONFilms(url));
+      }
     }
+
     getFilms();
   }, [shouldGetFilm]);
 
-  const generateEndpoint = () => {
-    let localEndpoint = endpoint;
-    if (formData.filmTitle)
-      localEndpoint = localEndpoint.concat(`title=${formData.filmTitle}`);
+  const getJSONFilms = async (url) => {
+    const response = await fetch(url, {
+      method: 'GET'
+    });
 
-    return localEndpoint.concat(`?format=${format}`);
+    return await response.json();
+  };
+
+  // return content from xml request
+  const getXMLFilms = async (url) => {
+    let response = await fetch(url, {
+      method: 'GET'
+    });
+    response = await response.text();
+
+    const xml = new DOMParser().parseFromString(response, 'application/xml');
+    return new XMLSerializer().serializeToString(xml.documentElement);
+  };
+
+  const generateEndpoint = () => {
+    let localEndpoint = endpoint.concat(`?format=${format}`);
+
+    if (formData.filmTitle)
+      localEndpoint = localEndpoint.concat(`&title=${formData.filmTitle}`);
+
+    return localEndpoint;
   };
 
   return (
     <MDBContainer className={classes.PageWrapper}>
       <MDBRow className={classes.PageContent}>
         <MDBCol size="md-3" className={classes.LeftContent}>
-          <MDBBtn onClick={() => setShouldGetFilm(true)}>Get</MDBBtn>
-          <MDBBtnGroup className={classes.OperationRadioGroup}>
-            <MDBRadio
-              name="operationGroup"
-              id="inlineRadio1"
-              label="Get all films"
-              inline
-              onClick={() => setEndpoint(getAllFilmsEndpoint)}
-            />
-            <MDBRadio
-              name="operationGroup"
-              id="inlineRadio2"
-              label="Get film by title"
-              inline
-              onClick={() => setEndpoint(getFilmByTitleEndpoint)}
-            />
-            <MDBRadio
-              name="operationGroup"
-              id="inlineRadio3"
-              label="Add new film"
-              inline
-            />
-          </MDBBtnGroup>
-          <p> Format: </p>
+          <p>Format: </p>
           <MDBBtnGroup className={classes.FormatRadioGroup}>
             <MDBRadio
               name="formatGroup"
@@ -94,11 +104,36 @@ const Home = () => {
               onClick={() => setFormat('csv')}
             />
           </MDBBtnGroup>
+
+          <MDBBtnGroup className={classes.OperationRadioGroup}>
+            <MDBRadio
+              name="operationGroup"
+              id="inlineRadio1"
+              label="Get all films"
+              inline
+              onClick={() => setEndpoint(getAllFilmsEndpoint)}
+            />
+            <MDBRadio
+              name="operationGroup"
+              id="inlineRadio2"
+              label="Get film by title"
+              inline
+              onClick={() => setEndpoint(getFilmByTitleEndpoint)}
+            />
+            <MDBRadio
+              name="operationGroup"
+              id="inlineRadio3"
+              label="Add new film"
+              inline
+            />
+          </MDBBtnGroup>
+
+          <MDBBtn onClick={() => setShouldGetFilm(true)}>Get</MDBBtn>
         </MDBCol>
 
         <div className={classes.ContentWrapper}>
-          <MiddleContent films={films ? films : null} />
-          <RightContent films={films ? films : null} />
+          <MiddleContent films={films} format={format} />
+          <RightContent films={films} format={format} />
         </div>
       </MDBRow>
     </MDBContainer>

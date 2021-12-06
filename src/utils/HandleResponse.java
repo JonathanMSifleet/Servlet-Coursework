@@ -57,7 +57,7 @@ public class HandleResponse {
 		xstream.alias("film", models.Film.class);
 
 		String xmlString = xstream.toXML(data);
-		return "<?xml version=\"1.0\" encoding=\"UTF-8\">" + "\n" + xmlString;
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + "\n" + xmlString;
 	}
 
 	private static String handleCSV(ArrayList<Film> data) throws IOException {

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAO;
 import models.Film;
-import sharedUtils.ResponseFormatting;
+import utils.HandleResponse;
 
 @WebServlet("/getAllFilms")
 public class GetAllFilms extends HttpServlet {
@@ -29,7 +29,7 @@ public class GetAllFilms extends HttpServlet {
 		FilmDAO filmDAO = new FilmDAO();
 		ArrayList<Film> films = filmDAO.getAllFilms();
 
-		ResponseFormatting.handleFormat(request, response, films);
+		HandleResponse.handleFormat(request, response, films);
 	}
 
 }
