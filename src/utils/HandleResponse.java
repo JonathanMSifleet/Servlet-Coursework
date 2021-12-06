@@ -1,4 +1,4 @@
-package sharedUtils;
+package utils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.XStream;
 
 import models.Film;
 
-public class ResponseFormatting {
+public class HandleResponse {
 
 	public static void handleFormat(HttpServletRequest request, HttpServletResponse response, ArrayList<Film> result) {
 		String format = request.getParameter("format");
