@@ -5,22 +5,43 @@ import {
   MDBBtn,
   MDBBtnGroup,
   MDBCol,
+  MDBInput,
   MDBRadio,
   MDBRow
 } from 'mdb-react-ui-kit';
 import { getAllFilmsEndpoint, getFilmByTitleEndpoint } from '../../endpoints';
 import RightContent from '../../components/RightContent/RightContent';
 import MiddleContent from '../../components/MiddleContent/MiddleContent';
+import { insertFilmEndpoint } from './../../endpoints';
 
 const Home = () => {
   const [shouldGetFilm, setShouldGetFilm] = useState(false);
-  const [films, setFilms] = useState();
+  const [shouldPostFilm, setShouldPostFilm] = useState(false);
 
   const [endpoint, setEndpoint] = useState('');
+  const [films, setFilms] = useState();
   const [format, setFormat] = useState('json');
 
-  // eslint-disable-next-line no-unused-vars
   const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    async function postFilm() {
+      console.log(formData);
+
+      let response = await fetch(insertFilmEndpoint, {
+        method: 'POST',
+        body: JSON.stringify(formData)
+      });
+
+      response = await response.json();
+      console.log(
+        '🚀 ~ file: Home.jsx ~ line 38 ~ postFilm ~ response',
+        response
+      );
+    }
+
+    if (shouldPostFilm) postFilm();
+  }, [shouldPostFilm]);
 
   useEffect(() => {
     async function getFilms() {
@@ -42,7 +63,7 @@ const Home = () => {
       }
     }
 
-    getFilms();
+    if (shouldGetFilm) getFilms();
   }, [shouldGetFilm]);
 
   const getJSONFilms = async (url) => {
@@ -71,6 +92,10 @@ const Home = () => {
       localEndpoint = localEndpoint.concat(`&title=${formData.filmTitle}`);
 
     return localEndpoint;
+  };
+
+  const inputChangedHandler = (event, inputName) => {
+    setFormData({ ...formData, [inputName]: event.target.value });
   };
 
   return (
@@ -129,6 +154,47 @@ const Home = () => {
           </MDBBtnGroup>
 
           <MDBBtn onClick={() => setShouldGetFilm(true)}>Get</MDBBtn>
+
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+            }}
+          >
+            <MDBInput
+              label="Title"
+              id="form1"
+              type="text"
+              onChange={(event) => inputChangedHandler(event, 'title')}
+            />
+            <MDBInput
+              label="Year"
+              id="form1"
+              type="text"
+              onChange={(event) => inputChangedHandler(event, 'year')}
+            />
+            <MDBInput
+              label="Director"
+              id="form1"
+              type="text"
+              onChange={(event) => inputChangedHandler(event, 'director')}
+            />
+            <MDBInput
+              label="Stars"
+              id="form1"
+              type="text"
+              onChange={(event) => inputChangedHandler(event, 'stars')}
+            />
+            <MDBInput
+              label="Review"
+              id="form1"
+              type="text"
+              onChange={(event) => inputChangedHandler(event, 'review')}
+            />
+
+            <MDBBtn onClick={() => setShouldPostFilm(true)}>
+              Create new film
+            </MDBBtn>
+          </form>
         </MDBCol>
 
         <div className={classes.ContentWrapper}>
