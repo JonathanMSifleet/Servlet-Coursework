@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.FilmDAO;
+import dao.FilmDAOSingleton;
 import models.Film;
 import utils.HandleResponse;
 
@@ -26,7 +26,7 @@ public class GetAllFilms extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		response.setCharacterEncoding("UTF-8");
 
-		FilmDAO filmDAO = new FilmDAO();
+		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 		ArrayList<Film> films = filmDAO.getAllFilms();
 
 		HandleResponse.handleFormat(request, response, films);

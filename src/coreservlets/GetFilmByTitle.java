@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.FilmDAO;
+import dao.FilmDAOSingleton;
 import models.Film;
 import utils.HandleResponse;
 
@@ -28,7 +28,7 @@ public class GetFilmByTitle extends HttpServlet {
 
 		String title = request.getParameter("title");
 
-		FilmDAO filmDAO = new FilmDAO();
+		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		ArrayList<Film> films = filmDAO.getFilm(title);
 
 		HandleResponse.handleFormat(request, response, films);

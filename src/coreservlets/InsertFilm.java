@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import dao.FilmDAO;
+import dao.FilmDAOSingleton;
 import models.Film;
 import utils.SQLOperations;
 
@@ -29,7 +29,7 @@ public class InsertFilm extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		response.setCharacterEncoding("UTF-8");
 
-		FilmDAO filmDAO = new FilmDAO();
+		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 
 		String requestBody = request.getReader().lines().collect(Collectors.joining());
 

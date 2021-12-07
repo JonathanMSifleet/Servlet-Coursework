@@ -6,7 +6,14 @@ import java.util.ArrayList;
 import models.Film;
 import utils.SQLOperations;
 
-public class FilmDAO {
+public class FilmDAOSingleton {
+	
+	private static FilmDAOSingleton filmDAO;
+	
+	public static synchronized FilmDAOSingleton getFilmDAO() {
+		if(filmDAO == null) filmDAO = new FilmDAOSingleton();
+		return filmDAO;
+	}
 
 	public ArrayList<Film> getAllFilms() {
 		try {
