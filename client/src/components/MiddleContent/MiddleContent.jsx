@@ -29,44 +29,27 @@ const MiddleContent = ({ films, format }) => {
     );
 
     try {
-      convertXMLtoJSON(deserialisedFilms);
+      return convertXMLtoJSON(deserialisedFilms);
     } catch (e) {}
-
-    // to do: xml to json
   };
 
   const convertXMLtoJSON = (xml) => {
-    const json = {};
+    const json = [];
 
     const localXML = xml.getElementsByTagName('root')[0].children;
 
     for (let i = 0; i < localXML.length; i++) {
       const child = localXML[i];
+
+      const id = child.getElementsByTagName('id')[0].textContent;
+      const title = child.getElementsByTagName('title')[0].textContent;
+      const year = child.getElementsByTagName('year')[0].textContent;
+      const director = child.getElementsByTagName('director')[0].textContent;
+      const stars = child.getElementsByTagName('stars')[0].textContent;
+      const review = child.getElementsByTagName('review')[0].textContent;
+
+      json.push({ id, title, year, director, stars, review });
     }
-    // let children = xml.children;
-
-    // for (let i = 0; i < children.length; i++) {
-    //   let child = children[i];
-    //   let childName = child.nodeName;
-    //   console.log(
-    //     '🚀 ~ file: MiddleContent.jsx ~ line 47 ~ convertXMLtoJSON ~ childName',
-    //     childName
-    //   );
-    //   let childValue = child.textContent;
-    //   console.log(
-    //     '🚀 ~ file: MiddleContent.jsx ~ line 52 ~ convertXMLtoJSON ~ childValue',
-    //     childValue
-    //   );
-
-    //   break;
-
-    //   if (child.children.length > 0) {
-    //     childValue = convertXMLtoJSON(child);
-    //   }
-
-    //   json[childName] = childValue;
-    // }
-
     return json;
   };
 
