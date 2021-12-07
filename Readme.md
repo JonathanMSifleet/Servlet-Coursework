@@ -3,6 +3,10 @@ Read me:
  - This may be caused by having VS Code and Eclipse open at the same time, but I am unable to confirm this.
 ---
 To do:
+- GetFilmByID JSON
+- Improve front-end
+- CSV all
+- XML all
 - Delete request
+- Update request
 - Fetching by CSV and XML
-
