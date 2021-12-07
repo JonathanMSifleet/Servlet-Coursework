@@ -13,37 +13,27 @@ import { getAllFilmsEndpoint, getFilmByTitleEndpoint } from '../../endpoints';
 import RightContent from '../../components/RightContent/RightContent';
 import MiddleContent from '../../components/MiddleContent/MiddleContent';
 import { insertFilmEndpoint } from './../../endpoints';
+import createHTTPRequest from './../../utils/createHTTPRequest';
 
 const Home = () => {
+  const [endpoint, setEndpoint] = useState('');
+  const [films, setFilms] = useState();
+  const [formData, setFormData] = useState({});
+  const [format, setFormat] = useState('json');
   const [shouldGetFilm, setShouldGetFilm] = useState(false);
   const [shouldPostFilm, setShouldPostFilm] = useState(false);
 
-  const [endpoint, setEndpoint] = useState('');
-  const [films, setFilms] = useState();
-  const [format, setFormat] = useState('json');
-
-  const [formData, setFormData] = useState({});
-
-  useEffect(() => {}, []);
-
   useEffect(() => {
     async function postFilm() {
-      await fetch(insertFilmEndpoint, {
-        method: 'POST',
-        body: JSON.stringify(formData)
-      });
+      await createHTTPRequest(insertFilmEndpoint, 'POST', formData);
     }
 
-    if (shouldPostFilm) {
-      postFilm();
-      cleanup();
-    }
+    if (shouldPostFilm) postFilm();
   }, [shouldPostFilm]);
 
   useEffect(() => {
     async function getFilms() {
       const url = generateEndpoint();
-      console.log('🚀 ~ file: Home.jsx ~ line 27 ~ getFilms ~ url', url);
 
       switch (format) {
         case 'json':
@@ -60,28 +50,11 @@ const Home = () => {
       }
     }
 
-    if (shouldGetFilm) {
-      getFilms();
-      cleanup();
-    }
+    if (shouldGetFilm) getFilms();
   }, [shouldGetFilm]);
 
-  const cleanup = () => {
-    setShouldGetFilm(false);
-    setShouldPostFilm(false);
-
-    setEndpoint(null);
-    setFormat('json');
-
-    setFormData({});
-  };
-
   const getJSONFilms = async (url) => {
-    const response = await fetch(url, {
-      method: 'GET'
-    });
-
-    return await response.json();
+    return await createHTTPRequest(url, 'GET', null);
   };
 
   // return content from xml request
@@ -166,6 +139,7 @@ const Home = () => {
 
           {endpoint === getFilmByTitleEndpoint ? (
             <MDBInput
+              className={classes.Input}
               label="Title"
               id="titleForm"
               type="text"
@@ -190,32 +164,32 @@ const Home = () => {
                 }}
               >
                 <MDBInput
+                  className={classes.Input}
                   label="Title"
-                  id="form1"
                   type="text"
                   onChange={(event) => inputChangedHandler(event, 'title')}
                 />
                 <MDBInput
+                  className={classes.Input}
                   label="Year"
-                  id="form1"
                   type="text"
                   onChange={(event) => inputChangedHandler(event, 'year')}
                 />
                 <MDBInput
+                  className={classes.Input}
                   label="Director"
-                  id="form1"
                   type="text"
                   onChange={(event) => inputChangedHandler(event, 'director')}
                 />
                 <MDBInput
+                  className={classes.Input}
                   label="Stars"
-                  id="form1"
                   type="text"
                   onChange={(event) => inputChangedHandler(event, 'stars')}
                 />
                 <MDBInput
+                  className={classes.Input}
                   label="Review"
-                  id="form1"
                   type="text"
                   onChange={(event) => inputChangedHandler(event, 'review')}
                 />

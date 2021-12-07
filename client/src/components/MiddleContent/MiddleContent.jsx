@@ -30,7 +30,9 @@ const MiddleContent = ({ films }) => {
 
     try {
       return convertXMLtoJSON(deserialisedFilms);
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const convertXMLtoJSON = (xml) => {
