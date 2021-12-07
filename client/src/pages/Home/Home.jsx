@@ -34,7 +34,10 @@ const Home = () => {
       });
     }
 
-    if (shouldPostFilm) postFilm();
+    if (shouldPostFilm) {
+      postFilm();
+      cleanup();
+    }
   }, [shouldPostFilm]);
 
   useEffect(() => {
@@ -57,8 +60,21 @@ const Home = () => {
       }
     }
 
-    if (shouldGetFilm) getFilms();
+    if (shouldGetFilm) {
+      getFilms();
+      cleanup();
+    }
   }, [shouldGetFilm]);
+
+  const cleanup = () => {
+    setShouldGetFilm(false);
+    setShouldPostFilm(false);
+
+    setEndpoint(null);
+    setFormat('json');
+
+    setFormData({});
+  };
 
   const getJSONFilms = async (url) => {
     const response = await fetch(url, {
@@ -213,8 +229,8 @@ const Home = () => {
         </MDBCol>
 
         <div className={classes.ContentWrapper}>
-          <MiddleContent films={films} format={format} />
-          <RightContent films={films} format={format} />
+          <MiddleContent films={films} />
+          <RightContent films={films} />
         </div>
       </MDBRow>
     </MDBContainer>

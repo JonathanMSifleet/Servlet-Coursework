@@ -2,15 +2,15 @@ import { MDBCol } from 'mdb-react-ui-kit';
 import React from 'react';
 import classes from './RightContent.module.scss';
 
-const RightContent = ({ films, format }) => {
+const RightContent = ({ films }) => {
   const handleFormat = () => {
-    switch (format) {
-      case 'json':
+    switch (typeof films) {
+      case 'object':
         return JSON.stringify(films, null, 4);
-      case 'xml':
+      case 'string':
         return films;
-      case 'csv':
-        break;
+      // case 'csv':
+      //   break;
       default:
         return null;
     }

@@ -2,19 +2,19 @@ import React from 'react';
 import classes from './MiddleContent.module.scss';
 import { MDBCol, MDBCard, MDBCardBody, MDBCardTitle } from 'mdb-react-ui-kit';
 
-const MiddleContent = ({ films, format }) => {
+const MiddleContent = ({ films }) => {
   const handleFormat = () => {
     let preparedFilms;
 
-    switch (format) {
-      case 'json':
+    switch (typeof films) {
+      case 'object':
         preparedFilms = films;
         break;
-      case 'xml':
+      case 'string':
         preparedFilms = handleXML(films);
         break;
-      case 'csv':
-        break;
+      // case 'csv':
+      //   break;
       default:
         return null;
     }
