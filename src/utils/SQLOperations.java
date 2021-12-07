@@ -71,18 +71,21 @@ public class SQLOperations {
 
 		return statement;
 	}
-	
+
 	public static int generateNewID() {
 		initFactory();
 
-		String SQL = "SELECT(MAX(id)) FROM eecoursework";
-		
+		String SQL = "SELECT(MAX(id)) FROM films";
+
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, null);
 
-			 System.out.println(statement.executeUpdate());
-			 return -1;
+			java.sql.ResultSet result = statement.executeQuery();
+			result.first();
+			
+			int largestID = result.getInt(1);
+			return ++largestID;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;

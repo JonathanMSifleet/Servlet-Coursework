@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 
 import dao.FilmDAO;
 import models.Film;
+import utils.SQLOperations;
 
 @WebServlet("/insertFilm")
 public class InsertFilm extends HttpServlet {
@@ -29,17 +30,14 @@ public class InsertFilm extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		FilmDAO filmDAO = new FilmDAO();
-		
-		String requestBody = request.getReader().lines().collect(Collectors.joining());
-		
-	    Film film = new Gson().fromJson(requestBody, Film.class);
-		
-//		Film dummyFilm = filmDAO.generateDummyFilm();
 
-		int result = filmDAO.insertFilm(film);
+		String requestBody = request.getReader().lines().collect(Collectors.joining());
+
+		Film film = new Gson().fromJson(requestBody, Film.class);
+		film.setId(SQLOperations.generateNewID());
 
 		PrintWriter out = response.getWriter();
-		out.print(result);
+		out.print(filmDAO.insertFilm(film));
 		out.flush();
 	}
 

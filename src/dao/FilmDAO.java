@@ -54,6 +54,7 @@ public class FilmDAO {
 		}
 	}
 
+	// move to different class
 	private ArrayList<Film> resultsToList(java.sql.ResultSet results) {
 		ArrayList<Film> films = new ArrayList<Film>();
 
@@ -69,6 +70,7 @@ public class FilmDAO {
 		}
 	}
 
+	// move to different class
 	private Film resultToFilm(java.sql.ResultSet results) {
 		Film newFilm = new Film();
 
@@ -85,17 +87,4 @@ public class FilmDAO {
 			return null;
 		}
 	}
-
-	public Film generateDummyFilm() {
-		Film dummyFilm = new Film();
-		dummyFilm.setId(42000);
-		dummyFilm.setTitle("Bladerunner 2049");
-		dummyFilm.setYear(2017);
-		dummyFilm.setDirector("Dennis Villenvue");
-		dummyFilm.setStars("RYAN GOSLING, HARRISON FORD, ANA DE ARMAS");
-		dummyFilm.setReview("GOAT");
-
-		return dummyFilm;
-	}
-
 }
