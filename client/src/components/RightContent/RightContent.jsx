@@ -19,7 +19,12 @@ const RightContent = ({ films }) => {
   return (
     <MDBCol className={classes.RightContent}>
       <h1 className={classes.Header}>Raw</h1>
-      <pre className={classes.Output}>{handleFormat()}</pre>
+      <pre className={classes.Output}>
+        {() => {
+          const output = handleFormat();
+          output ? output : null;
+        }}
+      </pre>
     </MDBCol>
   );
 };
