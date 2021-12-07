@@ -2,12 +2,15 @@ package coreservlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
 
 import dao.FilmDAO;
 import models.Film;
@@ -26,10 +29,14 @@ public class InsertFilm extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		FilmDAO filmDAO = new FilmDAO();
+		
+		String requestBody = request.getReader().lines().collect(Collectors.joining());
+		
+	    Film film = new Gson().fromJson(requestBody, Film.class);
+		
+//		Film dummyFilm = filmDAO.generateDummyFilm();
 
-		Film dummyFilm = filmDAO.generateDummyFilm();
-
-		int result = filmDAO.insertFilm(dummyFilm);
+		int result = filmDAO.insertFilm(film);
 
 		PrintWriter out = response.getWriter();
 		out.print(result);

@@ -71,5 +71,22 @@ public class SQLOperations {
 
 		return statement;
 	}
+	
+	public static int generateNewID() {
+		initFactory();
+
+		String SQL = "SELECT(MAX(id)) FROM eecoursework";
+		
+		try {
+			PreparedStatement statement = conn.prepareStatement(SQL);
+			statement = prepareStatement(statement, null);
+
+			 System.out.println(statement.executeUpdate());
+			 return -1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 
 }
