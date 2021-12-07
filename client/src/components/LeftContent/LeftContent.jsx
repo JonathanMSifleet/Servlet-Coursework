@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Context from '../../store/context';
 import classes from './LeftContent.module.scss';
 import * as actionTypes from '../../store/actionTypes';
+import createHTTPRequest from './../../utils/createHTTPRequest';
 import {
   getFilmByTitleEndpoint,
   getAllFilmsEndpoint,
@@ -18,11 +19,75 @@ import {
 const LeftContent = () => {
   const { globalState, actions } = useContext(Context);
 
+  const [shouldGetFilm, setShouldGetFilm] = useState(false);
+  const [shouldPostFilm, setShouldPostFilm] = useState(false);
+  const [format, setFormat] = useState('json');
+
   const inputChangedHandler = (event, inputName) => {
     actions({
       type: actionTypes.setFormData,
       payload: { ...globalState.formData, [inputName]: event.target.value }
     });
+  };
+
+  useEffect(() => {
+    async function postFilm() {
+      await createHTTPRequest(insertFilmEndpoint, 'POST', globalState.formData);
+    }
+
+    if (shouldPostFilm) postFilm();
+  }, [shouldPostFilm]);
+
+  useEffect(() => {
+    async function getFilms() {
+      const url = generateEndpoint();
+
+      switch (format) {
+        case 'json':
+          actions({
+            type: actionTypes.setFilms,
+            payload: await createHTTPRequest(url, 'GET')
+          });
+          break;
+        case 'xml':
+          actions({
+            type: actionTypes.setFilms,
+            payload: await getXMLFilms(url)
+          });
+          break;
+        // case 'csv':
+        //   films = getCSVFilms(url);
+        //   break;
+        default:
+          actions({
+            type: actionTypes.setFilms,
+            payload: await createHTTPRequest(url, 'GET')
+          });
+      }
+    }
+
+    if (shouldGetFilm) getFilms();
+  }, [shouldGetFilm]);
+
+  const getXMLFilms = async (url) => {
+    let response = await fetch(url, {
+      method: 'GET'
+    });
+    response = await response.text();
+
+    const xml = new DOMParser().parseFromString(response, 'application/xml'); // document empty
+    return new XMLSerializer().serializeToString(xml.documentElement);
+  };
+
+  const generateEndpoint = () => {
+    let localEndpoint = globalState.endpoint.concat(`?format=${format}`);
+
+    if (globalState.formData.filmTitle)
+      localEndpoint = localEndpoint.concat(
+        `&title=${globalState.formData.filmTitle}`
+      );
+
+    return localEndpoint;
   };
 
   return (
@@ -35,9 +100,7 @@ const LeftContent = () => {
           value="json"
           label="JSON (default)"
           inline
-          onClick={() =>
-            actions({ type: actionTypes.setFormat, payload: 'json' })
-          }
+          onClick={() => setFormat('json')}
         />
         <MDBRadio
           name="formatGroup"
@@ -45,9 +108,7 @@ const LeftContent = () => {
           value="xml"
           label="XML"
           inline
-          onClick={() =>
-            actions({ type: actionTypes.setFormat, payload: 'xml' })
-          }
+          onClick={() => setFormat('xml')}
         />
         <MDBRadio
           name="formatGroup"
@@ -55,9 +116,7 @@ const LeftContent = () => {
           value="csv"
           label="csv"
           inline
-          onClick={() =>
-            actions({ type: actionTypes.setFormat, payload: 'csv' })
-          }
+          onClick={() => setFormat('csv')}
         />
       </MDBBtnGroup>
 
@@ -114,13 +173,7 @@ const LeftContent = () => {
 
       {globalState.endpoint === getAllFilmsEndpoint ||
       globalState.endpoint === getFilmByTitleEndpoint ? (
-        <MDBBtn
-          onClick={() =>
-            actions({ type: actions.setShouldGetFilm, payload: true })
-          }
-        >
-          Get film(s)
-        </MDBBtn>
+        <MDBBtn onClick={() => setShouldGetFilm(true)}>Get film(s)</MDBBtn>
       ) : null}
 
       {globalState.endpoint === insertFilmEndpoint ? (
@@ -163,11 +216,7 @@ const LeftContent = () => {
               onChange={(event) => inputChangedHandler(event, 'review')}
             />
 
-            <MDBBtn
-              onClick={() =>
-                actions({ type: actions.setShouldPostFilm, payload: true })
-              }
-            >
+            <MDBBtn onClick={() => setShouldPostFilm(true)}>
               Create new film
             </MDBBtn>
           </form>

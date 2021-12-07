@@ -30,6 +30,7 @@ const MiddleContent = ({ films }) => {
 
     try {
       return convertXMLtoJSON(deserialisedFilms);
+      // eslint-disable-next-line no-empty
     } catch (e) {
       console.error(e);
     }
