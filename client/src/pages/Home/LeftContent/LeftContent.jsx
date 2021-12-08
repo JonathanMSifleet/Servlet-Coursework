@@ -5,7 +5,7 @@ import * as actionTypes from '../../../store/actionTypes';
 import createHTTPRequest from '../../../utils/createHTTPRequest';
 import * as endpoints from '../../../endpoints';
 import Radio from './../../../components/Radio/Radio';
-import { MDBBtn, MDBBtnGroup, MDBCol } from 'mdb-react-ui-kit';
+import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner } from 'mdb-react-ui-kit';
 import Input from './../../../components/Input/Input';
 
 const LeftContent = () => {
@@ -16,6 +16,7 @@ const LeftContent = () => {
   const [format, setFormat] = useState('json');
   const [endpoint, setEndpoint] = useState('');
   const [formData, setFormData] = useState({});
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const inputChangedHandler = (event, inputName) => {
     setFormData({
@@ -34,6 +35,8 @@ const LeftContent = () => {
 
   useEffect(() => {
     async function getFilms() {
+      setShowSpinner(true);
+
       const url = generateEndpoint();
 
       switch (format) {
@@ -58,6 +61,7 @@ const LeftContent = () => {
             payload: await createHTTPRequest(url, 'GET')
           });
       }
+      setShowSpinner(false);
     }
 
     if (shouldGetFilm) getFilms();
@@ -80,6 +84,74 @@ const LeftContent = () => {
       localEndpoint = localEndpoint.concat(`&title=${formData.filmTitle}`);
 
     return localEndpoint;
+  };
+
+  const renderSwitch = () => {
+    switch (endpoint) {
+      case endpoints.getAllFilmsEndpoint:
+        return (
+          <MDBBtn onClick={() => setShouldGetFilm(true)}>Get films</MDBBtn>
+        );
+      case endpoints.getFilmByTitleEndpoint:
+        return (
+          <>
+            <Input
+              label="Title"
+              onChange={(event) => {
+                inputChangedHandler(event, 'filmTitle');
+              }}
+            />
+            <MDBBtn onClick={() => setShouldGetFilm(true)}>Get film(s)</MDBBtn>
+          </>
+        );
+      case endpoints.insertFilmEndpoint:
+        return (
+          <>
+            <h3>Film attributes:</h3>
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+              }}
+            >
+              <Input
+                className={classes.Input}
+                label="Title"
+                onChange={(event) => inputChangedHandler(event, 'title')}
+              />
+              <Input
+                className={classes.Input}
+                label="Year"
+                onChange={(event) => inputChangedHandler(event, 'year')}
+              />
+              <Input
+                className={classes.Input}
+                label="Director"
+                onChange={(event) => inputChangedHandler(event, 'director')}
+              />
+              <Input
+                className={classes.Input}
+                label="Stars"
+                onChange={(event) => inputChangedHandler(event, 'stars')}
+              />
+              <Input
+                className={classes.Input}
+                label="Review"
+                onChange={(event) => inputChangedHandler(event, 'review')}
+              />
+
+              <MDBBtn onClick={() => setShouldPostFilm(true)}>
+                Create new film
+              </MDBBtn>
+            </form>
+          </>
+        );
+      case endpoints.updateFilmEndpoint:
+        <p>
+          In order to update a film, you must click a film's title, which can be
+          retrieved via getting all films, or a film by its a title
+        </p>;
+    }
   };
 
   return (
@@ -126,60 +198,14 @@ const LeftContent = () => {
         />
       </MDBBtnGroup>
 
-      {endpoint === endpoints.getFilmByTitleEndpoint ? (
-        <Input
-          label="Title"
-          onChange={(event) => {
-            inputChangedHandler(event, 'filmTitle');
-          }}
-        />
-      ) : null}
+      {renderSwitch()}
 
-      {endpoint === endpoints.getAllFilmsEndpoint ||
-      endpoint === endpoints.getFilmByTitleEndpoint ? (
-        <MDBBtn onClick={() => setShouldGetFilm(true)}>Get film(s)</MDBBtn>
-      ) : null}
-
-      {endpoint === endpoints.insertFilmEndpoint ? (
-        <>
-          <h3>Film attributes:</h3>
-
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-            }}
-          >
-            <Input
-              className={classes.Input}
-              label="Title"
-              onChange={(event) => inputChangedHandler(event, 'title')}
-            />
-            <Input
-              className={classes.Input}
-              label="Year"
-              onChange={(event) => inputChangedHandler(event, 'year')}
-            />
-            <Input
-              className={classes.Input}
-              label="Director"
-              onChange={(event) => inputChangedHandler(event, 'director')}
-            />
-            <Input
-              className={classes.Input}
-              label="Stars"
-              onChange={(event) => inputChangedHandler(event, 'stars')}
-            />
-            <Input
-              className={classes.Input}
-              label="Review"
-              onChange={(event) => inputChangedHandler(event, 'review')}
-            />
-
-            <MDBBtn onClick={() => setShouldPostFilm(true)}>
-              Create new film
-            </MDBBtn>
-          </form>
-        </>
+      {showSpinner ? (
+        <div className="d-flex justify-content-center">
+          <MDBSpinner role="status">
+            <span className="visually-hidden">Loading...</span>
+          </MDBSpinner>
+        </div>
       ) : null}
     </MDBCol>
   );
