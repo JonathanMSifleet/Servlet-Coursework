@@ -8,11 +8,21 @@ import Radio from './../../../components/Radio/Radio';
 import { MDBBtn, MDBBtnGroup, MDBCol } from 'mdb-react-ui-kit';
 import Input from './../../../components/Input/Input';
 
-const LeftContent = ({ endpoint, formData, format }) => {
+const LeftContent = () => {
   const { actions } = useContext(Context);
 
   const [shouldGetFilm, setShouldGetFilm] = useState(false);
   const [shouldPostFilm, setShouldPostFilm] = useState(false);
+  const [format, setFormat] = useState('json');
+  const [endpoint, setEndpoint] = useState('');
+  const [formData, setFormData] = useState({});
+
+  const inputChangedHandler = (event, inputName) => {
+    setFormData({
+      ...formData,
+      [inputName]: event.target.value
+    });
+  };
 
   useEffect(() => {
     async function postFilm() {
@@ -66,8 +76,8 @@ const LeftContent = ({ endpoint, formData, format }) => {
   const generateEndpoint = () => {
     let localEndpoint = endpoint.concat(`?format=${format}`);
 
-    if (formData.title)
-      localEndpoint = localEndpoint.concat(`&title=${formData.title}`);
+    if (formData.filmTitle)
+      localEndpoint = localEndpoint.concat(`&title=${formData.filmTitle}`);
 
     return localEndpoint;
   };
@@ -79,17 +89,17 @@ const LeftContent = ({ endpoint, formData, format }) => {
         <Radio
           label="JSON"
           name="formatGroup"
-          // onClick={}
+          onClick={() => setFormat('json')}
         />
         <Radio
           label="XML"
           name="formatGroup"
-          // onClick={}
+          onClick={() => setFormat('xml')}
         />
         <Radio
           label="Text"
           name="formatGroup"
-          // onClick={}
+          onClick={() => setFormat('csv')}
         />
       </MDBBtnGroup>
 
@@ -97,47 +107,32 @@ const LeftContent = ({ endpoint, formData, format }) => {
         <Radio
           name="operationGroup"
           label="Get all films"
-          onClick={() =>
-            actions({
-              type: actionTypes.setEndpoint,
-              payload: endpoints.getAllFilmsEndpoint
-            })
-          }
+          onClick={() => setEndpoint(endpoints.getAllFilmsEndpoint)}
         />
         <Radio
           name="operationGroup"
           label="Get film by title"
-          onClick={() =>
-            actions({
-              type: actionTypes.setEndpoint,
-              payload: endpoints.getFilmByTitleEndpoint
-            })
-          }
+          onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)}
         />
         <Radio
           name="operationGroup"
           label="Add new film"
-          onClick={() =>
-            actions({
-              type: actionTypes.setEndpoint,
-              payload: endpoints.insertFilmEndpoint
-            })
-          }
+          onClick={() => setEndpoint(endpoints.insertFilmEndpoint)}
         />
         <Radio
           name="operationGroup"
           label="Update film"
-          onClick={() =>
-            actions({
-              type: actionTypes.setEndpoint,
-              payload: endpoints.updateFilmEndpoint
-            })
-          }
+          onClick={() => setEndpoint(endpoints.updateFilmEndpoint)}
         />
       </MDBBtnGroup>
 
       {endpoint === endpoints.getFilmByTitleEndpoint ? (
-        <Input label="title" />
+        <Input
+          label="Title"
+          onChange={(event) => {
+            inputChangedHandler(event, 'filmTitle');
+          }}
+        />
       ) : null}
 
       {endpoint === endpoints.getAllFilmsEndpoint ||
@@ -154,12 +149,31 @@ const LeftContent = ({ endpoint, formData, format }) => {
               event.preventDefault();
             }}
           >
-            <Input label="Title" />
-            <Input label="Year" />
-            <Input label="Director" />
-            <Input label="Stars" />
-            <Input label="Title" />
-            <Input label="Review" />
+            <Input
+              className={classes.Input}
+              label="Title"
+              onChange={(event) => inputChangedHandler(event, 'title')}
+            />
+            <Input
+              className={classes.Input}
+              label="Year"
+              onChange={(event) => inputChangedHandler(event, 'year')}
+            />
+            <Input
+              className={classes.Input}
+              label="Director"
+              onChange={(event) => inputChangedHandler(event, 'director')}
+            />
+            <Input
+              className={classes.Input}
+              label="Stars"
+              onChange={(event) => inputChangedHandler(event, 'stars')}
+            />
+            <Input
+              className={classes.Input}
+              label="Review"
+              onChange={(event) => inputChangedHandler(event, 'review')}
+            />
 
             <MDBBtn onClick={() => setShouldPostFilm(true)}>
               Create new film
