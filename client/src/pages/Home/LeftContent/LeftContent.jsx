@@ -5,7 +5,13 @@ import * as actionTypes from '../../../store/actionTypes';
 import createHTTPRequest from '../../../utils/createHTTPRequest';
 import * as endpoints from '../../../endpoints';
 import Radio from './../../../components/Radio/Radio';
-import { MDBBtn, MDBCol, MDBInput, MDBRadio } from 'mdb-react-ui-kit';
+import {
+  MDBBtn,
+  MDBBtnGroup,
+  MDBCol,
+  MDBInput,
+  MDBRadio
+} from 'mdb-react-ui-kit';
 
 const LeftContent = () => {
   const { globalState, actions } = useContext(Context);
@@ -88,38 +94,19 @@ const LeftContent = () => {
   return (
     <MDBCol size="md-3" className={classes.LeftContent}>
       <h3>Format: </h3>
-      <div className={classes.FormatRadioGroup}>
-        <Radio label="JSON" />
-        {/* <Radio label="JSON" onChange={setFormat('json')} /> */}
-
-        {/* <MDBRadio
-          className={classes.Radio}
-          name="formatGroup"
-          id="inlineRadio4"
-          value="json"
+      <MDBBtnGroup className={classes.FormatRadioGroup}>
+        <Radio
           label="JSON"
-          inline
-          onClick={() => setFormat('json')}
-        /> */}
-        <MDBRadio
-          className={classes.Radio}
           name="formatGroup"
-          id="inlineRadio5"
-          value="xml"
-          label="XML"
-          inline
-          onClick={() => setFormat('xml')}
+          onClick={setFormat.bind('json')}
         />
-        <MDBRadio
-          className={classes.Radio}
+        <Radio label="XML" name="formatGroup" onClick={setFormat.bind('xml')} />
+        <Radio
+          label="Text"
           name="formatGroup"
-          id="inlineRadio6"
-          value="csv"
-          label="csv"
-          inline
-          onClick={() => setFormat('csv')}
+          onClick={setFormat.bind('csv')}
         />
-      </div>
+      </MDBBtnGroup>
 
       <div className={classes.OperationRadioGroup}>
         <MDBRadio

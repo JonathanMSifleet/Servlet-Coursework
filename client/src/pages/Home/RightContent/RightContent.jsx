@@ -22,7 +22,7 @@ const RightContent = ({ films }) => {
       <pre className={classes.Output}>
         {() => {
           const output = handleFormat();
-          output ? output : null;
+          return output ? output : null;
         }}
       </pre>
     </MDBCol>

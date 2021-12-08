@@ -2,15 +2,15 @@ import { MDBRadio } from 'mdb-react-ui-kit';
 import React from 'react';
 import classes from './Radio.module.scss';
 
-const Radio = ({ onClick, label }) => {
+const Radio = ({ label, name }) => {
   return (
     <div className={classes.Wrapper}>
       <MDBRadio
         className={classes.Radio}
-        value={label}
-        label={label}
         inline
-        // onClick={onClick}
+        label={label}
+        name={name}
+        value={label}
       />
     </div>
   );
