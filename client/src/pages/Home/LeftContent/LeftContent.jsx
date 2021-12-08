@@ -1,20 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Context from '../../store/context';
+import Context from '../../../store/context';
 import classes from './LeftContent.module.scss';
-import * as actionTypes from '../../store/actionTypes';
-import createHTTPRequest from './../../utils/createHTTPRequest';
-import {
-  getFilmByTitleEndpoint,
-  getAllFilmsEndpoint,
-  insertFilmEndpoint
-} from '../../endpoints';
-import {
-  MDBBtn,
-  MDBBtnGroup,
-  MDBCol,
-  MDBInput,
-  MDBRadio
-} from 'mdb-react-ui-kit';
+import * as actionTypes from '../../../store/actionTypes';
+import createHTTPRequest from '../../../utils/createHTTPRequest';
+import * as endpoints from '../../../endpoints';
+import Radio from './../../../components/Radio/Radio';
+import { MDBBtn, MDBCol, MDBInput, MDBRadio } from 'mdb-react-ui-kit';
 
 const LeftContent = () => {
   const { globalState, actions } = useContext(Context);
@@ -32,7 +23,11 @@ const LeftContent = () => {
 
   useEffect(() => {
     async function postFilm() {
-      await createHTTPRequest(insertFilmEndpoint, 'POST', globalState.formData);
+      await createHTTPRequest(
+        endpoints.insertFilmEndpoint,
+        'POST',
+        globalState.formData
+      );
     }
 
     if (shouldPostFilm) postFilm();
@@ -93,16 +88,21 @@ const LeftContent = () => {
   return (
     <MDBCol size="md-3" className={classes.LeftContent}>
       <h3>Format: </h3>
-      <MDBBtnGroup className={classes.FormatRadioGroup}>
-        <MDBRadio
+      <div className={classes.FormatRadioGroup}>
+        <Radio label="JSON" />
+        {/* <Radio label="JSON" onChange={setFormat('json')} /> */}
+
+        {/* <MDBRadio
+          className={classes.Radio}
           name="formatGroup"
           id="inlineRadio4"
           value="json"
-          label="JSON (default)"
+          label="JSON"
           inline
           onClick={() => setFormat('json')}
-        />
+        /> */}
         <MDBRadio
+          className={classes.Radio}
           name="formatGroup"
           id="inlineRadio5"
           value="xml"
@@ -111,6 +111,7 @@ const LeftContent = () => {
           onClick={() => setFormat('xml')}
         />
         <MDBRadio
+          className={classes.Radio}
           name="formatGroup"
           id="inlineRadio6"
           value="csv"
@@ -118,10 +119,11 @@ const LeftContent = () => {
           inline
           onClick={() => setFormat('csv')}
         />
-      </MDBBtnGroup>
+      </div>
 
-      <MDBBtnGroup className={classes.OperationRadioGroup}>
+      <div className={classes.OperationRadioGroup}>
         <MDBRadio
+          className={classes.Radio}
           name="operationGroup"
           id="inlineRadio1"
           label="Get all films"
@@ -129,11 +131,12 @@ const LeftContent = () => {
           onClick={() =>
             actions({
               type: actionTypes.setEndpoint,
-              payload: getAllFilmsEndpoint
+              payload: endpoints.getAllFilmsEndpoint
             })
           }
         />
         <MDBRadio
+          className={classes.Radio}
           name="operationGroup"
           id="inlineRadio2"
           label="Get film by title"
@@ -141,11 +144,12 @@ const LeftContent = () => {
           onClick={() =>
             actions({
               type: actionTypes.setEndpoint,
-              payload: getFilmByTitleEndpoint
+              payload: endpoints.getFilmByTitleEndpoint
             })
           }
         />
         <MDBRadio
+          className={`${classes.Radio} ${classes.EndRadio}`}
           name="operationGroup"
           id="inlineRadio3"
           label="Add new film"
@@ -153,13 +157,26 @@ const LeftContent = () => {
           onClick={() =>
             actions({
               type: actionTypes.setEndpoint,
-              payload: insertFilmEndpoint
+              payload: endpoints.insertFilmEndpoint
             })
           }
         />
-      </MDBBtnGroup>
+        <MDBRadio
+          className={classes.Radio}
+          name="operationGroup"
+          id="inlineRadio3"
+          label="Update film"
+          inline
+          onClick={() =>
+            actions({
+              type: actionTypes.setEndpoint,
+              payload: endpoints.updateFilmEndpoint
+            })
+          }
+        />
+      </div>
 
-      {globalState.endpoint === getFilmByTitleEndpoint ? (
+      {globalState.endpoint === endpoints.getFilmByTitleEndpoint ? (
         <MDBInput
           className={classes.Input}
           label="Title"
@@ -171,12 +188,12 @@ const LeftContent = () => {
         />
       ) : null}
 
-      {globalState.endpoint === getAllFilmsEndpoint ||
-      globalState.endpoint === getFilmByTitleEndpoint ? (
+      {globalState.endpoint === endpoints.getAllFilmsEndpoint ||
+      globalState.endpoint === endpoints.getFilmByTitleEndpoint ? (
         <MDBBtn onClick={() => setShouldGetFilm(true)}>Get film(s)</MDBBtn>
       ) : null}
 
-      {globalState.endpoint === insertFilmEndpoint ? (
+      {globalState.endpoint === endpoints.insertFilmEndpoint ? (
         <>
           <h3>Film attributes:</h3>
 
