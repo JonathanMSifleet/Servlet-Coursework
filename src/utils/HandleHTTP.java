@@ -37,6 +37,10 @@ public class HandleHTTP {
 				response.setContentType("text/csv");
 				payload = handleCSV(result);
 				break;
+			default:
+				response.setContentType("application/json");
+				payload = handleJSON(result);
+				break;
 			}
 
 			sendResponse(response, payload);
@@ -83,7 +87,6 @@ public class HandleHTTP {
 		response.setCharacterEncoding("UTF-8");
 
 		return response;
-
 	}
 
 }

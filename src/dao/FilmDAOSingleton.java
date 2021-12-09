@@ -7,11 +7,12 @@ import models.Film;
 import utils.SQLOperations;
 
 public class FilmDAOSingleton {
-	
+
 	private static FilmDAOSingleton filmDAO;
-	
+
 	public static synchronized FilmDAOSingleton getFilmDAO() {
-		if(filmDAO == null) filmDAO = new FilmDAOSingleton();
+		if (filmDAO == null)
+			filmDAO = new FilmDAOSingleton();
 		return filmDAO;
 	}
 
@@ -41,7 +42,7 @@ public class FilmDAOSingleton {
 		}
 		return null;
 	}
-	
+
 	public ArrayList<Film> getFilmByID(int id) {
 		String SQL = "SELECT * FROM eecoursework.films WHERE id = ?";
 
@@ -49,7 +50,7 @@ public class FilmDAOSingleton {
 			ArrayList<Object> paramVals = new ArrayList<Object>();
 			paramVals.add(id);
 
-			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, paramVals);			
+			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, paramVals);
 			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,14 +70,34 @@ public class FilmDAOSingleton {
 			paramVals.add(film.getStars());
 			paramVals.add(film.getReview());
 
-			return SQLOperations.sqlInsert(SQL, paramVals);
+			return SQLOperations.sqlManipulate(SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
 	}
 
-	// move to different class
+	public int updateFilm(Film film) {
+		String SQL = "UPDATE eecoursework.films SET id = ?, title = ?, year = ?, "
+				+ "director = ?, stars = ?, review = ? WHERE id = ?";
+
+		try {
+			ArrayList<Object> paramVals = new ArrayList<>();
+			paramVals.add(film.getId());
+			paramVals.add(film.getTitle());
+			paramVals.add(film.getYear());
+			paramVals.add(film.getDirector());
+			paramVals.add(film.getStars());
+			paramVals.add(film.getReview());
+			paramVals.add(film.getId());
+
+			return SQLOperations.sqlManipulate(SQL, paramVals);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
 	private ArrayList<Film> resultsToList(java.sql.ResultSet results) {
 		ArrayList<Film> films = new ArrayList<Film>();
 
@@ -92,7 +113,6 @@ public class FilmDAOSingleton {
 		}
 	}
 
-	// move to different class
 	private Film resultToFilm(java.sql.ResultSet results) {
 		Film newFilm = new Film();
 

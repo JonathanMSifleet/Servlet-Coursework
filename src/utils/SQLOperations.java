@@ -36,7 +36,7 @@ public class SQLOperations {
 		return null;
 	}
 
-	public static int sqlInsert(String SQL, ArrayList<Object> paramVals) {
+	public static int sqlManipulate(String SQL, ArrayList<Object> paramVals) {
 		initFactory();
 
 		try {

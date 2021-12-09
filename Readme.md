@@ -2,8 +2,8 @@ Read me:
 
 ---
 To do:
-- Delete request
-- Update request
-- Improve front-end
+- json update, Delete request
+- XML insert, update, delete
 - CSV all
-- XML all
+- handle errors
+- Selecting different film should update changed film

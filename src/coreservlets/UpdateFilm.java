@@ -15,27 +15,29 @@ import com.google.gson.Gson;
 import dao.FilmDAOSingleton;
 import models.Film;
 import utils.HandleHTTP;
-import utils.SQLOperations;
 
-@WebServlet("/insertFilm")
-public class InsertFilm extends HttpServlet {
-	private static final long serialVersionUID = -1809220141023596490L;
+@WebServlet("/updateFilm")
+public class UpdateFilm extends HttpServlet {
+	private static final long serialVersionUID = -909062916095173117L;
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		System.out.println("Function accessed");
 
-		response = HandleHTTP.setHeaders(response, "POST");
+		response = HandleHTTP.setHeaders(response, "*");
+		System.out.println("Headers set");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 
 		String requestBody = request.getReader().lines().collect(Collectors.joining());
+		System.out.println("Request body: " + requestBody);
+		
 		Film film = new Gson().fromJson(requestBody, Film.class);
-		film.setId(SQLOperations.generateNewID());
-		
-		
+
 		PrintWriter out = response.getWriter();
-		out.print(filmDAO.insertFilm(film));
+		out.print(filmDAO.updateFilm(film));
 		out.flush();
 	}
 

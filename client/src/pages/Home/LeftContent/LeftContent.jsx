@@ -110,12 +110,14 @@ const LeftContent = () => {
   useEffect(() => {
     const updateFilm = async () => {
       const url = `${endpoints.updateFilmEndpoint}?format=${format}`;
-
+      console.log('🚀 ~ file: LeftContent.jsx ~ line 113 ~ updateFilm ~ url', url);
       setShowSpinner(true);
-      let response = await createHTTPRequest(url, 'PUT', updateFormData);
-      setShowSpinner(false);
 
-      console.log('🚀 ~ file: LeftContent.jsx ~ line 114 ~ updateFilm ~ response', response);
+      console.log('🚀 ~ file: LeftContent.jsx ~ line 117 ~ updateFilm ~ updateFormData', updateFormData);
+
+      await createHTTPRequest(url, 'PUT', updateFormData);
+
+      setShowSpinner(false);
       setShouldUpdateFilm(false);
     };
 
