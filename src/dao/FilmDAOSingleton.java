@@ -20,8 +20,8 @@ public class FilmDAOSingleton {
 		try {
 			String SQL = "SELECT * FROM eecoursework.films";
 
-			java.sql.ResultSet rs = SQLOperations.sqlSelect(SQL, null);
-			return resultsToList(rs);
+			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, null);
+			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,7 +32,7 @@ public class FilmDAOSingleton {
 		String SQL = "SELECT * FROM eecoursework.films WHERE title LIKE ?";
 
 		try {
-			ArrayList<Object> paramVals = new ArrayList<Object>();
+			ArrayList<Object> paramVals = new ArrayList<>();
 			paramVals.add("%" + title + "%");
 
 			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, paramVals);
@@ -47,7 +47,7 @@ public class FilmDAOSingleton {
 		String SQL = "SELECT * FROM eecoursework.films WHERE id = ?";
 
 		try {
-			ArrayList<Object> paramVals = new ArrayList<Object>();
+			ArrayList<Object> paramVals = new ArrayList<>();
 			paramVals.add(id);
 
 			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, paramVals);
@@ -73,7 +73,7 @@ public class FilmDAOSingleton {
 			return SQLOperations.sqlManipulate(SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return 0;
+			return -1;
 		}
 	}
 
@@ -94,12 +94,26 @@ public class FilmDAOSingleton {
 			return SQLOperations.sqlManipulate(SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return 0;
+			return -1;
+		}
+	}
+
+	public int deleteFilm(int id) {
+		String SQL = "DELETE FROM eecoursework.films WHERE id = ?";
+
+		try {
+			ArrayList<Object> paramVals = new ArrayList<>();
+			paramVals.add(id);
+
+			return SQLOperations.sqlManipulate(SQL, paramVals);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
 		}
 	}
 
 	private ArrayList<Film> resultsToList(java.sql.ResultSet results) {
-		ArrayList<Film> films = new ArrayList<Film>();
+		ArrayList<Film> films = new ArrayList<>();
 
 		try {
 			while (results.next()) {
