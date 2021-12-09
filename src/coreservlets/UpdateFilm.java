@@ -24,16 +24,15 @@ public class UpdateFilm extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		System.out.println("Function accessed");
+		response.setContentType("application/json");
 
-		response = HandleHTTP.setHeaders(response, "*");
-		System.out.println("Headers set");
+		response = HandleHTTP.setHeaders(response, "PUT");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 
 		String requestBody = request.getReader().lines().collect(Collectors.joining());
 		System.out.println("Request body: " + requestBody);
-		
+
 		Film film = new Gson().fromJson(requestBody, Film.class);
 
 		PrintWriter out = response.getWriter();

@@ -12,6 +12,7 @@ const LeftContent = () => {
   const { globalState, actions } = useContext(Context);
 
   const [endpoint, setEndpoint] = useState('');
+  const [error, setError] = useState();
   const [formData, setFormData] = useState({});
   const [format, setFormat] = useState('json');
   const [selectedAttributeVal, setSelectedAttributeVal] = useState();
@@ -51,7 +52,12 @@ const LeftContent = () => {
   // create new film
   useEffect(() => {
     const postFilm = async () => {
-      await createHTTPRequest(endpoints.insertFilmEndpoint, 'POST', formData);
+      try {
+        await createHTTPRequest(endpoints.insertFilmEndpoint, 'POST', formData);
+      } catch (e) {
+        setError(e);
+      }
+
       setShouldPostFilm(false);
     };
 
@@ -97,9 +103,14 @@ const LeftContent = () => {
   useEffect(() => {
     const getFilmByID = async () => {
       const url = `${endpoint}?format=${format}&ID=${globalState.filmID}`;
-      const film = await createHTTPRequest(url, 'GET');
 
-      setSelectedFilm(film[0]);
+      try {
+        const film = await createHTTPRequest(url, 'GET');
+        setSelectedFilm(film[0]);
+      } catch (e) {
+        setError(e);
+      }
+
       setShouldGetFilmByID(false);
     };
 
@@ -110,12 +121,13 @@ const LeftContent = () => {
   useEffect(() => {
     const updateFilm = async () => {
       const url = `${endpoints.updateFilmEndpoint}?format=${format}`;
-      console.log('🚀 ~ file: LeftContent.jsx ~ line 113 ~ updateFilm ~ url', url);
       setShowSpinner(true);
 
-      console.log('🚀 ~ file: LeftContent.jsx ~ line 117 ~ updateFilm ~ updateFormData', updateFormData);
-
-      await createHTTPRequest(url, 'PUT', updateFormData);
+      try {
+        await createHTTPRequest(url, 'PUT', updateFormData);
+      } catch (e) {
+        setError(e);
+      }
 
       setShowSpinner(false);
       setShouldUpdateFilm(false);
@@ -125,13 +137,18 @@ const LeftContent = () => {
   }, [shouldUpdateFilm]);
 
   const getXMLFilms = async (url) => {
-    let response = await fetch(url, {
-      method: 'GET'
-    });
-    response = await response.text();
+    try {
+      let response = await fetch(url, {
+        method: 'GET'
+      });
+      response = await response.text();
 
-    const xml = new DOMParser().parseFromString(response, 'application/xml'); // document empty
-    return new XMLSerializer().serializeToString(xml.documentElement);
+      const xml = new DOMParser().parseFromString(response, 'application/xml');
+      return new XMLSerializer().serializeToString(xml.documentElement);
+    } catch (e) {
+      setError(e);
+      return null;
+    }
   };
 
   const handleSelectChange = (event) => {
@@ -285,6 +302,8 @@ const LeftContent = () => {
           <MDBSpinner role="status" />
         </div>
       ) : null}
+
+      {error ? <p>Error occured: {error}</p> : null}
     </MDBCol>
   );
 };

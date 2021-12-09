@@ -1,8 +1,8 @@
-const createHTTPRequest = async (url, method, body, mode) => {
+const createHTTPRequest = async (url, method, body) => {
   let options;
 
   if (body) {
-    options = { method, body: JSON.stringify(body), mode };
+    options = { method, body: JSON.stringify(body) };
   } else {
     options = { method };
   }

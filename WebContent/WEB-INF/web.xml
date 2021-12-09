@@ -1,22 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-  <servlet>
-    <description></description>
-    <display-name>UpdateFilm</display-name>
-    <servlet-name>UpdateFilm</servlet-name>
-    <servlet-class>coreservlets.UpdateFilm</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UpdateFilm</servlet-name>
-    <url-pattern>/UpdateFilm</url-pattern>
-  </servlet-mapping>
-  <display-name>ServletTemplate</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+<web-app version="4.0"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+   http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+	<display-name>ServletCoursework</display-name>
+	<filter>
+		<filter-name>CorsFilter</filter-name>
+		<filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+		<init-param>
+			<param-name>cors.allowed.origins</param-name>
+			<param-value>*</param-value>
+		</init-param>
+
+		<init-param>
+			<param-name>cors.allowed.methods</param-name>
+			<param-value>GET, HEAD, POST, PUT, DELETE, OPTIONS</param-value>
+		</init-param>
+
+		<!-- List of the response headers other than simple response headers that 
+			the browser should expose to the author of the cross-domain request through 
+			the XMLHttpRequest.getResponseHeader() method. The CORS filter supplies this 
+			information through the Access-Control-Expose-Headers header. -->
+		<init-param>
+			<param-name>cors.exposed.headers</param-name>
+			<param-value>Access-Control-Allow-Origin,Access-Control-Allow-Credentials</param-value>
+		</init-param>
+
+		<!-- The names of the supported author request headers. These are advertised 
+			through the Access-Control-Allow-Headers header. The CORS Filter implements 
+			this by simply echoing the requested value back to the browser. -->
+		<init-param>
+			<param-name>cors.allowed.headers</param-name>
+			<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
+		</init-param>
+
+	</filter>
+	<filter-mapping>
+		<filter-name>CorsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>
