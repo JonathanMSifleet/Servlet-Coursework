@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
 import models.Film;
-import utils.HandleResponse;
+import utils.HandleHTTP;
 
 @WebServlet("/getFilmByTitle")
 public class GetFilmByTitle extends HttpServlet {
@@ -21,17 +21,14 @@ public class GetFilmByTitle extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
-		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-		response.setCharacterEncoding("UTF-8");
+		response = HandleHTTP.setHeaders(response, "GET");
 
 		String title = request.getParameter("title");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		ArrayList<Film> films = filmDAO.getFilmByTitle(title);
 
-		HandleResponse.handleFormat(request, response, films);
+		HandleHTTP.handleFormat(request, response, films);
 	}
 
 }
