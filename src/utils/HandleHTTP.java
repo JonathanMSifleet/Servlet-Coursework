@@ -66,7 +66,7 @@ public class HandleHTTP {
 
 	private static String handleCSV(ArrayList<Film> data) throws IOException {
 		String csvString = "";
-		for (Film film : (ArrayList<Film>) data) {
+		for (Film film : data) {
 			csvString += film.getObjectValues(film);
 			csvString += "\n";
 		}

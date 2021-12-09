@@ -32,8 +32,7 @@ public class InsertFilm extends HttpServlet {
 		String requestBody = request.getReader().lines().collect(Collectors.joining());
 		Film film = new Gson().fromJson(requestBody, Film.class);
 		film.setId(SQLOperations.generateNewID());
-		
-		
+
 		PrintWriter out = response.getWriter();
 		out.print(filmDAO.insertFilm(film));
 		out.flush();

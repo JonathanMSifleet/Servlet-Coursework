@@ -29,7 +29,7 @@ public class SQLOperations {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, paramVals);
 
-			return (java.sql.ResultSet) statement.executeQuery();
+			return statement.executeQuery();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -83,7 +83,7 @@ public class SQLOperations {
 
 			java.sql.ResultSet result = statement.executeQuery();
 			result.first();
-			
+
 			int largestID = result.getInt(1);
 			return ++largestID;
 		} catch (Exception e) {
