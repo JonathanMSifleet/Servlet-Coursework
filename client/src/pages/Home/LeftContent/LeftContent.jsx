@@ -18,20 +18,13 @@ const LeftContent = () => {
   const [selectedAttributeVal, setSelectedAttributeVal] = useState();
   const [selectedLabel, setSelectedLabel] = useState('Title');
   const [selectedFilm, setSelectedFilm] = useState();
+  const [shouldDeleteFilm, setShouldDeleteFilm] = useState(false);
   const [shouldGetFilmByID, setShouldGetFilmByID] = useState(false);
   const [shouldGetFilmByTitle, setShouldGetFilmByTitle] = useState(false);
   const [shouldPostFilm, setShouldPostFilm] = useState(false);
   const [shouldUpdateFilm, setShouldUpdateFilm] = useState(false);
   const [updateFormData, setUpdateFormData] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
-
-  useEffect(() => {
-    console.log(globalState);
-  }, [globalState]);
-
-  useEffect(() => {
-    console.log(updateFormData);
-  }, [updateFormData]);
 
   const inputChangedHandler = (event, inputName, form) => {
     switch (form) {
@@ -102,7 +95,7 @@ const LeftContent = () => {
   // get film by ID
   useEffect(() => {
     const getFilmByID = async () => {
-      const url = `${endpoint}?format=${format}&ID=${globalState.filmID}`;
+      const url = `${endpoint}?format=${format}&id=${globalState.filmID}`;
 
       try {
         const film = await createHTTPRequest(url, 'GET');
@@ -135,6 +128,25 @@ const LeftContent = () => {
 
     if (shouldUpdateFilm) updateFilm();
   }, [shouldUpdateFilm]);
+
+  // delete film
+  useEffect(() => {
+    const deleteFilm = async () => {
+      const url = `${endpoints.deleteFilmEndpoint}?format=${format}&id=${globalState.filmID}`;
+      setShowSpinner(true);
+
+      try {
+        await createHTTPRequest(url, 'DELETE');
+      } catch (e) {
+        setError(e);
+      }
+
+      setShowSpinner(false);
+      setShouldDeleteFilm(false);
+    };
+
+    if (shouldDeleteFilm) deleteFilm();
+  }, [shouldDeleteFilm]);
 
   const getXMLFilms = async (url) => {
     try {
@@ -273,6 +285,21 @@ const LeftContent = () => {
             ) : null}
           </>
         );
+      case endpoints.deleteFilmEndpoint:
+        console.log('selectedFilm', selectedFilm);
+        return (
+          <>
+            {globalState.filmID ? (
+              <>
+                {/* <p>
+                  <b>Film ID:</b> {globalState.filmID}
+                </p> */}
+
+                <MDBBtn onClick={() => setShouldDeleteFilm(true)}>Delete film</MDBBtn>
+              </>
+            ) : null}
+          </>
+        );
     }
   };
 
@@ -294,6 +321,7 @@ const LeftContent = () => {
         />
         <Radio name="operationGroup" label="Add new film" onClick={() => setEndpoint(endpoints.insertFilmEndpoint)} />
         <Radio name="operationGroup" label="Update film" onClick={() => setEndpoint(endpoints.getFilmByIDEndpoint)} />
+        <Radio name="operationGroup" label="Delete film" onClick={() => setEndpoint(endpoints.deleteFilmEndpoint)} />
       </MDBBtnGroup>
 
       {renderSwitch()}

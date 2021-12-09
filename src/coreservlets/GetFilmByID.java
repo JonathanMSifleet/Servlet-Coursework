@@ -23,7 +23,7 @@ public class GetFilmByID extends HttpServlet {
 
 		response = HandleHTTP.setHeaders(response, "GET");
 
-		int id = Integer.parseInt(request.getParameter("ID"));
+		int id = Integer.parseInt(request.getParameter("id"));
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		ArrayList<Film> films = filmDAO.getFilmByID(id);
