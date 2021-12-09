@@ -18,8 +18,7 @@
 }
 
 .Card {
-  height: 20vh;
-  max-height: 20vh;
+  height: 15vh;
   margin-bottom: 2%;
 }
 
@@ -29,9 +28,15 @@
   margin: 2%;
 }
 
-.ReviewText {
+.FilmTitle {
+  cursor: pointer;
+  color: $mdbootstrapBlue;
+}
+
+.CardText {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
+  margin-bottom: 1%;
 }

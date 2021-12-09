@@ -13,8 +13,8 @@ import dao.FilmDAOSingleton;
 import models.Film;
 import utils.HandleResponse;
 
-@WebServlet("/getFilmByTitle")
-public class GetFilmByTitle extends HttpServlet {
+@WebServlet("/getFilmByID")
+public class GetFilmByID extends HttpServlet {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -26,10 +26,10 @@ public class GetFilmByTitle extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		response.setCharacterEncoding("UTF-8");
 
-		String title = request.getParameter("title");
+		int id = Integer.parseInt(request.getParameter("ID"));
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
-		ArrayList<Film> films = filmDAO.getFilmByTitle(title);
+		ArrayList<Film> films = filmDAO.getFilmByID(id);
 
 		HandleResponse.handleFormat(request, response, films);
 	}

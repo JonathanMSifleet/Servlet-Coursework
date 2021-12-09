@@ -2,13 +2,14 @@ import { MDBInput } from 'mdb-react-ui-kit';
 import React from 'react';
 import classes from './Input.module.scss';
 
-const Input = ({ label, onChange }) => {
+const Input = ({ className, label, onChange, placeholder }) => {
   return (
     <MDBInput
-      className={classes.Input}
+      className={`${classes.Input} ${className}`}
       label={label}
-      type="text"
       onChange={onChange}
+      placeholder={placeholder}
+      type="text"
     />
   );
 };

@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classes from './MiddleContent.module.scss';
 import { MDBCol, MDBCard, MDBCardBody, MDBCardTitle } from 'mdb-react-ui-kit';
+import Context from '../../../store/context';
+import * as actionTypes from '../../../store/actionTypes';
 
 const MiddleContent = ({ films }) => {
+  const { actions } = useContext(Context);
+
   const handleFormat = () => {
     let preparedFilms;
 
@@ -23,10 +27,7 @@ const MiddleContent = ({ films }) => {
   };
 
   const handleXML = (films) => {
-    const deserialisedFilms = new DOMParser().parseFromString(
-      films,
-      'application/xml'
-    );
+    const deserialisedFilms = new DOMParser().parseFromString(films, 'application/xml');
 
     try {
       return convertXMLtoJSON(deserialisedFilms);
@@ -56,6 +57,10 @@ const MiddleContent = ({ films }) => {
     return json;
   };
 
+  const getFilmID = (id) => {
+    actions({ type: actionTypes.setFilmID, payload: id });
+  };
+
   const printFilms = (preparedFilms) => {
     return (
       <>
@@ -65,16 +70,16 @@ const MiddleContent = ({ films }) => {
                 <li key={film.id}>
                   <MDBCard className={classes.Card}>
                     <MDBCardBody className={classes.CardBody}>
-                      <MDBCardTitle>
+                      <MDBCardTitle className={classes.FilmTitle} onClick={() => getFilmID(film.id)}>
                         {film.title} ({film.year})
                       </MDBCardTitle>
-                      <p>
+                      <p className={classes.CardText}>
                         <b>Director:</b> {film.director}
                       </p>
-                      <p>
+                      <p className={classes.CardText}>
                         <b>Starring:</b> {film.stars}
                       </p>
-                      <p className={classes.ReviewText}>
+                      <p className={classes.CardText}>
                         <b>Review:</b> {film.review}
                       </p>
                     </MDBCardBody>
