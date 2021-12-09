@@ -212,6 +212,7 @@ const LeftContent = () => {
             </form>
           </>
         );
+      // actually the update method
       case endpoints.getFilmByIDEndpoint:
         return (
           <>

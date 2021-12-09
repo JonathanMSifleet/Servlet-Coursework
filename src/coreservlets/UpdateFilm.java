@@ -31,8 +31,6 @@ public class UpdateFilm extends HttpServlet {
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 
 		String requestBody = request.getReader().lines().collect(Collectors.joining());
-		System.out.println("Request body: " + requestBody);
-
 		Film film = new Gson().fromJson(requestBody, Film.class);
 
 		PrintWriter out = response.getWriter();
