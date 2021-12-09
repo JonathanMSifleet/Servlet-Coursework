@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.XStream;
 
 import models.Film;
 
-public class HandleResponse {
+public class HandleHTTP {
 
 	public static void handleFormat(HttpServletRequest request, HttpServletResponse response, ArrayList<Film> result) {
 		String format = request.getParameter("format");
@@ -74,6 +74,16 @@ public class HandleResponse {
 		PrintWriter out = response.getWriter();
 		out.print(payload);
 		out.flush();
+	}
+
+	public static HttpServletResponse setHeaders(HttpServletResponse response, String method) {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+		response.setHeader("Access-Control-Allow-Methods", method);
+		response.setCharacterEncoding("UTF-8");
+
+		return response;
+
 	}
 
 }

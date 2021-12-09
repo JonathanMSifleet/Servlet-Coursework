@@ -5,17 +5,44 @@
 
 .OperationRadioGroup,
 .FormatRadioGroup {
-  border-radius: 10px;
   background-color: whitesmoke;
-  padding: 2%;
-  margin-right: 2%;
-  margin-left: 2%;
-  width: 96%;
-  margin-bottom: 8%;
+  border-radius: 10px;
+  display: inline-block;
   height: auto;
-  display: flex;
+  margin-bottom: 8%;
+  margin-left: 2%;
+  margin-right: 2%;
+  padding: 2%;
+  width: 96%;
 }
 
-.Input {
-  margin-bottom: 4%;
+.SelectWrapper {
+  min-height: 1px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.Select,
+.SelectInput {
+  height: 3vh;
+  padding: 1%;
+}
+
+.SelectWrapper {
+  height: auto;
+  width: 100%;
+}
+
+.Select {
+  width: fit-content;
+}
+
+.SelectInput {
+  width: auto;
+}
+
+.ReviewInput {
+  clear: left;
+  min-height: 20vh;
+  width: 98%;
 }

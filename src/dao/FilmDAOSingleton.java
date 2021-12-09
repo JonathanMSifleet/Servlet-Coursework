@@ -27,7 +27,7 @@ public class FilmDAOSingleton {
 		return null;
 	}
 
-	public ArrayList<Film> getFilm(String title) {
+	public ArrayList<Film> getFilmByTitle(String title) {
 		String SQL = "SELECT * FROM eecoursework.films WHERE title LIKE ?";
 
 		try {
@@ -35,6 +35,21 @@ public class FilmDAOSingleton {
 			paramVals.add("%" + title + "%");
 
 			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, paramVals);
+			return resultsToList(results);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public ArrayList<Film> getFilmByID(int id) {
+		String SQL = "SELECT * FROM eecoursework.films WHERE id = ?";
+
+		try {
+			ArrayList<Object> paramVals = new ArrayList<Object>();
+			paramVals.add(id);
+
+			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, paramVals);			
 			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();

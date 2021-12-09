@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 
 import dao.FilmDAOSingleton;
 import models.Film;
+import utils.HandleHTTP;
 import utils.SQLOperations;
 
 @WebServlet("/insertFilm")
@@ -24,10 +25,7 @@ public class InsertFilm extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "POST");
-		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-		response.setCharacterEncoding("UTF-8");
+		response = HandleHTTP.setHeaders(response, "POST");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 
