@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class SQLOperations {
 
 	private static Connection conn;
-	private static String url = "jdbc:mysql://localhost:3306/eecoursework?characterEncoding=utf8";
-	private static String username = "root";
-	private static String password = "Phantom2011!";
+	private static String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306";
+	private static String username = "sifleetj";
+	private static String password = "Joosderg6";
 
 	private static void initFactory() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection(url, username, password);
 		} catch (Exception e) {
 			e.printStackTrace();

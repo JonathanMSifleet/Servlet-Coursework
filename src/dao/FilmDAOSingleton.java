@@ -18,7 +18,7 @@ public class FilmDAOSingleton {
 
 	public ArrayList<Film> getAllFilms() {
 		try {
-			String SQL = "SELECT * FROM eecoursework.films";
+			String SQL = "SELECT * FROM epcoursework";
 
 			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, null);
 			return resultsToList(results);
@@ -29,7 +29,7 @@ public class FilmDAOSingleton {
 	}
 
 	public ArrayList<Film> getFilmByTitle(String title) {
-		String SQL = "SELECT * FROM eecoursework.films WHERE title LIKE ?";
+		String SQL = "SELECT * FROM epcoursework WHERE title LIKE ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -44,7 +44,7 @@ public class FilmDAOSingleton {
 	}
 
 	public ArrayList<Film> getFilmByID(int id) {
-		String SQL = "SELECT * FROM eecoursework.films WHERE id = ?";
+		String SQL = "SELECT * FROM epcoursework WHERE id = ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -59,7 +59,7 @@ public class FilmDAOSingleton {
 	}
 
 	public int insertFilm(Film film) {
-		String SQL = "INSERT INTO eecoursework.films VALUES (?, ?, ?, ?, ?, ?)";
+		String SQL = "INSERT INTO epcoursework VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -78,7 +78,7 @@ public class FilmDAOSingleton {
 	}
 
 	public int updateFilm(Film film) {
-		String SQL = "UPDATE eecoursework.films SET id = ?, title = ?, year = ?, "
+		String SQL = "UPDATE epcoursework SET id = ?, title = ?, year = ?, "
 				+ "director = ?, stars = ?, review = ? WHERE id = ?";
 
 		try {
@@ -99,7 +99,7 @@ public class FilmDAOSingleton {
 	}
 
 	public int deleteFilm(int id) {
-		String SQL = "DELETE FROM eecoursework.films WHERE id = ?";
+		String SQL = "DELETE FROM epcoursework WHERE id = ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
