@@ -1,41 +1,77 @@
 @import '../../../styles/variables';
 .RightContent {
-    float: left;
-    width: 50%;
-    height: 100%;
-    border: 1px solid #ccc;
-    padding: 1% !important;
+  float: left;
+  width: 50%;
+  height: 100%;
+  border: 1px solid #ccc;
+  padding: 1% !important;
 }
 
 .Header {
-    color: $mdbootstrapBlue;
+  color: $mdbootstrapBlue;
 }
 
 .List {
-    padding: 0;
-    list-style-type: none;
+  padding: 0;
+  list-style-type: none;
 }
 
 .Card {
-    height: 15vh;
-    margin-bottom: 2%;
+  height: 15vh;
+  margin-bottom: 2%;
 }
 
 .CardBody {
-    height: 100%;
-    padding: 0;
-    margin: 2%;
+  height: 100%;
+  padding: 0;
+  margin: 2%;
 }
 
 .FilmTitle {
-    cursor: pointer;
-    color: $mdbootstrapBlue;
+  cursor: pointer;
+  color: $mdbootstrapBlue;
 }
 
 .CardText {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 100%;
-    margin-bottom: 1%;
+  margin-bottom: 1%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.FilmTable {
+  table-layout: fixed;
+}
+
+.IDCell,
+.TitleCell,
+.YearCell,
+.DirectorCell,
+.StarsCell {
+  padding: 1% !important;
+}
+
+.IDCell,
+.YearCell {
+  width: 3vw;
+}
+
+.TitleCell {
+  width: 10vw;
+}
+
+.DirectorCell {
+  width: 7vw;
+}
+
+.StarsCell {
+  width: 9vw;
+}
+
+.ReviewText {
+  max-height: 5.5vh;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  //   white-space: nowrap;
 }

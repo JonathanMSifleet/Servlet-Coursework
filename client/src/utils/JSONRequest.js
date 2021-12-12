@@ -1,4 +1,4 @@
-const createHTTPRequest = async (url, method, body) => {
+const JSONRequest = async (url, method, body) => {
   let options;
 
   if (body) {
@@ -11,4 +11,4 @@ const createHTTPRequest = async (url, method, body) => {
   return await response.json();
 };
 
-export default createHTTPRequest;
+export default JSONRequest;

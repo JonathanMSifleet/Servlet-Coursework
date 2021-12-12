@@ -3,11 +3,7 @@ module.exports = {
     browser: true,
     es2020: true
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'eslint-config-prettier'
-  ],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'eslint-config-prettier'],
   parserOptions: {
     project: './jsconfig.json',
     ecmaFeatures: {
@@ -21,7 +17,7 @@ module.exports = {
   rules: {
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
-    'linebreak-style': ['error', 'windows'],
+    'linebreak-style': ['error', 'unix'],
     'react/jsx-closing-bracket-location': [2, 'tag-aligned'],
     'react/jsx-first-prop-new-line': [2, 'multiline'],
     'react/jsx-indent-props': [2, 2],

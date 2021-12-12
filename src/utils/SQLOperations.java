@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class SQLOperations {
 
 	private static Connection conn;
-	private static String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306";
+	private static String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
 	private static String username = "sifleetj";
 	private static String password = "Joosderg6";
 

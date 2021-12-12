@@ -62,34 +62,47 @@ const RightContent = ({ films }) => {
 
   const printFilms = (preparedFilms) => {
     return (
-      <MDBTable striped>
+      <MDBTable className={classes.FilmTable} striped>
         <MDBTableHead>
-        <tr>
-          <th scope='col'>ID</th>
-          <th scope='col'>Title</th>
-          <th scope='col'>Year</th>
-          <th scope='col'>Director</th>
-          <th scope='col'>Stars</th>
-          <th scope='col'>Review</th>
-        </tr>
-      </MDBTableHead>
-      <MDBTableBody>
-        {preparedFilms
-          ? preparedFilms.map((film) => {
-              return (
-                <tr onClick={() => getFilmID(film.id)}>
-                    <td>{film.id}</td>
-                    <td>{film.title}</td>
-                    <td>{film.year}</td>
-                    <td>{film.director}</td>
-                    <td>{film.stars}</td>
-                    <td>{film.review}</td>
-                </tr>
-              );
-            })
-          : null}
+          <tr>
+            <th className={classes.IDCell} scope="col">
+              ID
+            </th>
+            <th className={classes.TitleCell} scope="col">
+              Title
+            </th>
+            <th className={classes.YearCell} scope="col">
+              Year
+            </th>
+            <th className={classes.DirectorCell} scope="col">
+              Director
+            </th>
+            <th className={classes.StarsCell} scope="col">
+              Stars
+            </th>
+            <th className={classes.Review} scope="col">
+              Review
+            </th>
+          </tr>
+        </MDBTableHead>
+        <MDBTableBody>
+          {preparedFilms
+            ? preparedFilms.map((film) => {
+                return (
+                  <tr key={film.id} onClick={() => getFilmID(film.id)}>
+                    <td className={classes.IDCell}>{film.id}</td>
+                    <td className={classes.TitleCell}>{film.title}</td>
+                    <td className={classes.YearCell}>{film.year}</td>
+                    <td className={classes.DirectorCell}>{film.director}</td>
+                    <td className={classes.StarsCell}>{film.stars}</td>
+                    <td>
+                      <div className={classes.ReviewText}>{film.review}...</div>
+                    </td>
+                  </tr>
+                );
+              })
+            : null}
         </MDBTableBody>
-
       </MDBTable>
     );
   };

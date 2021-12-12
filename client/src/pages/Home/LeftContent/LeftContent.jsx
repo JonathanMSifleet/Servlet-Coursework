@@ -2,11 +2,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import Context from '../../../store/context';
 import classes from './LeftContent.module.scss';
 import * as actionTypes from '../../../store/actionTypes';
-import createHTTPRequest from '../../../utils/createHTTPRequest';
+import JSONRequest from '../../../utils/JSONRequest';
 import * as endpoints from '../../../endpoints';
 import Radio from './../../../components/Radio/Radio';
-import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner } from 'mdb-react-ui-kit';
+import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 import Input from './../../../components/Input/Input';
+import XMLRequest from '../../../utils/XMLRequest';
 
 const LeftContent = () => {
   const { globalState, actions } = useContext(Context);
@@ -16,17 +17,22 @@ const LeftContent = () => {
   const [formData, setFormData] = useState({});
   const [format, setFormat] = useState('json');
   const [selectedAttributeVal, setSelectedAttributeVal] = useState();
-  const [selectedLabel, setSelectedLabel] = useState('Title');
   const [selectedFilm, setSelectedFilm] = useState();
+  const [selectedLabel, setSelectedLabel] = useState('Title');
   const [shouldDeleteFilm, setShouldDeleteFilm] = useState(false);
   const [shouldGetFilmByID, setShouldGetFilmByID] = useState(false);
   const [shouldGetFilmByTitle, setShouldGetFilmByTitle] = useState(false);
   const [shouldPostFilm, setShouldPostFilm] = useState(false);
   const [shouldUpdateFilm, setShouldUpdateFilm] = useState(false);
-  const [updateFormData, setUpdateFormData] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [updateFormData, setUpdateFormData] = useState(false);
+  const [useREST, setUseREST] = useState(false);
 
-  const inputChangedHandler = (event, inputName, form) => {
+  useEffect(() => {
+    console.log(useREST);
+  }, [useREST]);
+
+  const formChangedHandler = (event, inputName, form) => {
     switch (form) {
       case 'filmForm':
         setFormData({
@@ -39,14 +45,19 @@ const LeftContent = () => {
           ...selectedFilm,
           [inputName]: event.target.value
         });
+        break;
     }
+  };
+
+  const toggleHandler = () => {
+    setUseREST(!useREST);
   };
 
   // create new film
   useEffect(() => {
     const postFilm = async () => {
       try {
-        await createHTTPRequest(endpoints.insertFilmEndpoint, 'POST', formData);
+        await JSONRequest(endpoints.insertFilmEndpoint, 'POST', formData);
       } catch (e) {
         setError(e);
       }
@@ -67,7 +78,7 @@ const LeftContent = () => {
         case 'json':
           actions({
             type: actionTypes.setFilms,
-            payload: await createHTTPRequest(url, 'GET')
+            payload: await JSONRequest(url, 'GET')
           });
           break;
         case 'xml':
@@ -82,7 +93,7 @@ const LeftContent = () => {
         default:
           actions({
             type: actionTypes.setFilms,
-            payload: await createHTTPRequest(url, 'GET')
+            payload: await JSONRequest(url, 'GET')
           });
       }
       setShouldGetFilmByTitle(false);
@@ -98,7 +109,7 @@ const LeftContent = () => {
       const url = `${endpoint}?format=${format}&id=${globalState.filmID}`;
 
       try {
-        const film = await createHTTPRequest(url, 'GET');
+        const film = await JSONRequest(url, 'GET');
         setSelectedFilm(film[0]);
       } catch (e) {
         setError(e);
@@ -117,7 +128,7 @@ const LeftContent = () => {
       setShowSpinner(true);
 
       try {
-        await createHTTPRequest(url, 'PUT', updateFormData);
+        await JSONRequest(url, 'PUT', updateFormData);
       } catch (e) {
         setError(e);
       }
@@ -136,7 +147,7 @@ const LeftContent = () => {
       setShowSpinner(true);
 
       try {
-        await createHTTPRequest(url, 'DELETE');
+        await JSONRequest(url, 'DELETE');
       } catch (e) {
         setError(e);
       }
@@ -150,13 +161,7 @@ const LeftContent = () => {
 
   const getXMLFilms = async (url) => {
     try {
-      let response = await fetch(url, {
-        method: 'GET'
-      });
-      response = await response.text();
-
-      const xml = new DOMParser().parseFromString(response, 'application/xml');
-      return new XMLSerializer().serializeToString(xml.documentElement);
+      return await XMLRequest(url);
     } catch (e) {
       setError(e);
       return null;
@@ -171,14 +176,18 @@ const LeftContent = () => {
   const renderSwitch = () => {
     switch (endpoint) {
       case endpoints.getAllFilmsEndpoint:
-        return <MDBBtn onClick={() => setShouldGetFilmByTitle(true)}>Get films</MDBBtn>;
+        return (
+          <MDBBtn onClick={() => setShouldGetFilmByTitle(true)}>
+            Get films
+          </MDBBtn>
+        );
       case endpoints.getFilmByTitleEndpoint:
         return (
           <>
             <Input
               label="Title"
               onChange={(event) => {
-                inputChangedHandler(event, 'filmTitle', 'filmForm');
+                formChangedHandler(event, 'filmTitle', 'filmForm');
               }}
             />
             <MDBBtn onClick={() => setShouldGetFilmByTitle(true)}>Get film(s)</MDBBtn>
@@ -197,27 +206,27 @@ const LeftContent = () => {
               <Input
                 className={classes.Input}
                 label="Title"
-                onChange={(event) => inputChangedHandler(event, 'title', 'filmForm')}
+                onChange={(event) => formChangedHandler(event, 'title', 'filmForm')}
               />
               <Input
                 className={classes.Input}
                 label="Year"
-                onChange={(event) => inputChangedHandler(event, 'year', 'filmForm')}
+                onChange={(event) => formChangedHandler(event, 'year', 'filmForm')}
               />
               <Input
                 className={classes.Input}
                 label="Director"
-                onChange={(event) => inputChangedHandler(event, 'director', 'filmForm')}
+                onChange={(event) => formChangedHandler(event, 'director', 'filmForm')}
               />
               <Input
                 className={classes.Input}
                 label="Stars"
-                onChange={(event) => inputChangedHandler(event, 'stars', 'filmForm')}
+                onChange={(event) => formChangedHandler(event, 'stars', 'filmForm')}
               />
               <Input
                 className={classes.Input}
                 label="Review"
-                onChange={(event) => inputChangedHandler(event, 'review', 'filmForm')}
+                onChange={(event) => formChangedHandler(event, 'review', 'filmForm')}
               />
 
               <MDBBtn onClick={() => setShouldPostFilm(true)}>Create new film</MDBBtn>
@@ -252,7 +261,7 @@ const LeftContent = () => {
                       className={classes.SelectInput}
                       label={selectedLabel ? selectedLabel : 'Title'}
                       placeholder={selectedAttributeVal ? selectedAttributeVal : selectedFilm.title}
-                      onChange={(event) => inputChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')}
+                      onChange={(event) => formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')}
                       type="text"
                     />
                   ) : (
@@ -260,7 +269,7 @@ const LeftContent = () => {
                       className={`${classes.SelectInput} ${classes.ReviewInput}`}
                       label={selectedLabel ? selectedLabel : 'Title'}
                       placeholder={selectedAttributeVal ? selectedAttributeVal : selectedFilm.title}
-                      onChange={(event) => inputChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')}
+                      onChange={(event) => formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')}
                       type="text"
                     />
                   )}
@@ -291,9 +300,9 @@ const LeftContent = () => {
           <>
             {globalState.filmID ? (
               <>
-                {/* <p>
+                <p>
                   <b>Film ID:</b> {globalState.filmID}
-                </p> */}
+                </p>
 
                 <MDBBtn onClick={() => setShouldDeleteFilm(true)}>Delete film</MDBBtn>
               </>
@@ -306,8 +315,10 @@ const LeftContent = () => {
   return (
     <MDBCol size="md-3" className={classes.LeftContent}>
       <h3>Format: </h3>
+      <MDBSwitch defaultChecked label="Use REST servlet" onChange={() => toggleHandler()} checked={useREST} />
+
       <MDBBtnGroup className={classes.FormatRadioGroup}>
-        <Radio label="JSON" name="formatGroup" onClick={() => setFormat('json')} />
+        <Radio defaultChecked label="JSON" name="formatGroup" onClick={() => setFormat('json')} />
         <Radio label="XML" name="formatGroup" onClick={() => setFormat('xml')} />
         <Radio label="Text" name="formatGroup" onClick={() => setFormat('csv')} />
       </MDBBtnGroup>
