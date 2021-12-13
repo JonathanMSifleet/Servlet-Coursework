@@ -51,7 +51,7 @@ public class InsertFilm extends HttpServlet implements utils.HandleHTTP {
 		case "xml":
 			try {
 
-				String xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><object><attributeOne>test</attributeOne><attributeTwo>test2</attributeTwo></object>";
+				String xmlString = "<object><attributeOne>test</attributeOne><attributeTwo>test2</attributeTwo></object>";
 
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = factory.newDocumentBuilder();
