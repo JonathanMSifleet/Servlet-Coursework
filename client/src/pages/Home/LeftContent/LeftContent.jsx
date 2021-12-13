@@ -20,6 +20,7 @@ const LeftContent = () => {
   const [selectedFilm, setSelectedFilm] = useState();
   const [selectedLabel, setSelectedLabel] = useState('Title');
   const [shouldDeleteFilm, setShouldDeleteFilm] = useState(false);
+  const [shouldGetAllFilms, setShouldGetAllFilms] = useState(false);
   const [shouldGetFilmByID, setShouldGetFilmByID] = useState(false);
   const [shouldGetFilmByTitle, setShouldGetFilmByTitle] = useState(false);
   const [shouldPostFilm, setShouldPostFilm] = useState(false);
@@ -53,20 +54,46 @@ const LeftContent = () => {
     setUseREST(!useREST);
   };
 
-  // create new film
+  // get all films
   useEffect(() => {
-    const postFilm = async () => {
+    async function getFilms() {
       try {
-        await JSONRequest(endpoints.insertFilmEndpoint, 'POST', formData);
+        const url = `${endpoints.getAllFilmsEndpoint}?format=${format}`;
+        setShowSpinner(true);
+        console.log('🚀 ~ file: LeftContent.jsx ~ line 61 ~ getFilms ~ url', url);
+
+        switch (format) {
+          case 'json':
+            actions({
+              type: actionTypes.setFilms,
+              payload: await JSONRequest(url, 'GET')
+            });
+            break;
+          case 'xml':
+            actions({
+              type: actionTypes.setFilms,
+              payload: await getXMLFilms(url)
+            });
+            break;
+          // case 'csv':
+          //   films = getCSVFilms(url);
+          //   break;
+          default:
+            actions({
+              type: actionTypes.setFilms,
+              payload: await JSONRequest(url, 'GET')
+            });
+        }
       } catch (e) {
         setError(e);
+      } finally {
+        setShowSpinner(false);
+        setShouldGetAllFilms(false);
       }
+    }
 
-      setShouldPostFilm(false);
-    };
-
-    if (shouldPostFilm) postFilm();
-  }, [shouldPostFilm]);
+    if (shouldGetAllFilms) getFilms();
+  }, [shouldGetAllFilms]);
 
   // get film by title
   useEffect(() => {
@@ -120,6 +147,21 @@ const LeftContent = () => {
 
     if (shouldGetFilmByID) getFilmByID();
   }, [shouldGetFilmByID]);
+
+  // create new film
+  useEffect(() => {
+    const postFilm = async () => {
+      try {
+        await JSONRequest(endpoints.insertFilmEndpoint, 'POST', formData);
+      } catch (e) {
+        setError(e);
+      }
+
+      setShouldPostFilm(false);
+    };
+
+    if (shouldPostFilm) postFilm();
+  }, [shouldPostFilm]);
 
   // update film
   useEffect(() => {
@@ -176,11 +218,7 @@ const LeftContent = () => {
   const renderSwitch = () => {
     switch (endpoint) {
       case endpoints.getAllFilmsEndpoint:
-        return (
-          <MDBBtn onClick={() => setShouldGetFilmByTitle(true)}>
-            Get films
-          </MDBBtn>
-        );
+        return <MDBBtn onClick={() => setShouldGetAllFilms(true)}>Get films</MDBBtn>;
       case endpoints.getFilmByTitleEndpoint:
         return (
           <>
@@ -203,31 +241,11 @@ const LeftContent = () => {
                 event.preventDefault();
               }}
             >
-              <Input
-                className={classes.Input}
-                label="Title"
-                onChange={(event) => formChangedHandler(event, 'title', 'filmForm')}
-              />
-              <Input
-                className={classes.Input}
-                label="Year"
-                onChange={(event) => formChangedHandler(event, 'year', 'filmForm')}
-              />
-              <Input
-                className={classes.Input}
-                label="Director"
-                onChange={(event) => formChangedHandler(event, 'director', 'filmForm')}
-              />
-              <Input
-                className={classes.Input}
-                label="Stars"
-                onChange={(event) => formChangedHandler(event, 'stars', 'filmForm')}
-              />
-              <Input
-                className={classes.Input}
-                label="Review"
-                onChange={(event) => formChangedHandler(event, 'review', 'filmForm')}
-              />
+              <Input className={classes.Input} label="Title" onChange={(event) => formChangedHandler(event, 'title', 'filmForm')} />
+              <Input className={classes.Input} label="Year" onChange={(event) => formChangedHandler(event, 'year', 'filmForm')} />
+              <Input className={classes.Input} label="Director" onChange={(event) => formChangedHandler(event, 'director', 'filmForm')} />
+              <Input className={classes.Input} label="Stars" onChange={(event) => formChangedHandler(event, 'stars', 'filmForm')} />
+              <Input className={classes.Input} label="Review" onChange={(event) => formChangedHandler(event, 'review', 'filmForm')} />
 
               <MDBBtn onClick={() => setShouldPostFilm(true)}>Create new film</MDBBtn>
             </form>
@@ -244,11 +262,7 @@ const LeftContent = () => {
                 </p>
 
                 <div className={classes.SelectWrapper}>
-                  <select
-                    className={classes.Select}
-                    name="filmAttributes"
-                    onChange={(event) => handleSelectChange(event)}
-                  >
+                  <select className={classes.Select} name="filmAttributes" onChange={(event) => handleSelectChange(event)}>
                     <option value={selectedFilm.title}>Title</option>
                     <option value={selectedFilm.year}>Year</option>
                     <option value={selectedFilm.director}>Director</option>
@@ -287,10 +301,7 @@ const LeftContent = () => {
               </>
             ) : null}
             {!selectedFilm && !globalState.filmID ? (
-              <p>
-                In order to update a film, you must click a film&apos;s title, which can be retrieved via getting all
-                films, or a film by its a title
-              </p>
+              <p>In order to update a film, you must click a film&apos;s title, which can be retrieved via getting all films, or a film by its a title</p>
             ) : null}
           </>
         );
@@ -325,11 +336,7 @@ const LeftContent = () => {
 
       <MDBBtnGroup className={classes.OperationRadioGroup}>
         <Radio name="operationGroup" label="Get all films" onClick={() => setEndpoint(endpoints.getAllFilmsEndpoint)} />
-        <Radio
-          name="operationGroup"
-          label="Get film by title"
-          onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)}
-        />
+        <Radio name="operationGroup" label="Get film by title" onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)} />
         <Radio name="operationGroup" label="Add new film" onClick={() => setEndpoint(endpoints.insertFilmEndpoint)} />
         <Radio name="operationGroup" label="Update film" onClick={() => setEndpoint(endpoints.getFilmByIDEndpoint)} />
         <Radio name="operationGroup" label="Delete film" onClick={() => setEndpoint(endpoints.deleteFilmEndpoint)} />
