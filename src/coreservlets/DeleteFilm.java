@@ -13,7 +13,7 @@ import dao.FilmDAOSingleton;
 import utils.HandleHTTP;
 
 @WebServlet("/deleteFilm")
-public class DeleteFilm extends HttpServlet {
+public class DeleteFilm extends HttpServlet implements utils.HandleHTTP {
 	private static final long serialVersionUID = -5107276414138521171L;
 
 	@Override

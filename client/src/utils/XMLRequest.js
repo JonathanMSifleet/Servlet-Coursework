@@ -1,11 +1,13 @@
-const createXMLRequest = async (url) => {
+const XMLRequest = async (url, method, body) => {
   let response = await fetch(url, {
-    method: 'GET'
+    method: method,
+    body
   });
+
   response = await response.text();
 
   const xml = new DOMParser().parseFromString(response, 'application/xml');
   return new XMLSerializer().serializeToString(xml.documentElement);
 };
 
-export default createXMLRequest;
+export default XMLRequest;

@@ -17,7 +17,7 @@ import models.Film;
 import utils.HandleHTTP;
 
 @WebServlet("/updateFilm")
-public class UpdateFilm extends HttpServlet {
+public class UpdateFilm extends HttpServlet implements utils.HandleHTTP {
 	private static final long serialVersionUID = -909062916095173117L;
 
 	@Override

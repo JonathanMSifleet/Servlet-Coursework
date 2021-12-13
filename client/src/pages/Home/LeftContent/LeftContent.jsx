@@ -3,11 +3,12 @@ import Context from '../../../store/context';
 import classes from './LeftContent.module.scss';
 import * as actionTypes from '../../../store/actionTypes';
 import JSONRequest from '../../../utils/JSONRequest';
-import * as endpoints from '../../../endpoints';
+import * as endpoints from '../../../constants/endpoints';
 import Radio from './../../../components/Radio/Radio';
 import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 import Input from './../../../components/Input/Input';
 import XMLRequest from '../../../utils/XMLRequest';
+import convertJSONFilmToXML from '../../../utils/convertJSONFilmToXML';
 
 const LeftContent = () => {
   const { globalState, actions } = useContext(Context);
@@ -28,10 +29,6 @@ const LeftContent = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [updateFormData, setUpdateFormData] = useState(false);
   const [useREST, setUseREST] = useState(false);
-
-  useEffect(() => {
-    console.log(useREST);
-  }, [useREST]);
 
   const formChangedHandler = (event, inputName, form) => {
     switch (form) {
@@ -101,28 +98,33 @@ const LeftContent = () => {
       setShowSpinner(true);
       const url = `${endpoint}?format=${format}&title=${formData.filmTitle}`;
 
-      switch (format) {
-        case 'json':
-          actions({
-            type: actionTypes.setFilms,
-            payload: await JSONRequest(url, 'GET')
-          });
-          break;
-        case 'xml':
-          actions({
-            type: actionTypes.setFilms,
-            payload: await getXMLFilms(url)
-          });
-          break;
-        // case 'csv':
-        //   films = getCSVFilms(url);
-        //   break;
-        default:
-          actions({
-            type: actionTypes.setFilms,
-            payload: await JSONRequest(url, 'GET')
-          });
+      try {
+        switch (format) {
+          case 'json':
+            actions({
+              type: actionTypes.setFilms,
+              payload: await JSONRequest(url, 'GET')
+            });
+            break;
+          case 'xml':
+            actions({
+              type: actionTypes.setFilms,
+              payload: await getXMLFilms(url)
+            });
+            break;
+          // case 'csv':
+          //   films = getCSVFilms(url);
+          //   break;
+          default:
+            actions({
+              type: actionTypes.setFilms,
+              payload: await JSONRequest(url, 'GET')
+            });
+        }
+      } catch (e) {
+        setError(e);
       }
+
       setShouldGetFilmByTitle(false);
       setShowSpinner(false);
     };
@@ -150,16 +152,34 @@ const LeftContent = () => {
 
   // create new film
   useEffect(() => {
-    const postFilm = async () => {
+    setShowSpinner(true);
+    const url = `${endpoint}?format=${format}`;
+
+    async function postFilm() {
       try {
-        await JSONRequest(endpoints.insertFilmEndpoint, 'POST', formData);
+        switch (format) {
+          case 'json':
+            await JSONRequest(url, 'POST', formData);
+            break;
+          case 'xml':
+            await XMLRequest(url, 'POST', convertJSONFilmToXML(formData));
+            break;
+          // case 'csv':
+          //   films = insertCSVFilm(url);
+          //   break;
+          default:
+            actions({
+              type: actionTypes.setFilms,
+              payload: await JSONRequest(url, 'GET')
+            });
+        }
       } catch (e) {
         setError(e);
       }
+    }
 
-      setShouldPostFilm(false);
-    };
-
+    setShouldPostFilm(false);
+    setShowSpinner(false);
     if (shouldPostFilm) postFilm();
   }, [shouldPostFilm]);
 

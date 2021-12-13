@@ -25,14 +25,4 @@
     <filter-name>CorsFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  <servlet>
-    <description></description>
-    <display-name>REST</display-name>
-    <servlet-name>REST</servlet-name>
-    <servlet-class>coreservlets.REST</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>REST</servlet-name>
-    <url-pattern>/REST</url-pattern>
-  </servlet-mapping>
 </web-app>

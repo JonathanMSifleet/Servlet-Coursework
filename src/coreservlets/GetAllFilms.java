@@ -14,7 +14,7 @@ import models.Film;
 import utils.HandleHTTP;
 
 @WebServlet("/getAllFilms")
-public class GetAllFilms extends HttpServlet {
+public class GetAllFilms extends HttpServlet implements utils.HandleHTTP {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -26,7 +26,32 @@ public class GetAllFilms extends HttpServlet {
 		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 		ArrayList<Film> films = filmDAO.getAllFilms();
 
-		HandleHTTP.handleFormat(request, response, films);
+		String format = request.getParameter("format");
+		if (format == null)
+			format = "json";
+
+		Object payload;
+
+		switch (format) {
+		case "json":
+			response.setContentType("application/json");
+			payload = HandleHTTP.handleJSON(films);
+			break;
+		case "xml":
+			response.setContentType("text/xml");
+			payload = HandleHTTP.handleXML(films);
+			break;
+		case "csv":
+			response.setContentType("text/csv");
+			payload = HandleHTTP.handleCSV(films);
+			break;
+		default:
+			response.setContentType("application/json");
+			payload = HandleHTTP.handleJSON(films);
+			break;
+		}
+
+		HandleHTTP.sendResponse(response, payload);
 	}
 
 }
