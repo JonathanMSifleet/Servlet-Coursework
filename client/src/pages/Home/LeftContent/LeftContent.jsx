@@ -201,12 +201,10 @@ const LeftContent = () => {
           //   films = insertCSVFilm(url);
           //   break;
           default:
-            actions({
-              type: actionTypes.setFilms,
-              payload: await JSONRequest(url, 'GET')
-            });
+            await JSONRequest(url, 'PUT', updateFormData);
+            break;
         }
-        setMessage('Film created successfully');
+        setMessage('Film updated successfully');
       } catch (e) {
         setMessage('Error occured:', e);
       }
@@ -337,7 +335,10 @@ const LeftContent = () => {
               </>
             ) : null}
             {!selectedFilm && !globalState.filmID ? (
-              <p>In order to update a film, you must click a film&apos;s title, which can be retrieved via getting all films, or a film by its a title</p>
+              <p>
+                In order to update a film, you must click a film&apos;s ID from the table, which can be retrieved via getting all films, or getting a film by
+                its a title
+              </p>
             ) : null}
           </>
         );

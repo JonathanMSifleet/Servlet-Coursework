@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import * as actionTypes from '../../../store/actionTypes';
 import Context from '../../../store/context';
 import classes from './RightContent.module.scss';
-import xml2js from 'xml2js';
 import { MDBCol, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 
 const RightContent = ({ films }) => {
@@ -28,13 +27,33 @@ const RightContent = ({ films }) => {
   };
 
   const handleXML = (films) => {
-    const deserialisedFilms = new DOMParser().parseFromString(films, 'application/xml');
+    const xmlFilms = new DOMParser().parseFromString(films, 'application/xml');
 
     try {
-      return xml2js(deserialisedFilms);
+      return convertXMLtoJSON(xmlFilms);
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const convertXMLtoJSON = (xml) => {
+    const json = [];
+
+    const localXML = xml.getElementsByTagName('root')[0].children;
+
+    for (let i = 0; i < localXML.length; i++) {
+      const child = localXML[i];
+
+      const id = child.getElementsByTagName('id')[0].textContent;
+      const title = child.getElementsByTagName('title')[0].textContent;
+      const year = child.getElementsByTagName('year')[0].textContent;
+      const director = child.getElementsByTagName('director')[0].textContent;
+      const stars = child.getElementsByTagName('stars')[0].textContent;
+      const review = child.getElementsByTagName('review')[0].textContent;
+
+      json.push({ id, title, year, director, stars, review });
+    }
+    return json;
   };
 
   const getFilmID = (id) => {
