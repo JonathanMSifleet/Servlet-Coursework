@@ -2,8 +2,8 @@ Read me:
 
 ---
 To do:
-- json update, Delete request
 - XML insert, update, delete
+- convert film.set to builder
 - CSV all
 - handle errors
 - Selecting different film should update changed film

@@ -55,8 +55,6 @@ public class SQLOperations {
 
 		int paramIndex = 1;
 
-		// for loop returns index out of bounds error:
-		// Index: 1, Size: 1
 		if (paramVals != null) {
 			for (Object param : paramVals) {
 				if (param instanceof String) {
@@ -75,17 +73,18 @@ public class SQLOperations {
 	public static int generateNewID() {
 		initFactory();
 
-		String SQL = "SELECT(MAX(id)) FROM films";
+		String SQL = "SELECT(MAX(id)) FROM epcoursework";
 
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, null);
 
 			java.sql.ResultSet result = statement.executeQuery();
-			result.first();
 
-			int largestID = result.getInt(1);
-			return ++largestID;
+			while (result.next()) {
+				return result.getInt(1) + 1;
+			}
+			return -1;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;

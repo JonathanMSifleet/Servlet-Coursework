@@ -18,7 +18,7 @@ public interface HandleHTTP {
 		return gson.toJson(data);
 	}
 
-	 static String handleXML(ArrayList<Film> data) throws IOException {
+	static String handleXML(ArrayList<Film> data) throws IOException {
 		XStream xstream = new XStream();
 		xstream.alias("root", List.class);
 		xstream.alias("film", models.Film.class);
@@ -27,7 +27,7 @@ public interface HandleHTTP {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + "\n" + xmlString;
 	}
 
-	 static String handleCSV(ArrayList<Film> data) throws IOException {
+	static String handleCSV(ArrayList<Film> data) throws IOException {
 		String csvString = "";
 		for (Film film : data) {
 			csvString += film.getObjectValues(film);
@@ -37,7 +37,7 @@ public interface HandleHTTP {
 		return csvString;
 	}
 
-	 static void sendResponse(HttpServletResponse response, Object payload) throws IOException {
+	static void sendResponse(HttpServletResponse response, Object payload) throws IOException {
 		PrintWriter out = response.getWriter();
 		out.print(payload);
 		out.flush();

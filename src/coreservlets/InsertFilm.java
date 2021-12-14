@@ -3,6 +3,7 @@ package coreservlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -50,25 +51,18 @@ public class InsertFilm extends HttpServlet implements utils.HandleHTTP {
 			break;
 		case "xml":
 			try {
-
-				String xmlString = "<object><attributeOne>test</attributeOne><attributeTwo>test2</attributeTwo></object>";
-
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = factory.newDocumentBuilder();
-				Document xmlObject = builder.parse(new InputSource(new StringReader(xmlString)));
+				Document xmlObject = builder.parse(new InputSource(new StringReader(requestBody)));
 
-				// print document attributes:
-				System.out.println("Root element: " + xmlObject.getDocumentElement().getNodeName());
+				Element root = xmlObject.getDocumentElement();
+				film.setTitle(root.getElementsByTagName("title").item(0).getTextContent());
+				film.setYear(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()));
+				film.setDirector(root.getElementsByTagName("director").item(0).getTextContent());
+				film.setStars(root.getElementsByTagName("stars").item(0).getTextContent());
+				film.setReview(root.getElementsByTagName("review").item(0).getTextContent());
 
-				int numRootElements = xmlObject.getDocumentElement().getAttributes().getLength();
-				System.out.println("Number of root elements: " + String.valueOf(numRootElements));
-
-				// log root element attributes:
-				System.out.println("Root element attributes: ");
-				for (int i = 0; i < numRootElements; i++) {
-					System.out.println(xmlObject.getDocumentElement().getAttributes().item(i).getNodeName() + ": "
-							+ xmlObject.getDocumentElement().getAttributes().item(i).getNodeValue());
-				}
+				System.out.println(film.toString());
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -77,11 +71,19 @@ public class InsertFilm extends HttpServlet implements utils.HandleHTTP {
 			break;
 		}
 
-		film.setId(SQLOperations.generateNewID());
+		try {
+			int id = SQLOperations.generateNewID();
+			if (id == -1)
+				throw new Exception("Invalid SQL result");
 
-		PrintWriter out = response.getWriter();
-		out.print(filmDAO.insertFilm(film));
-		out.flush();
+			film.setId(id);
+
+			PrintWriter out = response.getWriter();
+			out.print(filmDAO.insertFilm(film));
+			out.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -1,20 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Context from '../../../store/context';
-import classes from './LeftContent.module.scss';
 import * as actionTypes from '../../../store/actionTypes';
-import JSONRequest from '../../../utils/JSONRequest';
 import * as endpoints from '../../../constants/endpoints';
-import Radio from './../../../components/Radio/Radio';
-import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
+import Context from '../../../store/context';
 import Input from './../../../components/Input/Input';
+import JSONRequest from '../../../utils/JSONRequest';
+import Radio from './../../../components/Radio/Radio';
 import XMLRequest from '../../../utils/XMLRequest';
-import convertJSONFilmToXML from '../../../utils/convertJSONFilmToXML';
+import classes from './LeftContent.module.scss';
+import jsontoxml from 'jsontoxml';
+import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 
 const LeftContent = () => {
   const { globalState, actions } = useContext(Context);
 
   const [endpoint, setEndpoint] = useState('');
-  const [error, setError] = useState();
+  const [message, setMessage] = useState(null);
   const [formData, setFormData] = useState({});
   const [format, setFormat] = useState('json');
   const [selectedAttributeVal, setSelectedAttributeVal] = useState();
@@ -57,7 +57,6 @@ const LeftContent = () => {
       try {
         const url = `${endpoints.getAllFilmsEndpoint}?format=${format}`;
         setShowSpinner(true);
-        console.log('🚀 ~ file: LeftContent.jsx ~ line 61 ~ getFilms ~ url', url);
 
         switch (format) {
           case 'json':
@@ -82,7 +81,7 @@ const LeftContent = () => {
             });
         }
       } catch (e) {
-        setError(e);
+        setMessage('Error occured:', e);
       } finally {
         setShowSpinner(false);
         setShouldGetAllFilms(false);
@@ -122,7 +121,7 @@ const LeftContent = () => {
             });
         }
       } catch (e) {
-        setError(e);
+        setMessage('Error occured:', e);
       }
 
       setShouldGetFilmByTitle(false);
@@ -141,7 +140,7 @@ const LeftContent = () => {
         const film = await JSONRequest(url, 'GET');
         setSelectedFilm(film[0]);
       } catch (e) {
-        setError(e);
+        setMessage('Error occured:', e);
       }
 
       setShouldGetFilmByID(false);
@@ -162,7 +161,7 @@ const LeftContent = () => {
             await JSONRequest(url, 'POST', formData);
             break;
           case 'xml':
-            await XMLRequest(url, 'POST', convertJSONFilmToXML(formData));
+            await XMLRequest(url, 'POST', jsontoxml(formData));
             break;
           // case 'csv':
           //   films = insertCSVFilm(url);
@@ -173,8 +172,9 @@ const LeftContent = () => {
               payload: await JSONRequest(url, 'GET')
             });
         }
+        setMessage('Film created successfully');
       } catch (e) {
-        setError(e);
+        setMessage('Error occured:', e);
       }
     }
 
@@ -190,9 +190,25 @@ const LeftContent = () => {
       setShowSpinner(true);
 
       try {
-        await JSONRequest(url, 'PUT', updateFormData);
+        switch (format) {
+          case 'json':
+            await JSONRequest(url, 'PUT', updateFormData);
+            break;
+          case 'xml':
+            await XMLRequest(url, 'PUT', jsontoxml(updateFormData));
+            break;
+          // case 'csv':
+          //   films = insertCSVFilm(url);
+          //   break;
+          default:
+            actions({
+              type: actionTypes.setFilms,
+              payload: await JSONRequest(url, 'GET')
+            });
+        }
+        setMessage('Film created successfully');
       } catch (e) {
-        setError(e);
+        setMessage('Error occured:', e);
       }
 
       setShowSpinner(false);
@@ -211,7 +227,7 @@ const LeftContent = () => {
       try {
         await JSONRequest(url, 'DELETE');
       } catch (e) {
-        setError(e);
+        setMessage('Error occured:', e);
       }
 
       setShowSpinner(false);
@@ -225,7 +241,7 @@ const LeftContent = () => {
     try {
       return await XMLRequest(url);
     } catch (e) {
-      setError(e);
+      setMessage('Error occured:', e);
       return null;
     }
   };
@@ -370,7 +386,7 @@ const LeftContent = () => {
         </div>
       ) : null}
 
-      {error ? <p>Error occured: {error}</p> : null}
+      {message ? <p>{message}</p> : null}
     </MDBCol>
   );
 };
