@@ -6,14 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SQLOperations {
+public interface SQLOperations {
 
-	private static Connection conn;
-	private static String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
-	private static String username = "sifleetj";
-	private static String password = "Joosderg6";
+	public static Connection conn = null;
 
-	private static void initFactory() {
+	private static void loadDriver() {
+
+		String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
+		String username = "sifleetj";
+		String password = "Joosderg6";
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection(url, username, password);
@@ -23,7 +25,7 @@ public class SQLOperations {
 	}
 
 	public static java.sql.ResultSet sqlSelect(String SQL, ArrayList<Object> paramVals) {
-		initFactory();
+		loadDriver();
 
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
@@ -37,7 +39,7 @@ public class SQLOperations {
 	}
 
 	public static int sqlManipulate(String SQL, ArrayList<Object> paramVals) {
-		initFactory();
+		loadDriver();
 
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
@@ -71,7 +73,7 @@ public class SQLOperations {
 	}
 
 	public static int generateNewID() {
-		initFactory();
+		loadDriver();
 
 		String SQL = "SELECT(MAX(id)) FROM epcoursework";
 

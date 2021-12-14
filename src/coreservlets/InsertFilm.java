@@ -1,7 +1,6 @@
 package coreservlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.stream.Collectors;
 
@@ -25,7 +24,7 @@ import utils.HandleHTTP;
 import utils.SQLOperations;
 
 @WebServlet("/insertFilm")
-public class InsertFilm extends HttpServlet implements utils.HandleHTTP {
+public class InsertFilm extends HttpServlet implements utils.HandleHTTP, utils.SQLOperations {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -74,7 +73,7 @@ public class InsertFilm extends HttpServlet implements utils.HandleHTTP {
 			if (film.getId() == -1)
 				throw new Exception("Invalid SQL result");
 
-			HandleHTTP.sendResponse(response, film);
+			HandleHTTP.sendResponse(response, filmDAO.insertFilm(film));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
