@@ -216,6 +216,7 @@ const LeftContent = () => {
       setUpdateFormData(null);
       setShowSpinner(false);
       setShouldUpdateFilm(false);
+      setSelectedFilm(null);
     };
 
     if (shouldUpdateFilm) updateFilm();

@@ -17,10 +17,9 @@ import com.google.gson.Gson;
 import models.Film;
 
 public interface IMonoObjServletCommon {
-	
+
 	public static Film jsonToFilm(String jsonString) {
-		return new Film.Builder(new Gson().fromJson(jsonString, Film.class)).id(ISQLOperations.generateNewID())
-				.build();
+		return new Film.Builder(new Gson().fromJson(jsonString, Film.class)).build();
 	}
 
 	public static Film xmlToFilm(String xmlString) {
@@ -32,7 +31,7 @@ public interface IMonoObjServletCommon {
 			xmlObject = builder.parse(new InputSource(new StringReader(xmlString)));
 			Element root = xmlObject.getDocumentElement();
 
-			return new Film.Builder(null).id(ISQLOperations.generateNewID())
+			return new Film.Builder(null).id(Integer.valueOf(root.getElementsByTagName("id").item(0).getTextContent()))
 					.title(root.getElementsByTagName("title").item(0).getTextContent())
 					.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
 					.director(root.getElementsByTagName("director").item(0).getTextContent())
@@ -43,7 +42,7 @@ public interface IMonoObjServletCommon {
 		}
 		return null;
 	}
-	
+
 	public static String getRequestBody(HttpServletRequest request) {
 		try {
 			return request.getReader().lines().collect(Collectors.joining());

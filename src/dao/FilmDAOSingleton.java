@@ -18,7 +18,7 @@ public class FilmDAOSingleton {
 
 	public ArrayList<Film> getAllFilms() {
 		try {
-			String SQL = "SELECT * FROM epcoursework";
+			String SQL = "SELECT * FROM films";
 
 			java.sql.ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, null);
 			return resultsToList(results);
@@ -29,7 +29,7 @@ public class FilmDAOSingleton {
 	}
 
 	public ArrayList<Film> getFilmByTitle(String title) {
-		String SQL = "SELECT * FROM epcoursework WHERE title LIKE ?";
+		String SQL = "SELECT * FROM films WHERE title LIKE ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -45,7 +45,7 @@ public class FilmDAOSingleton {
 	}
 
 	public Film getFilmByID(int id) {
-		String SQL = "SELECT * FROM epcoursework WHERE id = ? LIMIT 1";
+		String SQL = "SELECT * FROM films WHERE id = ? LIMIT 1";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -66,7 +66,7 @@ public class FilmDAOSingleton {
 	}
 
 	public int insertFilm(Film film) {
-		String SQL = "INSERT INTO epcoursework VALUES (?, ?, ?, ?, ?, ?)";
+		String SQL = "INSERT INTO films VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
@@ -78,15 +78,15 @@ public class FilmDAOSingleton {
 		}
 	}
 
-	public int updateFilm(Film film) {
-		String SQL = "UPDATE epcoursework SET id = ?, title = ?, year = ?, "
+	public int updateFilm(Film film) {		
+		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, "
 				+ "director = ?, stars = ?, review = ? WHERE id = ?";
 
 		try {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
 
 			paramVals.add(film.getId());
-
+			
 			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class FilmDAOSingleton {
 	}
 
 	public int deleteFilm(int id) {
-		String SQL = "DELETE FROM epcoursework WHERE id = ?";
+		String SQL = "DELETE FROM films WHERE id = ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();

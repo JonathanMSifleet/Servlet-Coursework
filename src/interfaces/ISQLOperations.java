@@ -10,9 +10,13 @@ public interface ISQLOperations {
 
 	static Connection loadDriver() {
 
-		String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
-		String username = "sifleetj";
-		String password = "Joosderg6";
+//		String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
+//		String username = "sifleetj";
+//		String password = "Joosderg6";
+
+		String url = "jdbc:mysql://localhost:3306/epcoursework";
+		String username = "root";
+		String password = "Phantom2011!";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -23,7 +27,7 @@ public interface ISQLOperations {
 		return null;
 	}
 
-	 static java.sql.ResultSet sqlSelect(Connection conn, String SQL, ArrayList<Object> paramVals) {
+	static java.sql.ResultSet sqlSelect(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, paramVals);
@@ -35,7 +39,7 @@ public interface ISQLOperations {
 		return null;
 	}
 
-	 static int sqlManipulate(Connection conn, String SQL, ArrayList<Object> paramVals) {
+	static int sqlManipulate(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, paramVals);
@@ -70,7 +74,7 @@ public interface ISQLOperations {
 	static int generateNewID() {
 		Connection conn = loadDriver();
 
-		String SQL = "SELECT(MAX(id)) FROM epcoursework";
+		String SQL = "SELECT(MAX(id)) FROM films";
 
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
