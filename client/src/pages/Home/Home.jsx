@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import Context from '../../store/context';
+import LeftContent from './LeftContent/LeftContent';
+import RightContent from './RightContent/RightContent';
 import classes from './Home.module.scss';
 import { MDBContainer, MDBRow } from 'mdb-react-ui-kit';
-import RightContent from './RightContent/RightContent';
-import LeftContent from './LeftContent/LeftContent';
 
 const Home = () => {
   const { globalState } = useContext(Context);

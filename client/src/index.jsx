@@ -1,9 +1,9 @@
 // must load before App
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import App from './App';
 import Context from './store/context';
+import ReactDOM from 'react-dom';
 import StateHook from './store/StateHook';
 import reportWebVitals from './reportWebVitals';
 import './styles/global.scss';

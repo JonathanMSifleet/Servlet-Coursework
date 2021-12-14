@@ -1,6 +1,6 @@
-import { MDBRadio } from 'mdb-react-ui-kit';
 import React from 'react';
 import classes from './Radio.module.scss';
+import { MDBRadio } from 'mdb-react-ui-kit';
 
 const Radio = ({ defaultChecked, label, name, onClick }) => {
   return (
