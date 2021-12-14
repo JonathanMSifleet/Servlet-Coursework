@@ -13,29 +13,16 @@ import com.thoughtworks.xstream.XStream;
 import models.Film;
 
 public interface IHandleHTTP {
-	static String handleJSON(ArrayList<Film> data) throws IOException {
-		Gson gson = new Gson();
-		return gson.toJson(data);
-	}
 
-	static String handleXML(ArrayList<Film> data) throws IOException {
-		XStream xstream = new XStream();
-		xstream.alias("root", List.class);
-		xstream.alias("film", models.Film.class);
-
-		String xmlString = xstream.toXML(data);
-		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + "\n" + xmlString;
-	}
-
-	static String handleCSV(ArrayList<Film> data) throws IOException {
-		String csvString = "";
-		for (Film film : data) {
-			csvString += film.toString();
-			csvString += "\n";
-		}
-
-		return csvString;
-	}
+//	static String handleCSV(ArrayList<Film> data) throws IOException {
+//		String csvString = "";
+//		for (Film film : data) {
+//			csvString += film.toString();
+//			csvString += "\n";
+//		}
+//
+//		return csvString;
+//	}
 
 	static void sendResponse(HttpServletResponse response, Object payload) throws IOException {
 		PrintWriter out = response.getWriter();

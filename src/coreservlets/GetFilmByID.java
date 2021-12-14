@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
+import interfaces.IGetFormat;
 import interfaces.IHandleHTTP;
+import interfaces.IPolyObjServletCommon;
 import models.Film;
 
 @WebServlet("/getFilmByID")
-public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP {
+public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, interfaces.IGetFormat {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -27,29 +29,26 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP {
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		ArrayList<Film> films = filmDAO.getFilmByID(id);
-
-		String format = request.getParameter("format");
-		if (format == null)
-			format = "json";
+		String format = IGetFormat.getFormat(request);
 
 		Object payload;
 
 		switch (format) {
 		case "json":
 			response.setContentType("application/json");
-			payload = IHandleHTTP.handleJSON(films);
+			payload = IPolyObjServletCommon.jsonArrayToFilmList(films);
 			break;
 		case "xml":
 			response.setContentType("text/xml");
-			payload = IHandleHTTP.handleXML(films);
+			payload = IPolyObjServletCommon.xmlArrayToFilmList(films);
 			break;
-		case "csv":
-			response.setContentType("text/csv");
-			payload = IHandleHTTP.handleCSV(films);
-			break;
+//		case "csv":
+//			response.setContentType("text/csv");
+//			payload = IPolyObjServletCommon.handleCSV(films);
+//			break;
 		default:
 			response.setContentType("application/json");
-			payload = IHandleHTTP.handleJSON(films);
+			payload = IPolyObjServletCommon.jsonArrayToFilmList(films);
 			break;
 		}
 

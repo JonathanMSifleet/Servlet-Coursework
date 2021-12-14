@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 
 import models.Film;
 
-public interface IServletCommon {
+public interface IMonoObjServletCommon {
 	
 	public static Film jsonToFilm(String jsonString) {
 		return new Film.Builder(new Gson().fromJson(jsonString, Film.class)).id(ISQLOperations.generateNewID())
@@ -42,14 +42,6 @@ public interface IServletCommon {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public static String getFormat(HttpServletRequest request) {
-		String format = request.getParameter("format");
-		if (format == null)
-			format = "json";
-		
-		return format;
 	}
 	
 	public static String getRequestBody(HttpServletRequest request) {
