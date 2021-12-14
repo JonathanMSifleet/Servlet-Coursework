@@ -47,7 +47,6 @@ public interface IMonoObjServletCommon {
 		try {
 			return request.getReader().lines().collect(Collectors.joining());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

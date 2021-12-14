@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import * as actionTypes from '../../../store/actionTypes';
 import * as endpoints from '../../../constants/endpoints';
 import Context from '../../../store/context';
+import CSVRequest from '../../../utils/CSVRequest';
 import Input from './../../../components/Input/Input';
 import JSONRequest from '../../../utils/JSONRequest';
 import Radio from './../../../components/Radio/Radio';
@@ -55,6 +56,7 @@ const LeftContent = () => {
     async function getFilms() {
       try {
         const url = `${endpoints.getAllFilmsEndpoint}?format=${format}`;
+        console.log('🚀 ~ file: LeftContent.jsx ~ line 59 ~ getFilms ~ url', url);
         setShowSpinner(true);
 
         switch (format) {
@@ -67,12 +69,15 @@ const LeftContent = () => {
           case 'xml':
             actions({
               type: actionTypes.setFilms,
-              payload: await getXMLFilms(url)
+              payload: await XMLRequest(url, 'GET')
             });
             break;
-          // case 'csv':
-          //   films = getCSVFilms(url);
-          //   break;
+          case 'csv':
+            actions({
+              type: actionTypes.setFilms,
+              payload: await CSVRequest(url, 'GET')
+            });
+            break;
           default:
             actions({
               type: actionTypes.setFilms,
@@ -81,10 +86,10 @@ const LeftContent = () => {
         }
       } catch (e) {
         console.error(e);
-      } finally {
-        setShowSpinner(false);
-        setShouldGetAllFilms(false);
       }
+
+      setShowSpinner(false);
+      setShouldGetAllFilms(false);
     }
 
     if (shouldGetAllFilms) getFilms();
@@ -95,7 +100,6 @@ const LeftContent = () => {
     const getFilms = async () => {
       setShowSpinner(true);
       const url = `${endpoint}?format=${format}&title=${formData.title}`;
-      console.log('🚀 ~ file: LeftContent.jsx ~ line 98 ~ getFilms ~ url', url);
 
       try {
         switch (format) {
@@ -108,7 +112,7 @@ const LeftContent = () => {
           case 'xml':
             actions({
               type: actionTypes.setFilms,
-              payload: await getXMLFilms(url)
+              payload: await XMLRequest(url, 'GET')
             });
             break;
           // case 'csv':
@@ -240,15 +244,6 @@ const LeftContent = () => {
 
     if (shouldDeleteFilm) deleteFilm();
   }, [shouldDeleteFilm]);
-
-  const getXMLFilms = async (url) => {
-    try {
-      return await XMLRequest(url);
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
-  };
 
   const handleSelectChange = (event) => {
     setSelectedAttributeVal(event.target.value);

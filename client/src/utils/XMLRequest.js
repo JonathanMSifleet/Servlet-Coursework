@@ -1,6 +1,6 @@
 const XMLRequest = async (url, method, body) => {
   let response = await fetch(url, {
-    method: method,
+    method,
     body
   });
 

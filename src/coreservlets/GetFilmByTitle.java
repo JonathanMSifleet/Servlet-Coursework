@@ -36,11 +36,11 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 		switch (format) {
 		case "json":
 			response.setContentType("application/json");
-			payload = IPolyObjServletCommon.jsonArrayToFilmList(films);
+			payload = IPolyObjServletCommon.filmsToJSONArray(films);
 			break;
 		case "xml":
 			response.setContentType("text/xml");
-			payload = IPolyObjServletCommon.xmlArrayToFilmList(films);
+			payload = IPolyObjServletCommon.filmsToXMLArray(films);
 			break;
 //		case "csv":
 //			response.setContentType("text/csv");
@@ -48,7 +48,7 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 //			break;
 		default:
 			response.setContentType("application/json");
-			payload = IPolyObjServletCommon.jsonArrayToFilmList(films);
+			payload = IPolyObjServletCommon.filmsToJSONArray(films);
 			break;
 		}
 
