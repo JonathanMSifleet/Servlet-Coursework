@@ -95,6 +95,7 @@ const LeftContent = () => {
     const getFilms = async () => {
       setShowSpinner(true);
       const url = `${endpoint}?format=${format}&title=${formData.title}`;
+      console.log('🚀 ~ file: LeftContent.jsx ~ line 98 ~ getFilms ~ url', url);
 
       try {
         switch (format) {
@@ -138,7 +139,7 @@ const LeftContent = () => {
 
       try {
         const film = await JSONRequest(url, 'GET');
-        setSelectedFilm(film[0]);
+        setSelectedFilm(film);
       } catch (e) {
         console.error(e);
       }
@@ -188,7 +189,10 @@ const LeftContent = () => {
   useEffect(() => {
     const updateFilm = async () => {
       const url = `${endpoints.updateFilmEndpoint}?format=${format}`;
+      console.log('🚀 ~ file: LeftContent.jsx ~ line 192 ~ updateFilm ~ url', url);
       setShowSpinner(true);
+
+      console.log('updateFormData', updateFormData);
 
       try {
         switch (format) {
@@ -260,7 +264,7 @@ const LeftContent = () => {
             <Input
               label="Title"
               onChange={(event) => {
-                formChangedHandler(event, 'filmTitle', 'filmForm');
+                formChangedHandler(event, 'title', 'filmForm');
               }}
             />
             <MDBBtn onClick={() => setShouldGetFilmByTitle(true)}>Get film(s)</MDBBtn>
@@ -323,7 +327,9 @@ const LeftContent = () => {
                     />
                   )}
                 </div>
-                <MDBBtn onClick={() => setShouldUpdateFilm(true)}>Update film</MDBBtn>
+                <MDBBtn className={classes.UpdateFilmButton} onClick={() => setShouldUpdateFilm(true)}>
+                  Update film
+                </MDBBtn>
               </>
             ) : null}
             {!selectedFilm && globalState.filmID ? (
@@ -338,7 +344,7 @@ const LeftContent = () => {
             {!selectedFilm && !globalState.filmID ? (
               <p>
                 In order to update a film, you must click a film&apos;s ID from the table, which can be retrieved via getting all films, or getting a film by
-                its a title
+                its title
               </p>
             ) : null}
           </>

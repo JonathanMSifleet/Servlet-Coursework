@@ -27,6 +27,7 @@ public class GetAllFilms extends HttpServlet implements interfaces.IHandleHTTP, 
 
 		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 		ArrayList<Film> films = filmDAO.getAllFilms();
+				
 		String format = IGetFormat.getFormat(request);
 
 		Object payload;

@@ -29,6 +29,8 @@ public class UpdateFilm extends HttpServlet
 		String filmString = IMonoObjServletCommon.getRequestBody(request);
 		String format = IGetFormat.getFormat(request);
 
+		System.out.println(format + " " + filmString);
+
 		Film film = null;
 		switch (format) {
 		case "json":

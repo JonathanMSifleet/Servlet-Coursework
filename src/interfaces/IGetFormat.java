@@ -1,9 +1,7 @@
 package interfaces;
 
-import javax.servlet.http.HttpServletRequest;
-
 public interface IGetFormat {
-	static String getFormat(HttpServletRequest request) {
+	static String getFormat(javax.servlet.http.HttpServletRequest request) {
 		String format = request.getParameter("format");
 		if (format == null)
 			format = "json";

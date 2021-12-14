@@ -1,7 +1,6 @@
 package coreservlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,10 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.thoughtworks.xstream.XStream;
+
 import dao.FilmDAOSingleton;
 import interfaces.IGetFormat;
 import interfaces.IHandleHTTP;
-import interfaces.IPolyObjServletCommon;
 import models.Film;
 
 @WebServlet("/getFilmByID")
@@ -28,19 +29,26 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
-		ArrayList<Film> films = filmDAO.getFilmByID(id);
+		Film film = filmDAO.getFilmByID(id);
 		String format = IGetFormat.getFormat(request);
 
 		Object payload;
 
+		Gson gson = new Gson();
+
 		switch (format) {
 		case "json":
 			response.setContentType("application/json");
-			payload = IPolyObjServletCommon.jsonArrayToFilmList(films);
+			payload = gson.toJson(film);
 			break;
 		case "xml":
 			response.setContentType("text/xml");
-			payload = IPolyObjServletCommon.xmlArrayToFilmList(films);
+			XStream xstream = new XStream();
+			xstream.alias("film", models.Film.class);
+
+			String xmlString = xstream.toXML(film);
+
+			payload = xmlString;
 			break;
 //		case "csv":
 //			response.setContentType("text/csv");
@@ -48,7 +56,7 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 //			break;
 		default:
 			response.setContentType("application/json");
-			payload = IPolyObjServletCommon.jsonArrayToFilmList(films);
+			payload = gson.toJson(film);
 			break;
 		}
 

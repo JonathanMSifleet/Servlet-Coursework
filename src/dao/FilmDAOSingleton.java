@@ -44,15 +44,21 @@ public class FilmDAOSingleton {
 		return null;
 	}
 
-	public ArrayList<Film> getFilmByID(int id) {
-		String SQL = "SELECT * FROM epcoursework WHERE id = ?";
+	public Film getFilmByID(int id) {
+		String SQL = "SELECT * FROM epcoursework WHERE id = ? LIMIT 1";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
 			paramVals.add(id);
 
-			java.sql.ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
-			return resultsToList(results);
+			java.sql.ResultSet result = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
+
+			result.next();
+
+			return new Film.Builder(null).id(result.getInt("id")).title(result.getString("title"))
+					.year(result.getInt("year")).director(result.getString("director")).stars(result.getString("stars"))
+					.review(result.getString("review")).build();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,7 +68,7 @@ public class FilmDAOSingleton {
 	public int insertFilm(Film film) {
 		String SQL = "INSERT INTO epcoursework VALUES (?, ?, ?, ?, ?, ?)";
 
-		try {			
+		try {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
 
 			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
