@@ -8,9 +8,7 @@ import java.util.ArrayList;
 
 public interface SQLOperations {
 
-	public static Connection conn = null;
-
-	private static void loadDriver() {
+	static Connection loadDriver() {
 
 		String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
 		String username = "sifleetj";
@@ -18,15 +16,14 @@ public interface SQLOperations {
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-			conn = DriverManager.getConnection(url, username, password);
+			return DriverManager.getConnection(url, username, password);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
-	public static java.sql.ResultSet sqlSelect(String SQL, ArrayList<Object> paramVals) {
-		loadDriver();
-
+	 static java.sql.ResultSet sqlSelect(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, paramVals);
@@ -38,9 +35,7 @@ public interface SQLOperations {
 		return null;
 	}
 
-	public static int sqlManipulate(String SQL, ArrayList<Object> paramVals) {
-		loadDriver();
-
+	 static int sqlManipulate(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, paramVals);
@@ -52,7 +47,7 @@ public interface SQLOperations {
 		}
 	}
 
-	private static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals)
+	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals)
 			throws SQLException {
 
 		int paramIndex = 1;
@@ -72,8 +67,8 @@ public interface SQLOperations {
 		return statement;
 	}
 
-	public static int generateNewID() {
-		loadDriver();
+	static int generateNewID() {
+		Connection conn = loadDriver();
 
 		String SQL = "SELECT(MAX(id)) FROM epcoursework";
 

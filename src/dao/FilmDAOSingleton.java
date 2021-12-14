@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import models.Film;
+import utils.HandleHTTP;
 import utils.SQLOperations;
 
 public class FilmDAOSingleton {
@@ -20,7 +21,7 @@ public class FilmDAOSingleton {
 		try {
 			String SQL = "SELECT * FROM epcoursework";
 
-			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, null);
+			java.sql.ResultSet results = SQLOperations.sqlSelect(SQLOperations.loadDriver(), SQL, null);
 			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,7 +36,8 @@ public class FilmDAOSingleton {
 			ArrayList<Object> paramVals = new ArrayList<>();
 			paramVals.add("%" + title + "%");
 
-			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, paramVals);
+			java.sql.ResultSet results = SQLOperations.sqlSelect(SQLOperations.loadDriver(), SQL, paramVals);
+
 			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,7 +52,7 @@ public class FilmDAOSingleton {
 			ArrayList<Object> paramVals = new ArrayList<>();
 			paramVals.add(id);
 
-			java.sql.ResultSet results = SQLOperations.sqlSelect(SQL, paramVals);
+			java.sql.ResultSet results = SQLOperations.sqlSelect(SQLOperations.loadDriver(), SQL, paramVals);
 			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,7 +66,7 @@ public class FilmDAOSingleton {
 		try {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
 
-			return SQLOperations.sqlManipulate(SQL, paramVals);
+			return SQLOperations.sqlManipulate(SQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
@@ -80,7 +82,7 @@ public class FilmDAOSingleton {
 
 			paramVals.add(film.getId());
 
-			return SQLOperations.sqlManipulate(SQL, paramVals);
+			return SQLOperations.sqlManipulate(SQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
@@ -94,7 +96,7 @@ public class FilmDAOSingleton {
 			ArrayList<Object> paramVals = new ArrayList<>();
 			paramVals.add(id);
 
-			return SQLOperations.sqlManipulate(SQL, paramVals);
+			return SQLOperations.sqlManipulate(SQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
@@ -106,8 +108,7 @@ public class FilmDAOSingleton {
 
 		try {
 			while (results.next()) {
-				Film film = resultToFilm(results);
-				films.add(film);
+				films.add(resultToFilm(results));
 			}
 			return films;
 		} catch (SQLException e) {
@@ -119,7 +120,7 @@ public class FilmDAOSingleton {
 	private Film resultToFilm(java.sql.ResultSet results) {
 
 		try {
-			return new Film.FilmBuilder(null).id((int) results.getObject(1)).title((String) results.getObject(2))
+			return new Film.Builder().id((int) results.getObject(1)).title((String) results.getObject(2))
 					.year((int) results.getObject(3)).director((String) results.getObject(4))
 					.stars((String) results.getObject(5)).review((String) results.getObject(6)).build();
 		} catch (Exception e) {

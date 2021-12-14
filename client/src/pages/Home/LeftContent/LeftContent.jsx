@@ -14,7 +14,6 @@ const LeftContent = () => {
   const { globalState, actions } = useContext(Context);
 
   const [endpoint, setEndpoint] = useState('');
-  const [message, setMessage] = useState(null);
   const [formData, setFormData] = useState({});
   const [format, setFormat] = useState('json');
   const [selectedAttributeVal, setSelectedAttributeVal] = useState();
@@ -81,7 +80,7 @@ const LeftContent = () => {
             });
         }
       } catch (e) {
-        setMessage('Error occured:', e);
+        console.error(e);
       } finally {
         setShowSpinner(false);
         setShouldGetAllFilms(false);
@@ -121,11 +120,12 @@ const LeftContent = () => {
             });
         }
       } catch (e) {
-        setMessage('Error occured:', e);
+        console.error(e);
       }
 
-      setShouldGetFilmByTitle(false);
       setShowSpinner(false);
+      setShouldGetFilmByTitle(false);
+      setFormData({});
     };
 
     if (shouldGetFilmByTitle) getFilms();
@@ -135,14 +135,16 @@ const LeftContent = () => {
   useEffect(() => {
     const getFilmByID = async () => {
       const url = `${endpoint}?format=${format}&id=${globalState.filmID}`;
+      setShowSpinner(true);
 
       try {
         const film = await JSONRequest(url, 'GET');
         setSelectedFilm(film[0]);
       } catch (e) {
-        setMessage('Error occured:', e);
+        console.error(e);
       }
 
+      setShowSpinner(false);
       setShouldGetFilmByID(false);
     };
 
@@ -151,17 +153,17 @@ const LeftContent = () => {
 
   // create new film
   useEffect(() => {
-    setShowSpinner(true);
-    const url = `${endpoint}?format=${format}`;
-
     async function postFilm() {
+      const url = `${endpoint}?format=${format}`;
+      setShowSpinner(true);
+
       try {
         switch (format) {
           case 'json':
             await JSONRequest(url, 'POST', formData);
             break;
           case 'xml':
-            await XMLRequest(url, 'POST', jsontoxml(formData));
+            await XMLRequest(url, 'POST', `<film>${jsontoxml(formData)}</film>`);
             break;
           // case 'csv':
           //   films = insertCSVFilm(url);
@@ -172,14 +174,15 @@ const LeftContent = () => {
               payload: await JSONRequest(url, 'GET')
             });
         }
-        setMessage('Film created successfully');
       } catch (e) {
-        setMessage('Error occured:', e);
+        console.error(e);
       }
+
+      setShouldPostFilm(false);
+      setShowSpinner(false);
+      setFormData({});
     }
 
-    setShouldPostFilm(false);
-    setShowSpinner(false);
     if (shouldPostFilm) postFilm();
   }, [shouldPostFilm]);
 
@@ -204,9 +207,8 @@ const LeftContent = () => {
             await JSONRequest(url, 'PUT', updateFormData);
             break;
         }
-        setMessage('Film updated successfully');
       } catch (e) {
-        setMessage('Error occured:', e);
+        console.error(e);
       }
 
       setShowSpinner(false);
@@ -225,7 +227,7 @@ const LeftContent = () => {
       try {
         await JSONRequest(url, 'DELETE');
       } catch (e) {
-        setMessage('Error occured:', e);
+        console.error(e);
       }
 
       setShowSpinner(false);
@@ -239,7 +241,7 @@ const LeftContent = () => {
     try {
       return await XMLRequest(url);
     } catch (e) {
-      setMessage('Error occured:', e);
+      console.error(e);
       return null;
     }
   };
@@ -386,8 +388,6 @@ const LeftContent = () => {
           <MDBSpinner role="status" />
         </div>
       ) : null}
-
-      {message ? <p>{message}</p> : null}
     </MDBCol>
   );
 };

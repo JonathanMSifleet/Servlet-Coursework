@@ -27,7 +27,7 @@ public class GetFilmByTitle extends HttpServlet implements utils.HandleHTTP {
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		ArrayList<Film> films = filmDAO.getFilmByTitle(title);
-		
+
 		String format = request.getParameter("format");
 		if (format == null)
 			format = "json";

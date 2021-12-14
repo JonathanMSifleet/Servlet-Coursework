@@ -43,7 +43,7 @@ public interface HandleHTTP {
 		out.flush();
 	}
 
-	public static HttpServletResponse setHeaders(HttpServletResponse response, String method) {
+	static HttpServletResponse setHeaders(HttpServletResponse response, String method) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		response.setHeader("Access-Control-Allow-Methods", method);

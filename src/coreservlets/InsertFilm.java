@@ -44,8 +44,8 @@ public class InsertFilm extends HttpServlet implements utils.HandleHTTP, utils.S
 
 		switch (format) {
 		case "json":
-			film = new Film.FilmBuilder(new Gson().fromJson(requestBody, Film.class)).id(SQLOperations.generateNewID())
-					.build();
+//			film = new Film.Builder(new Gson().fromJson(requestBody, Film.class)).id(SQLOperations.generateNewID())
+//					.build();
 			break;
 		case "xml":
 			try {
@@ -53,11 +53,12 @@ public class InsertFilm extends HttpServlet implements utils.HandleHTTP, utils.S
 				DocumentBuilder builder = factory.newDocumentBuilder();
 				Document xmlObject;
 
+				System.out.println("requestBody: " + requestBody);
+
 				xmlObject = builder.parse(new InputSource(new StringReader(requestBody)));
 				Element root = xmlObject.getDocumentElement();
 
-				film = new Film.FilmBuilder(null)
-						.id(SQLOperations.generateNewID())
+				film = new Film.Builder().id(SQLOperations.generateNewID())
 						.title(root.getElementsByTagName("title").item(0).getTextContent())
 						.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
 						.director(root.getElementsByTagName("director").item(0).getTextContent())
@@ -70,10 +71,11 @@ public class InsertFilm extends HttpServlet implements utils.HandleHTTP, utils.S
 		}
 
 		try {
-			if (film.getId() == -1)
+			if (film.getId() == -1) {
 				throw new Exception("Invalid SQL result");
-
-			HandleHTTP.sendResponse(response, filmDAO.insertFilm(film));
+			} else {
+				HandleHTTP.sendResponse(response, filmDAO.insertFilm(film));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
