@@ -44,8 +44,8 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return String.format("%s,%s,%s,%s,\"%s\",\"%s\"", this.getId(), this.getTitle(), this.getYear(),
-				this.getDirector(), this.getStars(), this.getReview());
+		return this.getId() + ", " + this.getTitle() + ", " + this.getYear() + ", " + this.getDirector() + ", "
+				+ this.getStars() + ", " + this.getReview();
 	}
 
 	public static class Builder {
@@ -56,7 +56,16 @@ public class Film {
 		private String stars;
 		private String review;
 
-		public Builder() {
+		public Builder(Film film) {
+
+			if (film != null) {
+				this.id = film.getId();
+				this.title = film.getTitle();
+				this.year = film.getYear();
+				this.director = film.getDirector();
+				this.stars = film.getStars();
+				this.review = film.getReview();
+			}
 		}
 
 		public Builder id(int id) {

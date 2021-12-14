@@ -10,28 +10,40 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-
 import dao.FilmDAOSingleton;
+import interfaces.IHandleHTTP;
+import interfaces.IServletCommon;
 import models.Film;
-import utils.HandleHTTP;
 
 @WebServlet("/updateFilm")
-public class UpdateFilm extends HttpServlet implements utils.HandleHTTP {
+public class UpdateFilm extends HttpServlet implements interfaces.IHandleHTTP {
 	private static final long serialVersionUID = -909062916095173117L;
 
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.setContentType("application/json");
-
-		response = HandleHTTP.setHeaders(response, "PUT");
+		response = IHandleHTTP.setHeaders(response, "PUT");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
-
 		String requestBody = request.getReader().lines().collect(Collectors.joining());
-		Film film = new Gson().fromJson(requestBody, Film.class);
+
+		System.out.println("Request Body: " + requestBody);
+
+		String format = request.getParameter("format");
+		if (format == null)
+			format = "json";
+
+		Film film = null;
+
+		switch (format) {
+		case "json":
+			film = IServletCommon.jsonToFilm(requestBody);
+			break;
+		case "xml":
+			film = IServletCommon.xmlToFilm(requestBody);
+			break;
+		}
 
 		PrintWriter out = response.getWriter();
 		out.print(filmDAO.updateFilm(film));

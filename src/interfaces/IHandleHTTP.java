@@ -1,4 +1,4 @@
-package utils;
+package interfaces;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +12,7 @@ import com.thoughtworks.xstream.XStream;
 
 import models.Film;
 
-public interface HandleHTTP {
+public interface IHandleHTTP {
 	static String handleJSON(ArrayList<Film> data) throws IOException {
 		Gson gson = new Gson();
 		return gson.toJson(data);

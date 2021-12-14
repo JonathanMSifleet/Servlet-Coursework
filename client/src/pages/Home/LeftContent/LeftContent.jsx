@@ -94,7 +94,7 @@ const LeftContent = () => {
   useEffect(() => {
     const getFilms = async () => {
       setShowSpinner(true);
-      const url = `${endpoint}?format=${format}&title=${formData.filmTitle}`;
+      const url = `${endpoint}?format=${format}&title=${formData.title}`;
 
       try {
         switch (format) {
@@ -125,7 +125,6 @@ const LeftContent = () => {
 
       setShowSpinner(false);
       setShouldGetFilmByTitle(false);
-      setFormData({});
     };
 
     if (shouldGetFilmByTitle) getFilms();
@@ -180,7 +179,6 @@ const LeftContent = () => {
 
       setShouldPostFilm(false);
       setShowSpinner(false);
-      setFormData({});
     }
 
     if (shouldPostFilm) postFilm();
@@ -211,6 +209,7 @@ const LeftContent = () => {
         console.error(e);
       }
 
+      setUpdateFormData(null);
       setShowSpinner(false);
       setShouldUpdateFilm(false);
     };
@@ -330,7 +329,7 @@ const LeftContent = () => {
             {!selectedFilm && globalState.filmID ? (
               <>
                 <p>
-                  Selected film ID:
+                  Selected film ID:{''}
                   {globalState.filmID}
                 </p>
                 <MDBBtn onClick={() => setShouldGetFilmByID(true)}>Get film data</MDBBtn>

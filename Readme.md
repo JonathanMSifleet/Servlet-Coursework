@@ -1,9 +1,7 @@
-Read me:
-
----
 To do:
-- XML insert, update, delete
-- convert film.set to builder
+- XML update, delete
 - CSV all
 - handle errors
-- Selecting different film should update changed film
+- WSDL
+- Write up
+- Refactor

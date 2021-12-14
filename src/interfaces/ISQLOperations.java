@@ -1,4 +1,4 @@
-package utils;
+package interfaces;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface SQLOperations {
+public interface ISQLOperations {
 
 	static Connection loadDriver() {
 

@@ -10,18 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
+import interfaces.IHandleHTTP;
 import models.Film;
-import utils.HandleHTTP;
 
 @WebServlet("/getAllFilms")
-public class GetAllFilms extends HttpServlet implements utils.HandleHTTP {
+public class GetAllFilms extends HttpServlet implements interfaces.IHandleHTTP {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response = HandleHTTP.setHeaders(response, "GET");
+		response = IHandleHTTP.setHeaders(response, "GET");
 
 		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 		ArrayList<Film> films = filmDAO.getAllFilms();
@@ -35,23 +35,23 @@ public class GetAllFilms extends HttpServlet implements utils.HandleHTTP {
 		switch (format) {
 		case "json":
 			response.setContentType("application/json");
-			payload = HandleHTTP.handleJSON(films);
+			payload = IHandleHTTP.handleJSON(films);
 			break;
 		case "xml":
 			response.setContentType("text/xml");
-			payload = HandleHTTP.handleXML(films);
+			payload = IHandleHTTP.handleXML(films);
 			break;
 		case "csv":
 			response.setContentType("text/csv");
-			payload = HandleHTTP.handleCSV(films);
+			payload = IHandleHTTP.handleCSV(films);
 			break;
 		default:
 			response.setContentType("application/json");
-			payload = HandleHTTP.handleJSON(films);
+			payload = IHandleHTTP.handleJSON(films);
 			break;
 		}
 
-		HandleHTTP.sendResponse(response, payload);
+		IHandleHTTP.sendResponse(response, payload);
 	}
 
 }
