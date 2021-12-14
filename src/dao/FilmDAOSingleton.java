@@ -62,13 +62,7 @@ public class FilmDAOSingleton {
 		String SQL = "INSERT INTO epcoursework VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
-			ArrayList<Object> paramVals = new ArrayList<>();
-			paramVals.add(film.getId());
-			paramVals.add(film.getTitle());
-			paramVals.add(film.getYear());
-			paramVals.add(film.getDirector());
-			paramVals.add(film.getStars());
-			paramVals.add(film.getReview());
+			ArrayList<Object> paramVals = filmAttributesToParamList(film);
 
 			return SQLOperations.sqlManipulate(SQL, paramVals);
 		} catch (Exception e) {
@@ -82,13 +76,8 @@ public class FilmDAOSingleton {
 				+ "director = ?, stars = ?, review = ? WHERE id = ?";
 
 		try {
-			ArrayList<Object> paramVals = new ArrayList<>();
-			paramVals.add(film.getId());
-			paramVals.add(film.getTitle());
-			paramVals.add(film.getYear());
-			paramVals.add(film.getDirector());
-			paramVals.add(film.getStars());
-			paramVals.add(film.getReview());
+			ArrayList<Object> paramVals = filmAttributesToParamList(film);
+
 			paramVals.add(film.getId());
 
 			return SQLOperations.sqlManipulate(SQL, paramVals);
@@ -128,19 +117,27 @@ public class FilmDAOSingleton {
 	}
 
 	private Film resultToFilm(java.sql.ResultSet results) {
-		Film newFilm = new Film();
 
 		try {
-			newFilm.setId((int) results.getObject(1));
-			newFilm.setTitle((String) results.getObject(2));
-			newFilm.setYear((int) results.getObject(3));
-			newFilm.setDirector((String) results.getObject(4));
-			newFilm.setStars((String) results.getObject(5));
-			newFilm.setReview((String) results.getObject(6));
-			return newFilm;
+			return new Film.FilmBuilder(null).id((int) results.getObject(1)).title((String) results.getObject(2))
+					.year((int) results.getObject(3)).director((String) results.getObject(4))
+					.stars((String) results.getObject(5)).review((String) results.getObject(6)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private ArrayList<Object> filmAttributesToParamList(Film film) {
+		ArrayList<Object> paramVals = new ArrayList<>();
+
+		paramVals.add(film.getId());
+		paramVals.add(film.getTitle());
+		paramVals.add(film.getYear());
+		paramVals.add(film.getDirector());
+		paramVals.add(film.getStars());
+		paramVals.add(film.getReview());
+
+		return paramVals;
 	}
 }

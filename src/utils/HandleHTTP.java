@@ -30,7 +30,7 @@ public interface HandleHTTP {
 	static String handleCSV(ArrayList<Film> data) throws IOException {
 		String csvString = "";
 		for (Film film : data) {
-			csvString += film.getObjectValues(film);
+			csvString += film.toString();
 			csvString += "\n";
 		}
 

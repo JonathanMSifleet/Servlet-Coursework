@@ -3,7 +3,6 @@ package coreservlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -19,7 +18,6 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 import com.google.gson.Gson;
-import com.thoughtworks.xstream.XStream;
 
 import dao.FilmDAOSingleton;
 import models.Film;
@@ -43,44 +41,40 @@ public class InsertFilm extends HttpServlet implements utils.HandleHTTP {
 		if (format == null)
 			format = "json";
 
-		Film film = new Film();
+		Film film = null;
 
 		switch (format) {
 		case "json":
-			film = new Gson().fromJson(requestBody, Film.class);
+			film = new Film.FilmBuilder(new Gson().fromJson(requestBody, Film.class)).id(SQLOperations.generateNewID())
+					.build();
 			break;
 		case "xml":
 			try {
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = factory.newDocumentBuilder();
-				Document xmlObject = builder.parse(new InputSource(new StringReader(requestBody)));
+				Document xmlObject;
 
+				xmlObject = builder.parse(new InputSource(new StringReader(requestBody)));
 				Element root = xmlObject.getDocumentElement();
-				film.setTitle(root.getElementsByTagName("title").item(0).getTextContent());
-				film.setYear(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()));
-				film.setDirector(root.getElementsByTagName("director").item(0).getTextContent());
-				film.setStars(root.getElementsByTagName("stars").item(0).getTextContent());
-				film.setReview(root.getElementsByTagName("review").item(0).getTextContent());
 
-				System.out.println(film.toString());
-
+				film = new Film.FilmBuilder(null)
+						.id(SQLOperations.generateNewID())
+						.title(root.getElementsByTagName("title").item(0).getTextContent())
+						.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
+						.director(root.getElementsByTagName("director").item(0).getTextContent())
+						.stars(root.getElementsByTagName("stars").item(0).getTextContent())
+						.review(root.getElementsByTagName("director").item(0).getTextContent()).build();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 			break;
 		}
 
 		try {
-			int id = SQLOperations.generateNewID();
-			if (id == -1)
+			if (film.getId() == -1)
 				throw new Exception("Invalid SQL result");
 
-			film.setId(id);
-
-			PrintWriter out = response.getWriter();
-			out.print(filmDAO.insertFilm(film));
-			out.flush();
+			HandleHTTP.sendResponse(response, film);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
