@@ -15,7 +15,7 @@ const RightContent = ({ films }) => {
         preparedFilms = films;
         break;
       case 'xml':
-        preparedFilms = convertXMLToJSON(films);
+        preparedFilms = xmlToJSON(films);
         break;
       case 'csv':
         preparedFilms = convertCSVToJSON(films);
@@ -25,13 +25,14 @@ const RightContent = ({ films }) => {
     return printFilms(preparedFilms);
   };
 
-  const convertXMLToJSON = (xml) => {
-    const xmlFilms = new DOMParser().parseFromString(xml, 'application/xml');
-    const localXML = xmlFilms.getElementsByTagName('root')[0].children;
+  const xmlToJSON = (xml) => {
+    xml = new DOMParser().parseFromString(xml, 'application/xml');
+    xml = xml.getElementsByTagName('root')[0].children;
 
     const json = [];
-    for (let i = 0; i < localXML.length; i++) {
-      const child = localXML[i];
+
+    for (let i = 0; i < xml.length; i++) {
+      const child = xml[i];
 
       const id = child.getElementsByTagName('id')[0].textContent;
       const title = child.getElementsByTagName('title')[0].textContent;

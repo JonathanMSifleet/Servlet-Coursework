@@ -1,14 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
 import * as actionTypes from '../../../store/actionTypes';
 import * as endpoints from '../../../constants/endpoints';
-import Context from '../../../store/context';
 import CSVRequest from '../../../utils/CSVRequest';
+import Context from '../../../store/context';
 import Input from './../../../components/Input/Input';
 import JSONRequest from '../../../utils/JSONRequest';
 import Radio from './../../../components/Radio/Radio';
 import XMLRequest from '../../../utils/XMLRequest';
 import classes from './LeftContent.module.scss';
 import jsontoxml from 'jsontoxml';
+import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
 import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 
 const LeftContent = () => {
@@ -134,8 +135,17 @@ const LeftContent = () => {
       const url = `${endpoint}?format=${format}&id=${globalState.filmID}`;
       setShowSpinner(true);
 
+      let film;
       try {
-        const film = await JSONRequest(url, 'GET');
+        switch (format) {
+          case 'json':
+            film = await JSONRequest(url, 'GET');
+            break;
+          case 'xml':
+            const response = await XMLRequest(url, 'GET');
+            film = singleXMLFilmToJSON(response);
+            break;
+        }
         setSelectedFilm(film);
       } catch (e) {
         console.error(e);
@@ -189,7 +199,8 @@ const LeftContent = () => {
             await JSONRequest(url, 'PUT', updateFormData);
             break;
           case 'xml':
-            await XMLRequest(url, 'PUT', jsontoxml(updateFormData));
+            const film = jsontoxml(updateFormData);
+            await XMLRequest(url, 'PUT', `<film>${film}</film>`);
             break;
           // case 'csv':
           //   films = insertCSVFilm(url);

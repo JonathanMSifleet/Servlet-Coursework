@@ -21,17 +21,21 @@ public class UpdateFilm extends HttpServlet
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		IHandleHTTP.setHeaders(response, "PUT");
+		response = IHandleHTTP.setHeaders(response, "PUT");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		String filmString = IMonoObjServletCommon.getRequestBody(request);
 		String format = IGetFormat.getFormat(request);
+		
+		System.out.println(filmString);
 
 		Film film = switch (format) {
-			case "json" -> IMonoObjServletCommon.jsonToFilm(filmString, false);
-			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, false);
-			default -> null;
+		case "json" -> IMonoObjServletCommon.jsonToFilm(filmString, false);
+		case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, false);
+		default -> null;
 		};
+
+		System.out.println(film.toString());
 
 		IHandleHTTP.sendResponse(response, filmDAO.updateFilm(film));
 	}
