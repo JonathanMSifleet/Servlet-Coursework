@@ -73,7 +73,6 @@ public class FilmDAOSingleton {
 
 		try {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
-
 			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +80,7 @@ public class FilmDAOSingleton {
 		}
 	}
 
-	public int updateFilm(Film film) {		
+	public int updateFilm(Film film) {
 		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, "
 				+ "director = ?, stars = ?, review = ? WHERE id = ?";
 
@@ -89,7 +88,7 @@ public class FilmDAOSingleton {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
 
 			paramVals.add(film.getId());
-			
+
 			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();

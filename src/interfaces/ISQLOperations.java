@@ -41,6 +41,7 @@ public interface ISQLOperations {
 
 	static int sqlManipulate(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
+
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, paramVals);
 
@@ -51,8 +52,8 @@ public interface ISQLOperations {
 		}
 	}
 
-	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals) throws SQLException
-			 {
+	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals)
+			throws SQLException {
 
 		int paramIndex = 1;
 

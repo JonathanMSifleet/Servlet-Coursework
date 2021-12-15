@@ -18,8 +18,19 @@ import models.Film;
 
 public interface IMonoObjServletCommon {
 
-	static Film jsonToFilm(String jsonString) {
-		return new Film.Builder(new Gson().fromJson(jsonString, Film.class)).build();
+	static Film jsonToFilm(String jsonString, Boolean newFilm) {
+
+		Film film = null;
+
+		if (newFilm) {
+			film = new Film.Builder(new Gson().fromJson(jsonString, Film.class)).id(ISQLOperations.generateNewID())
+					.build();
+		} else {
+			film = new Film.Builder(new Gson().fromJson(jsonString, Film.class)).build();
+
+		}
+
+		return film;
 	}
 
 	static Film xmlToFilm(String xmlString) {

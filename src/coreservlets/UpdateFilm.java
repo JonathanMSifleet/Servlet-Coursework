@@ -31,7 +31,7 @@ public class UpdateFilm extends HttpServlet
 		System.out.println("filmString " + filmString);
 
 		Film film = switch (format) {
-			case "json" -> IMonoObjServletCommon.jsonToFilm(filmString);
+			case "json" -> IMonoObjServletCommon.jsonToFilm(filmString, false);
 			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString);
 			default -> null;
 		};
