@@ -166,9 +166,7 @@ const LeftContent = () => {
           //   films = insertCSVFilm(url);
           //   break;
         }
-        window.alert('Film created successfully');
       } catch (e) {
-        window.alert('Film not created');
         console.error(e);
       }
 
@@ -197,9 +195,7 @@ const LeftContent = () => {
           //   films = insertCSVFilm(url);
           //   break;
         }
-        window.alert('Film updated successfully');
       } catch (e) {
-        window.alert('Film not updated');
         console.error(e);
       }
 
@@ -220,9 +216,7 @@ const LeftContent = () => {
 
       try {
         await JSONRequest(url, 'DELETE');
-        window.alert('Film deleted successfully');
       } catch (e) {
-        window.alert('Film not deleted');
         console.error(e);
       }
 

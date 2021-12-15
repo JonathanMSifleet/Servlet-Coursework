@@ -33,7 +33,7 @@ public interface IMonoObjServletCommon {
 		return film;
 	}
 
-	static Film xmlToFilm(String xmlString) {
+	static Film xmlToFilm(String xmlString, Boolean newFilm) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -42,12 +42,25 @@ public interface IMonoObjServletCommon {
 			xmlObject = builder.parse(new InputSource(new StringReader(xmlString)));
 			Element root = xmlObject.getDocumentElement();
 
-			return new Film.Builder(null).id(Integer.valueOf(root.getElementsByTagName("id").item(0).getTextContent()))
-					.title(root.getElementsByTagName("title").item(0).getTextContent())
-					.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
-					.director(root.getElementsByTagName("director").item(0).getTextContent())
-					.stars(root.getElementsByTagName("stars").item(0).getTextContent())
-					.review(root.getElementsByTagName("director").item(0).getTextContent()).build();
+			Film film = null;
+
+			if (newFilm) {
+				film = new Film.Builder(null).id(ISQLOperations.generateNewID())
+						.title(root.getElementsByTagName("title").item(0).getTextContent())
+						.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
+						.director(root.getElementsByTagName("director").item(0).getTextContent())
+						.stars(root.getElementsByTagName("stars").item(0).getTextContent())
+						.review(root.getElementsByTagName("director").item(0).getTextContent()).build();
+			} else {
+				film = new Film.Builder(null)
+						.id(Integer.valueOf(root.getElementsByTagName("id").item(0).getTextContent()))
+						.title(root.getElementsByTagName("title").item(0).getTextContent())
+						.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
+						.director(root.getElementsByTagName("director").item(0).getTextContent())
+						.stars(root.getElementsByTagName("stars").item(0).getTextContent())
+						.review(root.getElementsByTagName("director").item(0).getTextContent()).build();
+			}
+			return film;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

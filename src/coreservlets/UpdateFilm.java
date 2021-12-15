@@ -28,11 +28,9 @@ public class UpdateFilm extends HttpServlet
 		String filmString = IMonoObjServletCommon.getRequestBody(request);
 		String format = IGetFormat.getFormat(request);
 
-		System.out.println("filmString " + filmString);
-
 		Film film = switch (format) {
 			case "json" -> IMonoObjServletCommon.jsonToFilm(filmString, false);
-			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString);
+			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, false);
 			default -> null;
 		};
 
