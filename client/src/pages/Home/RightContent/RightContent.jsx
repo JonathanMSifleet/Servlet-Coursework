@@ -46,7 +46,7 @@ const RightContent = ({ films }) => {
   };
 
   const convertCSVToJSON = (csv) => {
-    const lines = csv.split('\r\n');
+    const lines = csv.split('\n');
     const json = [];
 
     lines.forEach((csvFilm) => {

@@ -30,7 +30,7 @@ public interface IPolyObjServletCommon {
 		String films = "";
 
 		for (Film film : data) {
-			films += film.toString() + "\r\n";
+			films += film.toString() + "\n";
 		}
 
 		return films;
