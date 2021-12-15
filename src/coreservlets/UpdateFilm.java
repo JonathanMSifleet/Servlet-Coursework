@@ -15,12 +15,11 @@ import models.Film;
 
 @WebServlet("/updateFilm")
 public class UpdateFilm extends HttpServlet
-		implements interfaces.IHandleHTTP, interfaces.IMonoObjServletCommon, interfaces.IGetFormat {
+    implements interfaces.IHandleHTTP, interfaces.IMonoObjServletCommon, interfaces.IGetFormat {
 	private static final long serialVersionUID = -909062916095173117L;
 
 	@Override
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException
-			 {
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		IHandleHTTP.setHeaders(response, "PUT");
 

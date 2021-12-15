@@ -45,7 +45,7 @@ public class Film {
 	@Override
 	public String toString() {
 		return this.getId() + ",, " + this.getTitle() + ",, " + this.getYear() + ",, " + this.getDirector() + ",, \""
-				+ this.getStars() + "\",, \"" + this.getReview() + "\"";
+		    + this.getStars() + "\",, \"" + this.getReview() + "\"";
 	}
 
 	public static class Builder {

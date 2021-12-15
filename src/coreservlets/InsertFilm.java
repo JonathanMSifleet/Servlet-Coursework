@@ -15,7 +15,7 @@ import models.Film;
 
 @WebServlet("/insertFilm")
 public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, interfaces.ISQLOperations,
-		interfaces.IMonoObjServletCommon, interfaces.IGetFormat {
+    interfaces.IMonoObjServletCommon, interfaces.IGetFormat {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -28,10 +28,10 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 		String format = IGetFormat.getFormat(request);
 
 		Film film = switch (format) {
-		case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, true);
-		default -> IMonoObjServletCommon.jsonToFilm(filmString, true);
+			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, true);
+			default -> IMonoObjServletCommon.jsonToFilm(filmString, true);
 		};
-		
+
 		IHandleHTTP.sendResponse(response, filmDAO.insertFilm(film));
 
 	}

@@ -58,9 +58,9 @@ public class FilmDAOSingleton {
 			assert result != null;
 			result.next();
 
-			return new Film.Builder(null).id(result.getInt("id")).title(result.getString("title"))
-					.year(result.getInt("year")).director(result.getString("director")).stars(result.getString("stars"))
-					.review(result.getString("review")).build();
+			return new Film.Builder(null).id(result.getInt("id")).title(result.getString("title")).year(result.getInt("year"))
+			    .director(result.getString("director")).stars(result.getString("stars")).review(result.getString("review"))
+			    .build();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,8 +81,7 @@ public class FilmDAOSingleton {
 	}
 
 	public int updateFilm(Film film) {
-		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, "
-				+ "director = ?, stars = ?, review = ? WHERE id = ?";
+		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, " + "director = ?, stars = ?, review = ? WHERE id = ?";
 
 		try {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
@@ -128,8 +127,8 @@ public class FilmDAOSingleton {
 
 		try {
 			return new Film.Builder(null).id((int) results.getObject(1)).title((String) results.getObject(2))
-					.year((int) results.getObject(3)).director((String) results.getObject(4))
-					.stars((String) results.getObject(5)).review((String) results.getObject(6)).build();
+			    .year((int) results.getObject(3)).director((String) results.getObject(4)).stars((String) results.getObject(5))
+			    .review((String) results.getObject(6)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
