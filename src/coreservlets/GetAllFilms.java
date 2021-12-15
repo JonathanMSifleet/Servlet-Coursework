@@ -16,7 +16,7 @@ import models.Film;
 
 @WebServlet("/getAllFilms")
 public class GetAllFilms extends HttpServlet
-		implements interfaces.IHandleHTTP, interfaces.IGetFormat, interfaces.IPolyObjServletCommon {
+    implements interfaces.IHandleHTTP, interfaces.IGetFormat, interfaces.IPolyObjServletCommon {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -32,20 +32,20 @@ public class GetAllFilms extends HttpServlet
 		Object payload;
 
 		switch (format) {
-		case "xml" -> {
-			response.setContentType("text/xml");
-			payload = IPolyObjServletCommon.filmsToXMLArray(films);
+			case "xml" -> {
+				response.setContentType("text/xml");
+				payload = IPolyObjServletCommon.filmsToXMLArray(films);
+			}
+			case "csv" -> {
+				response.setContentType("text/csv");
+				payload = IPolyObjServletCommon.filmsToCSVArray(films);
+			}
+			default -> {
+				response.setContentType("application/json");
+				payload = IPolyObjServletCommon.filmsToJSONArray(films);
+			}
 		}
-		case "csv" -> {
-			response.setContentType("text/csv");
-			payload = IPolyObjServletCommon.filmsToCSVArray(films);
-		}
-		default -> {
-			response.setContentType("application/json");
-			payload = IPolyObjServletCommon.filmsToJSONArray(films);
-		}
-		}
-
+		
 		IHandleHTTP.sendResponse(response, payload);
 	}
 

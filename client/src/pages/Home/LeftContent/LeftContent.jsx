@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import * as actionTypes from '../../../store/actionTypes';
 import * as endpoints from '../../../constants/endpoints';
-import CSVRequest from '../../../utils/CSVRequest';
+import CSVRequest from '../../../utils/requests/CSVRequest';
 import Context from '../../../store/context';
 import Input from './../../../components/Input/Input';
-import JSONRequest from '../../../utils/JSONRequest';
+import JSONRequest from '../../../utils/requests/JSONRequest';
 import Radio from './../../../components/Radio/Radio';
-import XMLRequest from '../../../utils/XMLRequest';
+import XMLRequest from '../../../utils/requests/XMLRequest';
 import classes from './LeftContent.module.scss';
 import jsontoxml from 'jsontoxml';
 import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
@@ -99,6 +99,7 @@ const LeftContent = () => {
     const getFilms = async () => {
       setShowSpinner(true);
       const url = `${endpoint}?format=${format}&title=${formData.title}`;
+      console.log('🚀 ~ file: LeftContent.jsx ~ line 102 ~ getFilms ~ url', url);
 
       try {
         switch (format) {
@@ -114,9 +115,12 @@ const LeftContent = () => {
               payload: await XMLRequest(url, 'GET')
             });
             break;
-          // case 'csv':
-          //   films = getCSVFilms(url);
-          //   break;
+          case 'csv':
+            actions({
+              type: actionTypes.setFilms,
+              payload: await CSVRequest(url, 'GET')
+            });
+            break;
         }
       } catch (e) {
         console.error(e);
@@ -125,6 +129,8 @@ const LeftContent = () => {
       setShowSpinner(false);
       setShouldGetFilmByTitle(false);
     };
+
+    console.log('🚀 ~ file: LeftContent.jsx ~ line 130 ~ useEffect ~ shouldGetFilmByTitle', shouldGetFilmByTitle);
 
     if (shouldGetFilmByTitle) getFilms();
   }, [shouldGetFilmByTitle]);
