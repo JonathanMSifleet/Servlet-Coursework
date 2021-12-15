@@ -22,7 +22,7 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		IHandleHTTP.setHeaders(response, "GET");
+		response = IHandleHTTP.setHeaders(response, "GET");
 
 		int id = Integer.parseInt(request.getParameter("id"));
 

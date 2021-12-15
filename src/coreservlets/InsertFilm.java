@@ -21,7 +21,7 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		IHandleHTTP.setHeaders(response, "POST");
+		response = IHandleHTTP.setHeaders(response, "POST");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		String filmString = IMonoObjServletCommon.getRequestBody(request);

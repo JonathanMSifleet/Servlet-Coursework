@@ -18,7 +18,7 @@ public class DeleteFilm extends HttpServlet implements interfaces.IHandleHTTP {
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		IHandleHTTP.setHeaders(response, "DELETE");
+		response = IHandleHTTP.setHeaders(response, "DELETE");
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();

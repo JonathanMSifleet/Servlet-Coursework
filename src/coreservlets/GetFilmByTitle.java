@@ -21,7 +21,7 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		IHandleHTTP.setHeaders(response, "GET");
+		response = IHandleHTTP.setHeaders(response, "GET");
 
 		String title = request.getParameter("title");
 

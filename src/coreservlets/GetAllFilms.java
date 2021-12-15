@@ -22,7 +22,7 @@ public class GetAllFilms extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		IHandleHTTP.setHeaders(response, "GET");
+		response = IHandleHTTP.setHeaders(response, "GET");
 
 		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 		ArrayList<Film> films = filmDAO.getAllFilms();
