@@ -2,12 +2,12 @@ package models;
 
 public class Film {
 
-	private int id;
-	private String title;
-	private int year;
-	private String director;
-	private String stars;
-	private String review;
+	private final int id;
+	private final String title;
+	private final int year;
+	private final String director;
+	private final String stars;
+	private final String review;
 
 	private Film(Builder builder) {
 		this.id = builder.id;

@@ -18,11 +18,11 @@ import models.Film;
 
 public interface IMonoObjServletCommon {
 
-	public static Film jsonToFilm(String jsonString) {
+	static Film jsonToFilm(String jsonString) {
 		return new Film.Builder(new Gson().fromJson(jsonString, Film.class)).build();
 	}
 
-	public static Film xmlToFilm(String xmlString) {
+	static Film xmlToFilm(String xmlString) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -43,7 +43,7 @@ public interface IMonoObjServletCommon {
 		return null;
 	}
 
-	public static String getRequestBody(HttpServletRequest request) {
+	static String getRequestBody(HttpServletRequest request) {
 		try {
 			return request.getReader().lines().collect(Collectors.joining());
 		} catch (IOException e) {

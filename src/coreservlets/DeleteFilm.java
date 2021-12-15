@@ -3,7 +3,6 @@ package coreservlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +16,9 @@ public class DeleteFilm extends HttpServlet implements interfaces.IHandleHTTP {
 	private static final long serialVersionUID = -5107276414138521171L;
 
 	@Override
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		response = IHandleHTTP.setHeaders(response, "DELETE");
+		IHandleHTTP.setHeaders(response, "DELETE");
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();

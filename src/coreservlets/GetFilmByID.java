@@ -2,7 +2,6 @@ package coreservlets;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +20,9 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		response = IHandleHTTP.setHeaders(response, "GET");
+		IHandleHTTP.setHeaders(response, "GET");
 
 		int id = Integer.parseInt(request.getParameter("id"));
 
@@ -37,27 +35,16 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 		Gson gson = new Gson();
 
 		switch (format) {
-		case "json":
-			response.setContentType("application/json");
-			payload = gson.toJson(film);
-			break;
-		case "xml":
-			response.setContentType("text/xml");
-			XStream xstream = new XStream();
-			xstream.alias("film", models.Film.class);
-
-			String xmlString = xstream.toXML(film);
-
-			payload = xmlString;
-			break;
-//		case "csv":
-//			response.setContentType("text/csv");
-//			payload = IPolyObjServletCommon.handleCSV(films);
-//			break;
-		default:
-			response.setContentType("application/json");
-			payload = gson.toJson(film);
-			break;
+			case "xml" -> {
+				response.setContentType("text/xml");
+				XStream xstream = new XStream();
+				xstream.alias("film", Film.class);
+				payload = xstream.toXML(film);
+			}
+			default -> {
+				response.setContentType("application/json");
+				payload = gson.toJson(film);
+			}
 		}
 
 		IHandleHTTP.sendResponse(response, payload);

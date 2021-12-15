@@ -3,6 +3,7 @@
 **/Folder.jpg
 **/thumbs.db
 **/*.class
+.idea
 node_modules
 client/.angular
 *.class

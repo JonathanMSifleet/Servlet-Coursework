@@ -51,8 +51,8 @@ public interface ISQLOperations {
 		}
 	}
 
-	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals)
-			throws SQLException {
+	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals) throws SQLException
+			 {
 
 		int paramIndex = 1;
 
@@ -77,8 +77,9 @@ public interface ISQLOperations {
 		String SQL = "SELECT(MAX(id)) FROM films";
 
 		try {
+			assert conn != null;
 			PreparedStatement statement = conn.prepareStatement(SQL);
-			statement = prepareStatement(statement, null);
+			prepareStatement(statement, null);
 
 			java.sql.ResultSet result = statement.executeQuery();
 

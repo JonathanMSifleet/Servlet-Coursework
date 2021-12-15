@@ -1,6 +1,5 @@
 package interfaces;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +10,12 @@ import models.Film;
 
 public interface IPolyObjServletCommon {
 
-	static String filmsToJSONArray(ArrayList<Film> data) throws IOException {
+	static String filmsToJSONArray(ArrayList<Film> data) {
 		Gson gson = new Gson();
 		return gson.toJson(data);
 	}
 
-	static String filmsToXMLArray(ArrayList<Film> data) throws IOException {
+	static String filmsToXMLArray(ArrayList<Film> data) {
 		XStream xstream = new XStream();
 		xstream.alias("root", List.class);
 		xstream.alias("film", models.Film.class);

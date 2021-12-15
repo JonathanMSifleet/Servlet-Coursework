@@ -3,7 +3,6 @@ package coreservlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +19,9 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		response = IHandleHTTP.setHeaders(response, "GET");
+		IHandleHTTP.setHeaders(response, "GET");
 
 		String title = request.getParameter("title");
 
@@ -34,22 +32,14 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 		Object payload;
 
 		switch (format) {
-		case "json":
-			response.setContentType("application/json");
-			payload = IPolyObjServletCommon.filmsToJSONArray(films);
-			break;
-		case "xml":
-			response.setContentType("text/xml");
-			payload = IPolyObjServletCommon.filmsToXMLArray(films);
-			break;
-//		case "csv":
-//			response.setContentType("text/csv");
-//			payload = IPolyObjServletCommon.handleCSV(films);
-//			break;
-		default:
-			response.setContentType("application/json");
-			payload = IPolyObjServletCommon.filmsToJSONArray(films);
-			break;
+			case "xml" -> {
+				response.setContentType("text/xml");
+				payload = IPolyObjServletCommon.filmsToXMLArray(films);
+			}
+			default -> {
+				response.setContentType("application/json");
+				payload = IPolyObjServletCommon.filmsToJSONArray(films);
+			}
 		}
 
 		IHandleHTTP.sendResponse(response, payload);

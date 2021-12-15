@@ -21,6 +21,7 @@ public class FilmDAOSingleton {
 			String SQL = "SELECT * FROM films";
 
 			java.sql.ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, null);
+			assert results != null;
 			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -37,6 +38,7 @@ public class FilmDAOSingleton {
 
 			java.sql.ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
 
+			assert results != null;
 			return resultsToList(results);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,6 +55,7 @@ public class FilmDAOSingleton {
 
 			java.sql.ResultSet result = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
 
+			assert result != null;
 			result.next();
 
 			return new Film.Builder(null).id(result.getInt("id")).title(result.getString("title"))
