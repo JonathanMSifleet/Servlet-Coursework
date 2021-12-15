@@ -4,10 +4,7 @@ const CSVRequest = async (url, method, body) => {
     body
   });
 
-  response = await response.text();
-  console.log('🚀 ~ file: CSVRequest.js ~ line 8 ~ CSVRequest ~ response', response);
-
-  return response;
+  return await response.text();
 };
 
 export default CSVRequest;

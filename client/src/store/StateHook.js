@@ -4,6 +4,7 @@ import { useState } from 'react';
 const StateHook = () => {
   const [filmID, setFilmID] = useState(null);
   const [films, setFilms] = useState(null);
+  const [filmFormat, setFilmFormat] = useState(null);
 
   const actions = (action) => {
     const { type, payload } = action;
@@ -13,12 +14,15 @@ const StateHook = () => {
         return setFilmID(payload);
       case actionTypes.setFilms:
         return setFilms(payload);
+      case actionTypes.setFilmFormat:
+        return setFilmFormat(payload);
     }
   };
 
   const globalState = {
     filmID,
-    films
+    films,
+    filmFormat
   };
 
   return { globalState, actions };

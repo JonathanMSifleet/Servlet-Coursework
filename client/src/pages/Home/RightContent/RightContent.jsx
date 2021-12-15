@@ -5,42 +5,31 @@ import classes from './RightContent.module.scss';
 import { MDBCol, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 
 const RightContent = ({ films }) => {
-  const { actions } = useContext(Context);
+  const { globalState, actions } = useContext(Context);
 
   const handleFormat = () => {
     let preparedFilms;
 
-    switch (typeof films) {
-      case 'object':
+    switch (globalState.filmFormat) {
+      case 'json':
         preparedFilms = films;
         break;
-      case 'string':
-        preparedFilms = handleXML(films);
+      case 'xml':
+        preparedFilms = convertXMLToJSON(films);
         break;
-      // case 'csv':
-      //   break;
-      default:
-        return null;
+      case 'csv':
+        preparedFilms = convertCSVToJSON(films);
+        break;
     }
 
     return printFilms(preparedFilms);
   };
 
-  const handleXML = (films) => {
-    const xmlFilms = new DOMParser().parseFromString(films, 'application/xml');
+  const convertXMLToJSON = (xml) => {
+    const xmlFilms = new DOMParser().parseFromString(xml, 'application/xml');
+    const localXML = xmlFilms.getElementsByTagName('root')[0].children;
 
-    try {
-      return convertXMLtoJSON(xmlFilms);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const convertXMLtoJSON = (xml) => {
     const json = [];
-
-    const localXML = xml.getElementsByTagName('root')[0].children;
-
     for (let i = 0; i < localXML.length; i++) {
       const child = localXML[i];
 
@@ -53,6 +42,18 @@ const RightContent = ({ films }) => {
 
       json.push({ id, title, year, director, stars, review });
     }
+    return json;
+  };
+
+  const convertCSVToJSON = (csv) => {
+    const lines = csv.split('\r\n');
+    const json = [];
+
+    lines.forEach((csvFilm) => {
+      let film = csvFilm.split(',,');
+      json.push({ id: film[0], title: film[1], year: film[2], director: film[3], stars: film[4], review: film[5] });
+    });
+
     return json;
   };
 
@@ -109,7 +110,7 @@ const RightContent = ({ films }) => {
 
   return (
     <MDBCol className={classes.RightContent}>
-      <h1 className={classes.Header}>Output:</h1>
+      <h1 className={classes.Header}>Films:</h1>
       <ul className={classes.List}>{handleFormat()}</ul>
     </MDBCol>
   );

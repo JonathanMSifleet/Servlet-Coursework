@@ -6,17 +6,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
 
 public interface IHandleHTTP {
-
-//	static String handleCSV(ArrayList<Film> data) throws IOException {
-//		String csvString = "";
-//		for (Film film : data) {
-//			csvString += film.toString();
-//			csvString += "\n";
-//		}
-//
-//		return csvString;
-//	}
-
+	
 	static void sendResponse(javax.servlet.http.HttpServletResponse response, Object payload) throws IOException {
 		PrintWriter out = response.getWriter();
 		out.print(payload);

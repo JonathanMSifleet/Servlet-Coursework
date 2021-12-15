@@ -56,7 +56,6 @@ const LeftContent = () => {
     async function getFilms() {
       try {
         const url = `${endpoints.getAllFilmsEndpoint}?format=${format}`;
-        console.log('🚀 ~ file: LeftContent.jsx ~ line 59 ~ getFilms ~ url', url);
         setShowSpinner(true);
 
         switch (format) {
@@ -78,12 +77,11 @@ const LeftContent = () => {
               payload: await CSVRequest(url, 'GET')
             });
             break;
-          default:
-            actions({
-              type: actionTypes.setFilms,
-              payload: await JSONRequest(url, 'GET')
-            });
         }
+        actions({
+          type: actionTypes.setFilmFormat,
+          payload: format
+        });
       } catch (e) {
         console.error(e);
       }
@@ -118,11 +116,6 @@ const LeftContent = () => {
           // case 'csv':
           //   films = getCSVFilms(url);
           //   break;
-          default:
-            actions({
-              type: actionTypes.setFilms,
-              payload: await JSONRequest(url, 'GET')
-            });
         }
       } catch (e) {
         console.error(e);
@@ -172,11 +165,6 @@ const LeftContent = () => {
           // case 'csv':
           //   films = insertCSVFilm(url);
           //   break;
-          default:
-            actions({
-              type: actionTypes.setFilms,
-              payload: await JSONRequest(url, 'GET')
-            });
         }
       } catch (e) {
         console.error(e);
@@ -209,9 +197,6 @@ const LeftContent = () => {
           // case 'csv':
           //   films = insertCSVFilm(url);
           //   break;
-          default:
-            await JSONRequest(url, 'PUT', updateFormData);
-            break;
         }
       } catch (e) {
         console.error(e);

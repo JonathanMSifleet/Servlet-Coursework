@@ -41,10 +41,10 @@ public class GetAllFilms extends HttpServlet implements interfaces.IHandleHTTP, 
 			response.setContentType("text/xml");
 			payload = IPolyObjServletCommon.filmsToXMLArray(films);
 			break;
-//		case "csv":
-//			response.setContentType("text/csv");
-//			payload = IPolyObjServletCommon.handleCSV(films);
-//			break;
+		case "csv":
+			response.setContentType("text/csv");
+			payload = IPolyObjServletCommon.filmsToCSVArray(films);
+			break;
 		default:
 			response.setContentType("application/json");
 			payload = IPolyObjServletCommon.filmsToJSONArray(films);
