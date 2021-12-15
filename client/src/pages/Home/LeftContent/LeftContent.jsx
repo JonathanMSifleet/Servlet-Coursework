@@ -166,7 +166,9 @@ const LeftContent = () => {
           //   films = insertCSVFilm(url);
           //   break;
         }
+        window.alert('Film created successfully');
       } catch (e) {
+        window.alert('Film not created');
         console.error(e);
       }
 
@@ -181,10 +183,7 @@ const LeftContent = () => {
   useEffect(() => {
     const updateFilm = async () => {
       const url = `${endpoints.updateFilmEndpoint}?format=${format}`;
-      console.log('🚀 ~ file: LeftContent.jsx ~ line 192 ~ updateFilm ~ url', url);
       setShowSpinner(true);
-
-      console.log('updateFormData', updateFormData);
 
       try {
         switch (format) {
@@ -198,7 +197,9 @@ const LeftContent = () => {
           //   films = insertCSVFilm(url);
           //   break;
         }
+        window.alert('Film updated successfully');
       } catch (e) {
+        window.alert('Film not updated');
         console.error(e);
       }
 
@@ -219,7 +220,9 @@ const LeftContent = () => {
 
       try {
         await JSONRequest(url, 'DELETE');
+        window.alert('Film deleted successfully');
       } catch (e) {
+        window.alert('Film not deleted');
         console.error(e);
       }
 
@@ -331,7 +334,6 @@ const LeftContent = () => {
           </>
         );
       case endpoints.deleteFilmEndpoint:
-        console.log('selectedFilm', selectedFilm);
         return (
           <>
             {globalState.filmID ? (
