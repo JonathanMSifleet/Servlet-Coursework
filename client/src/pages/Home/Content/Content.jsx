@@ -1,25 +1,25 @@
-import React, { useContext, useState, useEffect } from 'react';
-import * as actionTypes from '../../../store/actionTypes';
+import React, { useState, useEffect } from 'react';
 import * as endpoints from '../../../constants/endpoints';
 import CSVRequest from '../../../utils/requests/CSVRequest';
-import Context from '../../../store/context';
-import Input from './../../../components/Input/Input';
+import Input from '../../../components/Input/Input';
 import JSONRequest from '../../../utils/requests/JSONRequest';
-import Radio from './../../../components/Radio/Radio';
+import Radio from '../../../components/Radio/Radio';
 import XMLRequest from '../../../utils/requests/XMLRequest';
-import classes from './LeftContent.module.scss';
+import classes from './Content.module.scss';
 import jsontoxml from 'jsontoxml';
 import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
 import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
+import Output from './Output/Output';
 
-const LeftContent = () => {
-  const { globalState, actions } = useContext(Context);
-
+const Content = () => {
   const [endpoint, setEndpoint] = useState('');
+  const [films, setFilms] = useState(null);
   const [formData, setFormData] = useState({});
   const [format, setFormat] = useState('json');
+  const [formatChanged, setFormatChanged] = useState(false);
   const [selectedAttributeVal, setSelectedAttributeVal] = useState();
   const [selectedFilm, setSelectedFilm] = useState();
+  const [selectedFilmID, setSelectedFilmID] = useState(null);
   const [selectedLabel, setSelectedLabel] = useState('Title');
   const [shouldDeleteFilm, setShouldDeleteFilm] = useState(false);
   const [shouldGetAllFilms, setShouldGetAllFilms] = useState(false);
@@ -30,6 +30,12 @@ const LeftContent = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [updateFormData, setUpdateFormData] = useState(false);
   const [useREST, setUseREST] = useState(false);
+
+  // reset films on format change:
+  useEffect(() => {
+    setFilms(null);
+    setFormatChanged(null);
+  }, [format]);
 
   const formChangedHandler = (event, inputName, form) => {
     switch (form) {
@@ -60,29 +66,15 @@ const LeftContent = () => {
         setShowSpinner(true);
 
         switch (format) {
-          case 'json':
-            actions({
-              type: actionTypes.setFilms,
-              payload: await JSONRequest(url, 'GET')
-            });
-            break;
           case 'xml':
-            actions({
-              type: actionTypes.setFilms,
-              payload: await XMLRequest(url, 'GET')
-            });
+            setFilms(await XMLRequest(url, 'GET'));
             break;
           case 'csv':
-            actions({
-              type: actionTypes.setFilms,
-              payload: await CSVRequest(url, 'GET')
-            });
+            setFilms(await CSVRequest(url, 'GET'));
             break;
+          default:
+            setFilms(await JSONRequest(url, 'GET'));
         }
-        actions({
-          type: actionTypes.setFilmFormat,
-          payload: format
-        });
       } catch (e) {
         console.error(e);
       }
@@ -99,28 +91,17 @@ const LeftContent = () => {
     const getFilms = async () => {
       setShowSpinner(true);
       const url = `${endpoint}?format=${format}&title=${formData.title}`;
-      console.log('🚀 ~ file: LeftContent.jsx ~ line 102 ~ getFilms ~ url', url);
 
       try {
         switch (format) {
-          case 'json':
-            actions({
-              type: actionTypes.setFilms,
-              payload: await JSONRequest(url, 'GET')
-            });
-            break;
           case 'xml':
-            actions({
-              type: actionTypes.setFilms,
-              payload: await XMLRequest(url, 'GET')
-            });
+            setFilms(await XMLRequest(url, 'GET'));
             break;
           case 'csv':
-            actions({
-              type: actionTypes.setFilms,
-              payload: await CSVRequest(url, 'GET')
-            });
+            setFilms(await CSVRequest(url, 'GET'));
             break;
+          default:
+            setFilms(await JSONRequest(url, 'GET'));
         }
       } catch (e) {
         console.error(e);
@@ -130,15 +111,13 @@ const LeftContent = () => {
       setShouldGetFilmByTitle(false);
     };
 
-    console.log('🚀 ~ file: LeftContent.jsx ~ line 130 ~ useEffect ~ shouldGetFilmByTitle', shouldGetFilmByTitle);
-
     if (shouldGetFilmByTitle) getFilms();
   }, [shouldGetFilmByTitle]);
 
   // get film by ID
   useEffect(() => {
     const getFilmByID = async () => {
-      const url = `${endpoint}?format=${format}&id=${globalState.filmID}`;
+      const url = `${endpoint}?format=${format}&id=${selectedFilmID}`;
       setShowSpinner(true);
 
       let film;
@@ -228,7 +207,7 @@ const LeftContent = () => {
   // delete film
   useEffect(() => {
     const deleteFilm = async () => {
-      const url = `${endpoints.deleteFilmEndpoint}?format=${format}&id=${globalState.filmID}`;
+      const url = `${endpoints.deleteFilmEndpoint}?format=${format}&id=${selectedFilmID}`;
       setShowSpinner(true);
 
       try {
@@ -327,16 +306,16 @@ const LeftContent = () => {
                 </MDBBtn>
               </>
             ) : null}
-            {!selectedFilm && globalState.filmID ? (
+            {!selectedFilm && selectedFilmID ? (
               <>
                 <p>
                   Selected film ID:{''}
-                  {globalState.filmID}
+                  {selectedFilmID}
                 </p>
                 <MDBBtn onClick={() => setShouldGetFilmByID(true)}>Get film data</MDBBtn>
               </>
             ) : null}
-            {!selectedFilm && !globalState.filmID ? (
+            {!selectedFilm && !selectedFilmID ? (
               <p>
                 In order to update a film, you must click a film&apos;s ID from the table, which can be retrieved via getting all films, or getting a film by
                 its title
@@ -347,10 +326,10 @@ const LeftContent = () => {
       case endpoints.deleteFilmEndpoint:
         return (
           <>
-            {globalState.filmID ? (
+            {selectedFilmID ? (
               <>
                 <p>
-                  <b>Film ID:</b> {globalState.filmID}
+                  <b>Film ID:</b> {selectedFilmID}
                 </p>
 
                 <MDBBtn onClick={() => setShouldDeleteFilm(true)}>Delete film</MDBBtn>
@@ -362,33 +341,58 @@ const LeftContent = () => {
   };
 
   return (
-    <MDBCol size="md-3" className={classes.LeftContent}>
-      <h3>Format: </h3>
-      <MDBSwitch defaultChecked label="Use REST servlet" onChange={() => toggleHandler()} checked={useREST} />
+    <>
+      <MDBCol size="md-3" className={classes.LeftContent}>
+        <h3>Format: </h3>
+        <MDBSwitch defaultChecked label="Use REST servlet" onChange={() => toggleHandler()} checked={useREST} />
 
-      <MDBBtnGroup className={classes.FormatRadioGroup}>
-        <Radio defaultChecked label="JSON" name="formatGroup" onClick={() => setFormat('json')} />
-        <Radio label="XML" name="formatGroup" onClick={() => setFormat('xml')} />
-        <Radio label="Text" name="formatGroup" onClick={() => setFormat('csv')} />
-      </MDBBtnGroup>
+        <MDBBtnGroup className={classes.FormatRadioGroup}>
+          <Radio
+            defaultChecked
+            label="JSON"
+            name="formatGroup"
+            onClick={() => {
+              setFormatChanged(true);
+              setFormat('json');
+            }}
+          />
+          <Radio
+            label="XML"
+            name="formatGroup"
+            onClick={() => {
+              setFormatChanged(true);
+              setFormat('xml');
+            }}
+          />
+          <Radio
+            label="Text"
+            name="formatGroup"
+            onClick={() => {
+              setFormatChanged(true);
+              setFormat('csv');
+            }}
+          />
+        </MDBBtnGroup>
 
-      <MDBBtnGroup className={classes.OperationRadioGroup}>
-        <Radio name="operationGroup" label="Get all films" onClick={() => setEndpoint(endpoints.getAllFilmsEndpoint)} />
-        <Radio name="operationGroup" label="Get film by title" onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)} />
-        <Radio name="operationGroup" label="Add new film" onClick={() => setEndpoint(endpoints.insertFilmEndpoint)} />
-        <Radio name="operationGroup" label="Update film" onClick={() => setEndpoint(endpoints.getFilmByIDEndpoint)} />
-        <Radio name="operationGroup" label="Delete film" onClick={() => setEndpoint(endpoints.deleteFilmEndpoint)} />
-      </MDBBtnGroup>
+        <MDBBtnGroup className={classes.OperationRadioGroup}>
+          <Radio name="operationGroup" label="Get all films" onClick={() => setEndpoint(endpoints.getAllFilmsEndpoint)} />
+          <Radio name="operationGroup" label="Get film by title" onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)} />
+          <Radio name="operationGroup" label="Add new film" onClick={() => setEndpoint(endpoints.insertFilmEndpoint)} />
+          <Radio name="operationGroup" label="Update film" onClick={() => setEndpoint(endpoints.getFilmByIDEndpoint)} />
+          <Radio name="operationGroup" label="Delete film" onClick={() => setEndpoint(endpoints.deleteFilmEndpoint)} />
+        </MDBBtnGroup>
 
-      {renderSwitch()}
+        {renderSwitch()}
 
-      {showSpinner ? (
-        <div className="d-flex justify-content-center">
-          <MDBSpinner role="status" />
-        </div>
-      ) : null}
-    </MDBCol>
+        {showSpinner ? (
+          <div className="d-flex justify-content-center">
+            <MDBSpinner role="status" />
+          </div>
+        ) : null}
+      </MDBCol>
+      <Output films={films} format={format} formatChanged={formatChanged} />
+    </>
   );
 };
 
-export default LeftContent;
+export default Content;

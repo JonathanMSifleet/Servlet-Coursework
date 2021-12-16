@@ -1,25 +1,22 @@
-import React, { useContext } from 'react';
-import * as actionTypes from '../../../store/actionTypes';
-import Context from '../../../store/context';
-import classes from './RightContent.module.scss';
+import React from 'react';
+import classes from './Output.module.scss';
 import { MDBCol, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 
-const RightContent = ({ films }) => {
-  const { globalState, actions } = useContext(Context);
-
+const Output = ({ films, format, formatChanged }) => {
   const handleFormat = () => {
+    if (formatChanged) return null;
+
     let preparedFilms;
 
-    switch (globalState.filmFormat) {
-      case 'json':
-        preparedFilms = films;
-        break;
+    switch (format) {
       case 'xml':
         preparedFilms = xmlToJSON(films);
         break;
       case 'csv':
         preparedFilms = convertCSVToJSON(films);
         break;
+      default:
+        preparedFilms = films;
     }
 
     return printFilms(preparedFilms);
@@ -58,8 +55,10 @@ const RightContent = ({ films }) => {
     return json;
   };
 
+  // eslint-disable-next-line no-unused-vars
   const getFilmID = (id) => {
-    actions({ type: actionTypes.setFilmID, payload: id });
+    // TODO: curry filmID
+    // set film ID : id
   };
 
   const printFilms = (preparedFilms) => {
@@ -112,9 +111,9 @@ const RightContent = ({ films }) => {
   return (
     <MDBCol className={classes.RightContent}>
       <h1 className={classes.Header}>Films:</h1>
-      <ul className={classes.List}>{handleFormat()}</ul>
+      <ul className={classes.List}>{films ? handleFormat() : null}</ul>
     </MDBCol>
   );
 };
 
-export default RightContent;
+export default Output;

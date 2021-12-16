@@ -39,7 +39,6 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 			case "csv" -> {
 				response.setContentType("text/csv");
 				payload = IPolyObjServletCommon.filmsToCSVArray(films);
-				System.out.println(payload);
 			}
 			default -> {
 				response.setContentType("application/json");
