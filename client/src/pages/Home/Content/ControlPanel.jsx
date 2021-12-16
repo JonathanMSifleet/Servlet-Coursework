@@ -261,11 +261,11 @@ const ControlPanel = () => {
                 event.preventDefault();
               }}
             >
-              <Input className={classes.Input} label="Title" onChange={(event) => formChangedHandler(event, 'title', 'filmForm')} />
-              <Input className={classes.Input} label="Year" onChange={(event) => formChangedHandler(event, 'year', 'filmForm')} />
-              <Input className={classes.Input} label="Director" onChange={(event) => formChangedHandler(event, 'director', 'filmForm')} />
-              <Input className={classes.Input} label="Stars" onChange={(event) => formChangedHandler(event, 'stars', 'filmForm')} />
-              <Input className={classes.Input} label="Review" onChange={(event) => formChangedHandler(event, 'review', 'filmForm')} />
+              <Input label="Title" onChange={(event) => formChangedHandler(event, 'title', 'filmForm')} />
+              <Input label="Year" onChange={(event) => formChangedHandler(event, 'year', 'filmForm')} />
+              <Input label="Director" onChange={(event) => formChangedHandler(event, 'director', 'filmForm')} />
+              <Input label="Stars" onChange={(event) => formChangedHandler(event, 'stars', 'filmForm')} />
+              <Input label="Review" onChange={(event) => formChangedHandler(event, 'review', 'filmForm')} />
 
               <MDBBtn onClick={() => setShouldPostFilm(true)}>Create new film</MDBBtn>
             </form>
@@ -293,7 +293,6 @@ const ControlPanel = () => {
                   {selectedLabel !== 'Review' ? (
                     <input
                       className={classes.SelectInput}
-                      label={selectedLabel ? selectedLabel : 'Title'}
                       placeholder={selectedAttributeVal ? selectedAttributeVal : selectedFilm.title}
                       onChange={(event) => formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')}
                       type="text"
@@ -301,10 +300,8 @@ const ControlPanel = () => {
                   ) : (
                     <textarea
                       className={`${classes.SelectInput} ${classes.ReviewInput}`}
-                      label={selectedLabel ? selectedLabel : 'Title'}
                       placeholder={selectedAttributeVal ? selectedAttributeVal : selectedFilm.title}
                       onChange={(event) => formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')}
-                      type="text"
                     />
                   )}
                 </div>
@@ -316,8 +313,8 @@ const ControlPanel = () => {
             {!selectedFilm && selectedFilmID ? (
               <>
                 <p>
-                  Selected film ID:{''}
-                  {selectedFilmID}
+                  Selected film ID:
+                  {' ' + selectedFilmID}
                 </p>
                 <MDBBtn onClick={() => setShouldGetFilmByID(true)}>Get film data</MDBBtn>
               </>

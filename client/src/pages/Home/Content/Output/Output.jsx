@@ -75,7 +75,7 @@ const Output = ({ films, format, formatChanged, sharedSetSelectedFilmID }) => {
             <th className={classes.StarsCell} scope="col">
               Stars
             </th>
-            <th className={classes.Review} scope="col">
+            <th scope="col">
               Review
             </th>
           </tr>

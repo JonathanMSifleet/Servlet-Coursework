@@ -6,7 +6,6 @@ const Radio = ({ defaultChecked, label, name, onClick }) => {
   return (
     <div className={classes.Wrapper}>
       <MDBRadio
-        className={classes.Radio}
         defaultChecked={defaultChecked}
         inline
         label={label}
