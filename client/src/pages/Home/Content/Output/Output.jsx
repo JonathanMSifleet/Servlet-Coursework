@@ -91,7 +91,7 @@ const Output = ({ films, format, formatChanged, sharedSetSelectedFilmID }) => {
                     <td className={classes.DirectorCell}>{film.director}</td>
                     <td className={classes.StarsCell}>{film.stars}</td>
                     <td>
-                      <div className={classes.ReviewText}>{film.review}...</div>
+                      <div className={classes.ReviewText}>{film.review}</div>
                     </td>
                   </tr>
                 );
