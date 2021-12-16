@@ -344,7 +344,7 @@ const Content = () => {
     <>
       <MDBCol size="md-3" className={classes.LeftContent}>
         <h3>Format: </h3>
-        <MDBSwitch defaultChecked label="Use REST servlet" onChange={() => toggleHandler()} checked={useREST} />
+        <MDBSwitch className={classes.RESTToggle} label="Use REST servlet" onChange={() => toggleHandler()} checked={useREST} />
 
         <MDBBtnGroup className={classes.FormatRadioGroup}>
           <Radio
