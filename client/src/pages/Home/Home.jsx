@@ -1,5 +1,5 @@
 import React from 'react';
-import Content from './Content/Content';
+import ControlPanel from './Content/ControlPanel';
 import classes from './Home.module.scss';
 import { MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 
@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <MDBContainer className={classes.PageWrapper}>
       <MDBRow className={classes.PageContent}>
-        <Content />
+        <ControlPanel />
       </MDBRow>
     </MDBContainer>
   );

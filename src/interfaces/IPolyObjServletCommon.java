@@ -32,6 +32,9 @@ public interface IPolyObjServletCommon {
 			films += film.toString() + "\n";
 		}
 
+		// remove additional line terminator
+		films = films.substring(0, films.length() - 2);
+
 		return films;
 	}
 

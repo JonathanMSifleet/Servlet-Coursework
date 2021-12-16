@@ -1,7 +1,7 @@
 To do:
-- XML update, delete
-- CSV all
-- handle errors
+- CSV new update, delete
+- refactor
 - WSDL
+- cloud
 - Write up
-- Refactor
+- handle errors
