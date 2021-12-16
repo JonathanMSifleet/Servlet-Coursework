@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './Output.module.scss';
 import { MDBCol, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 
-const Output = ({ films, format, formatChanged }) => {
+const Output = ({ films, format, formatChanged, sharedSetSelectedFilmID }) => {
   const handleFormat = () => {
     if (formatChanged) return null;
 
@@ -55,12 +55,6 @@ const Output = ({ films, format, formatChanged }) => {
     return json;
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const getFilmID = (id) => {
-    // TODO: curry filmID
-    // set film ID : id
-  };
-
   const printFilms = (preparedFilms) => {
     return (
       <MDBTable className={classes.FilmTable} striped>
@@ -90,7 +84,7 @@ const Output = ({ films, format, formatChanged }) => {
           {preparedFilms
             ? preparedFilms.map((film) => {
                 return (
-                  <tr key={film.id} onClick={() => getFilmID(film.id)}>
+                  <tr key={film.id} onClick={() => sharedSetSelectedFilmID(film.id)}>
                     <td className={classes.IDCell}>{film.id}</td>
                     <td className={classes.TitleCell}>{film.title}</td>
                     <td className={classes.YearCell}>{film.year}</td>

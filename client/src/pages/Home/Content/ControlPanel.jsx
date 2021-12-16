@@ -5,13 +5,13 @@ import Input from '../../../components/Input/Input';
 import JSONRequest from '../../../utils/requests/JSONRequest';
 import Radio from '../../../components/Radio/Radio';
 import XMLRequest from '../../../utils/requests/XMLRequest';
-import classes from './Content.module.scss';
+import classes from './ControlPanel.module.scss';
 import jsontoxml from 'jsontoxml';
 import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
 import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 import Output from './Output/Output';
 
-const Content = () => {
+const ControlPanel = () => {
   const [endpoint, setEndpoint] = useState('');
   const [films, setFilms] = useState(null);
   const [formData, setFormData] = useState({});
@@ -36,6 +36,11 @@ const Content = () => {
     setFilms(null);
     setFormatChanged(null);
   }, [format]);
+
+  const sharedSetSelectedFilmID = (id) => {
+    console.log('🚀 ~ file: ControlPanel.jsx ~ line 41 ~ sharedSetSelectedFilmID ~ id', id);
+    setSelectedFilmID(id);
+  };
 
   const formChangedHandler = (event, inputName, form) => {
     switch (form) {
@@ -89,6 +94,8 @@ const Content = () => {
   // get film by title
   useEffect(() => {
     const getFilms = async () => {
+      if (!formData.title) return;
+
       setShowSpinner(true);
       const url = `${endpoint}?format=${format}&title=${formData.title}`;
 
@@ -390,9 +397,9 @@ const Content = () => {
           </div>
         ) : null}
       </MDBCol>
-      <Output films={films} format={format} formatChanged={formatChanged} />
+      <Output films={films} format={format} formatChanged={formatChanged} sharedSetSelectedFilmID={sharedSetSelectedFilmID} />
     </>
   );
 };
 
-export default Content;
+export default ControlPanel;
