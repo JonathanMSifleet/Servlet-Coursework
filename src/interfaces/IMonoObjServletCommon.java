@@ -21,7 +21,6 @@ public interface IMonoObjServletCommon {
 	static Film jsonToFilm(String jsonString, Boolean newFilm) {
 
 		Film film = null;
-
 		if (newFilm) {
 			film = new Film.Builder(new Gson().fromJson(jsonString, Film.class)).id(ISQLOperations.generateNewID()).build();
 		} else {
@@ -41,7 +40,6 @@ public interface IMonoObjServletCommon {
 			Element root = xmlObject.getDocumentElement();
 
 			Film film = null;
-
 			if (newFilm) {
 				film = new Film.Builder(null).id(ISQLOperations.generateNewID())
 				    .title(root.getElementsByTagName("title").item(0).getTextContent())
@@ -64,14 +62,23 @@ public interface IMonoObjServletCommon {
 		return null;
 	}
 
-	static Film csvToFilm(String csvFilm) {
+	static Film csvToFilm(String csvFilm, Boolean newFilm) {
 		System.out.println(csvFilm);
 
 		String[] filmAttributes = csvFilm.split(",,");
 
-		return new Film.Builder(null).id(ISQLOperations.generateNewID()).title(filmAttributes[0])
-		    .year(Integer.valueOf(filmAttributes[1])).director(filmAttributes[2]).stars(filmAttributes[3])
-		    .review(filmAttributes[4]).build();
+		Film film = null;
+		if (newFilm) {
+			film = new Film.Builder(null).id(ISQLOperations.generateNewID()).title(filmAttributes[0])
+			    .year(Integer.valueOf(filmAttributes[1])).director(filmAttributes[2]).stars(filmAttributes[3])
+			    .review(filmAttributes[4]).build();
+		} else {
+			film = new Film.Builder(null).id(Integer.valueOf(filmAttributes[0])).title(filmAttributes[1])
+			    .year(Integer.valueOf(filmAttributes[2])).director(filmAttributes[3]).stars(filmAttributes[4])
+			    .review(filmAttributes[5]).build();
+		}
+
+		return film;
 	}
 
 	static String getRequestBody(HttpServletRequest request) {

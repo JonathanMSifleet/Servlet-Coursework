@@ -26,13 +26,13 @@ public class UpdateFilm extends HttpServlet
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		String filmString = IMonoObjServletCommon.getRequestBody(request);
 		String format = IGetFormat.getFormat(request);
-		
+
 		System.out.println(filmString);
 
 		Film film = switch (format) {
-		case "json" -> IMonoObjServletCommon.jsonToFilm(filmString, false);
-		case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, false);
-		default -> null;
+			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, false);
+			case "csv" -> IMonoObjServletCommon.csvToFilm(filmString, false);
+			default -> IMonoObjServletCommon.jsonToFilm(filmString, false);
 		};
 
 		System.out.println(film.toString());

@@ -7,6 +7,7 @@ import Output from './Output/Output';
 import Radio from '../../../components/Radio/Radio';
 import XMLRequest from '../../../utils/requests/XMLRequest';
 import classes from './ControlPanel.module.scss';
+import csvToJSON from '../../../utils/csvToJSON';
 import jsonToCSV from '../../../utils/jsonToCSV';
 import jsontoxml from 'jsontoxml';
 import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
@@ -18,8 +19,8 @@ const ControlPanel = () => {
   const [formData, setFormData] = useState({});
   const [format, setFormat] = useState('json');
   const [formatChanged, setFormatChanged] = useState(false);
-  const [selectedAttributeVal, setSelectedAttributeVal] = useState();
-  const [selectedFilm, setSelectedFilm] = useState();
+  const [selectedAttributeVal, setSelectedAttributeVal] = useState(null);
+  const [selectedFilm, setSelectedFilm] = useState(null);
   const [selectedFilmID, setSelectedFilmID] = useState(null);
   const [selectedLabel, setSelectedLabel] = useState('Title');
   const [shouldDeleteFilm, setShouldDeleteFilm] = useState(false);
@@ -32,14 +33,15 @@ const ControlPanel = () => {
   const [updateFormData, setUpdateFormData] = useState(false);
   const [useREST, setUseREST] = useState(false);
 
-  // reset films on format change:
+  // reset state data on format change:
   useEffect(() => {
     setFilms(null);
-    setFormatChanged(null);
+    setFormatChanged(false);
+    setSelectedFilm(null);
+    setSelectedFilmID(null);
   }, [format]);
 
   const sharedSetSelectedFilmID = (id) => {
-    console.log('🚀 ~ file: ControlPanel.jsx ~ line 41 ~ sharedSetSelectedFilmID ~ id', id);
     setSelectedFilmID(id);
   };
 
@@ -62,6 +64,11 @@ const ControlPanel = () => {
 
   const toggleHandler = () => {
     setUseREST(!useREST);
+  };
+
+  const handleSelectChange = (event) => {
+    setSelectedAttributeVal(event.target.value);
+    setSelectedLabel(event.target.selectedOptions[0].innerText);
   };
 
   // get all films
@@ -131,12 +138,16 @@ const ControlPanel = () => {
       let film;
       try {
         switch (format) {
-          case 'json':
-            film = await JSONRequest(url, 'GET');
-            break;
           case 'xml':
-            const response = await XMLRequest(url, 'GET');
-            film = singleXMLFilmToJSON(response);
+            film = await XMLRequest(url, 'GET');
+            film = singleXMLFilmToJSON(film);
+            break;
+          case 'csv':
+            film = await CSVRequest(url, 'GET');
+            film = csvToJSON(film);
+            break;
+          default:
+            film = await JSONRequest(url, 'GET');
             break;
         }
         setSelectedFilm(film);
@@ -192,12 +203,15 @@ const ControlPanel = () => {
             await JSONRequest(url, 'PUT', updateFormData);
             break;
           case 'xml':
-            const film = jsontoxml(updateFormData);
-            await XMLRequest(url, 'PUT', `<film>${film}</film>`);
+            const xmlFilm = jsontoxml(updateFormData);
+            await XMLRequest(url, 'PUT', `<film>${xmlFilm}</film>`);
             break;
-          // case 'csv':
-          //   films = insertCSVFilm(url);
-          //   break;
+          case 'csv':
+            console.log('🚀 ~ file: ControlPanel.jsx ~ line 211 ~ updateFilm ~ updateFormData', updateFormData);
+            const csvFilm = jsonToCSV(updateFormData);
+            console.log('🚀 ~ file: ControlPanel.jsx ~ line 211 ~ updateFilm ~ film', csvFilm);
+            await CSVRequest(url, 'PUT', csvFilm);
+            break;
         }
       } catch (e) {
         console.error(e);
@@ -230,11 +244,6 @@ const ControlPanel = () => {
 
     if (shouldDeleteFilm) deleteFilm();
   }, [shouldDeleteFilm]);
-
-  const handleSelectChange = (event) => {
-    setSelectedAttributeVal(event.target.value);
-    setSelectedLabel(event.target.selectedOptions[0].innerText);
-  };
 
   const renderSwitch = () => {
     switch (endpoint) {

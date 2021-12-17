@@ -30,10 +30,7 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 		Film film = filmDAO.getFilmByID(id);
 		String format = IGetFormat.getFormat(request);
 
-		Object payload;
-
-		Gson gson = new Gson();
-
+		Object payload = null;
 		switch (format) {
 			case "xml" -> {
 				response.setContentType("text/xml");
@@ -41,9 +38,13 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 				xstream.alias("film", Film.class);
 				payload = xstream.toXML(film);
 			}
+			case "csv" -> {
+				payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector() + ",,"
+				    + film.getStars() + ",," + film.getReview();
+			}
 			default -> {
 				response.setContentType("application/json");
-				payload = gson.toJson(film);
+				payload = new Gson().toJson(film);
 			}
 		}
 
