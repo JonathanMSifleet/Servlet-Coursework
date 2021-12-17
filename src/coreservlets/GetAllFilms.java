@@ -46,5 +46,4 @@ public class GetAllFilms extends HttpServlet
 		
 		IHandleHTTP.sendResponse(response, payload);
 	}
-
 }
