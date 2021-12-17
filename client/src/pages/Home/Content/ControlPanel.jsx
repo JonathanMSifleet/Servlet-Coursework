@@ -253,9 +253,14 @@ const ControlPanel = () => {
   // delete film
   useEffect(() => {
     const deleteFilm = async () => {
-      const url = `${endpoints.deleteFilmEndpoint}?format=${format}&id=${selectedFilmID}`;
-      setShowSpinner(true);
+      let url = `format=${format}&id=${selectedFilmID}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}`;
+      } else {
+        url = `${endpoints.deleteFilmEndpoint}?${url}`;
+      }
 
+      setShowSpinner(true);
       try {
         await JSONRequest(url, 'DELETE');
       } catch (e) {

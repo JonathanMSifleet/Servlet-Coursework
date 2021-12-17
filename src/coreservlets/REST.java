@@ -1,6 +1,7 @@
 package coreservlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -79,6 +80,18 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		};
 
 		IHandleHTTP.sendResponse(response, filmDAO.updateFilm(film));
+	}
+
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+		response = IHandleHTTP.setHeaders(response, "DELETE");
+		int id = Integer.parseInt(request.getParameter("id"));
+
+		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
+
+		PrintWriter out = response.getWriter();
+		out.print(filmDAO.deleteFilm(id));
+		out.flush();
 	}
 
 	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {
