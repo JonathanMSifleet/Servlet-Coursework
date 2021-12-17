@@ -65,6 +65,22 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		IHandleHTTP.sendResponse(response, filmDAO.insertFilm(film));
 	}
 
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response = IHandleHTTP.setHeaders(response, "PUT");
+
+		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
+		String filmString = IMonoObjServletCommon.getRequestBody(request);
+		String format = IGetFormat.getFormat(request);
+
+		Film film = switch (format) {
+			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, false);
+			case "csv" -> IMonoObjServletCommon.csvToFilm(filmString, false);
+			default -> IMonoObjServletCommon.jsonToFilm(filmString, false);
+		};
+
+		IHandleHTTP.sendResponse(response, filmDAO.updateFilm(film));
+	}
+
 	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {
 		ArrayList<Film> films = filmDAO.getAllFilms();
 
@@ -76,28 +92,6 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		ArrayList<Film> films = filmDAO.getFilmByTitle(title);
 
 		return handleGetAllOrByTitleFormat(films, format, response);
-	}
-
-	private static Object handleGetAllOrByTitleFormat(ArrayList<Film> films, String format,
-	    HttpServletResponse response) {
-		Object payload;
-
-		switch (format) {
-			case "xml" -> {
-				response.setContentType("text/xml");
-				payload = IPolyObjServletCommon.filmsToXMLArray(films);
-			}
-			case "csv" -> {
-				response.setContentType("text/csv");
-				payload = IPolyObjServletCommon.filmsToCSVArray(films);
-			}
-			default -> {
-				response.setContentType("application/json");
-				payload = IPolyObjServletCommon.filmsToJSONArray(films);
-			}
-		}
-
-		return payload;
 	}
 
 	private static Object getFilmByID(FilmDAOSingleton filmDAO, String format, int id, HttpServletResponse response) {
@@ -118,6 +112,28 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 			default -> {
 				response.setContentType("application/json");
 				payload = new Gson().toJson(film);
+			}
+		}
+
+		return payload;
+	}
+
+	private static Object handleGetAllOrByTitleFormat(ArrayList<Film> films, String format,
+	    HttpServletResponse response) {
+		Object payload;
+
+		switch (format) {
+			case "xml" -> {
+				response.setContentType("text/xml");
+				payload = IPolyObjServletCommon.filmsToXMLArray(films);
+			}
+			case "csv" -> {
+				response.setContentType("text/csv");
+				payload = IPolyObjServletCommon.filmsToCSVArray(films);
+			}
+			default -> {
+				response.setContentType("application/json");
+				payload = IPolyObjServletCommon.filmsToJSONArray(films);
 			}
 		}
 

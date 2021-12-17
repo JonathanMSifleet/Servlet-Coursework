@@ -216,9 +216,14 @@ const ControlPanel = () => {
   // update film
   useEffect(() => {
     const updateFilm = async () => {
-      const url = `${endpoints.updateFilmEndpoint}?format=${format}`;
-      setShowSpinner(true);
+      let url = `format=${format}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}`;
+      } else {
+        url = `${endpoints.updateFilmEndpoint}?${url}`;
+      }
 
+      setShowSpinner(true);
       try {
         switch (format) {
           case 'xml':
