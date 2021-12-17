@@ -109,7 +109,7 @@ const ControlPanel = () => {
     const getFilms = async () => {
       if (!formData.title) return;
 
-      let url = `format=${format}&getType=byTitle&title=${formData.title}`;
+      let url = `format=${format}&getType=title&title=${formData.title}`;
       if (useREST) {
         url = `${endpoints.restEndpoint}?${url}`;
       } else {
@@ -142,7 +142,7 @@ const ControlPanel = () => {
   // get film by ID
   useEffect(() => {
     const getFilmByID = async () => {
-      let url = `format=${format}&id=${selectedFilmID}`;
+      let url = `format=${format}&getType=id&id=${selectedFilmID}`;
       if (useREST) {
         url = `${endpoints.restEndpoint}?${url}`;
       } else {
@@ -190,7 +190,6 @@ const ControlPanel = () => {
       }
 
       setShowSpinner(true);
-
       try {
         switch (format) {
           case 'xml':

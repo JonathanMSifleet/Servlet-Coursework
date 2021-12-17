@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.thoughtworks.xstream.XStream;
+
 import dao.FilmDAOSingleton;
 import interfaces.IGetFormat;
 import interfaces.IHandleHTTP;
@@ -32,9 +35,13 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		String getType = request.getParameter("getType");
 		switch (getType) {
 			case "all" -> payload = getAllFilms(filmDAO, format, response);
-			case "byTitle" -> {
+			case "title" -> {
 				String title = request.getParameter("title");
-				payload = getByTitle(filmDAO, format, title, response);
+				payload = getFilmByTitle(filmDAO, format, title, response);
+			}
+			case "id" -> {
+				int id = Integer.parseInt(request.getParameter("id"));
+				payload = getFilmByID(filmDAO, format, id, response);
 			}
 		}
 
@@ -64,7 +71,7 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		return handleGetAllOrByTitleFormat(films, format, response);
 	}
 
-	private static Object getByTitle(FilmDAOSingleton filmDAO, String format, String title,
+	private static Object getFilmByTitle(FilmDAOSingleton filmDAO, String format, String title,
 	    HttpServletResponse response) {
 		ArrayList<Film> films = filmDAO.getFilmByTitle(title);
 
@@ -87,6 +94,30 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 			default -> {
 				response.setContentType("application/json");
 				payload = IPolyObjServletCommon.filmsToJSONArray(films);
+			}
+		}
+
+		return payload;
+	}
+
+	private static Object getFilmByID(FilmDAOSingleton filmDAO, String format, int id, HttpServletResponse response) {
+		Film film = filmDAO.getFilmByID(id);
+
+		Object payload = null;
+		switch (format) {
+			case "xml" -> {
+				response.setContentType("text/xml");
+				XStream xstream = new XStream();
+				xstream.alias("film", Film.class);
+				payload = xstream.toXML(film);
+			}
+			case "csv" -> {
+				payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector() + ",,"
+				    + film.getStars() + ",," + film.getReview();
+			}
+			default -> {
+				response.setContentType("application/json");
+				payload = new Gson().toJson(film);
 			}
 		}
 
