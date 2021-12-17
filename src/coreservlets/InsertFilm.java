@@ -24,17 +24,16 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 		response = IHandleHTTP.setHeaders(response, "POST");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
-		String filmString = IMonoObjServletCommon.getRequestBody(request);
+		String requestBodyFilm = IMonoObjServletCommon.getRequestBody(request);
 		String format = IGetFormat.getFormat(request);
 
 		Film film = switch (format) {
-			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, true);
-			case "csv" -> IMonoObjServletCommon.csvToFilm(filmString, true);
-			default -> IMonoObjServletCommon.jsonToFilm(filmString, true);
+			case "xml" -> IMonoObjServletCommon.xmlToFilm(requestBodyFilm, true);
+			case "csv" -> IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
+			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
 		};
 
 		IHandleHTTP.sendResponse(response, filmDAO.insertFilm(film));
-
 	}
 
 }

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import dao.FilmDAOSingleton;
 import interfaces.IGetFormat;
 import interfaces.IHandleHTTP;
+import interfaces.IMonoObjServletCommon;
 import interfaces.IPolyObjServletCommon;
 import models.Film;
 
@@ -38,6 +39,23 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		}
 
 		IHandleHTTP.sendResponse(response, payload);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response = IHandleHTTP.setHeaders(response, "POST");
+
+		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
+		String requestBodyFilm = IMonoObjServletCommon.getRequestBody(request);
+		String format = IGetFormat.getFormat(request);
+
+		Film film = switch (format) {
+			case "xml" -> IMonoObjServletCommon.xmlToFilm(requestBodyFilm, true);
+			case "csv" -> IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
+			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
+		};
+
+		IHandleHTTP.sendResponse(response, filmDAO.insertFilm(film));
 	}
 
 	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {

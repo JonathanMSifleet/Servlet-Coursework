@@ -142,11 +142,18 @@ const ControlPanel = () => {
   // get film by ID
   useEffect(() => {
     const getFilmByID = async () => {
-      const url = `${endpoint}?format=${format}&id=${selectedFilmID}`;
+      let url = `format=${format}&id=${selectedFilmID}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}`;
+      } else {
+        url = `${endpoints.insertFilmEndpoint}?${url}`;
+      }
+
       setShowSpinner(true);
 
-      let film;
       try {
+        let film;
+
         switch (format) {
           case 'xml':
             film = await XMLRequest(url, 'GET');
