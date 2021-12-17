@@ -29,6 +29,7 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 
 		Film film = switch (format) {
 			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, true);
+			case "csv" -> IMonoObjServletCommon.csvToFilm(filmString);
 			default -> IMonoObjServletCommon.jsonToFilm(filmString, true);
 		};
 

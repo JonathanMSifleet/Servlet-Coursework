@@ -23,11 +23,9 @@ public interface IMonoObjServletCommon {
 		Film film = null;
 
 		if (newFilm) {
-			film = new Film.Builder(new Gson().fromJson(jsonString, Film.class)).id(ISQLOperations.generateNewID())
-					.build();
+			film = new Film.Builder(new Gson().fromJson(jsonString, Film.class)).id(ISQLOperations.generateNewID()).build();
 		} else {
 			film = new Film.Builder(new Gson().fromJson(jsonString, Film.class)).build();
-
 		}
 
 		return film;
@@ -46,25 +44,34 @@ public interface IMonoObjServletCommon {
 
 			if (newFilm) {
 				film = new Film.Builder(null).id(ISQLOperations.generateNewID())
-						.title(root.getElementsByTagName("title").item(0).getTextContent())
-						.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
-						.director(root.getElementsByTagName("director").item(0).getTextContent())
-						.stars(root.getElementsByTagName("stars").item(0).getTextContent())
-						.review(root.getElementsByTagName("director").item(0).getTextContent()).build();
+				    .title(root.getElementsByTagName("title").item(0).getTextContent())
+				    .year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
+				    .director(root.getElementsByTagName("director").item(0).getTextContent())
+				    .stars(root.getElementsByTagName("stars").item(0).getTextContent())
+				    .review(root.getElementsByTagName("director").item(0).getTextContent()).build();
 			} else {
-				film = new Film.Builder(null)
-						.id(Integer.valueOf(root.getElementsByTagName("id").item(0).getTextContent()))
-						.title(root.getElementsByTagName("title").item(0).getTextContent())
-						.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
-						.director(root.getElementsByTagName("director").item(0).getTextContent())
-						.stars(root.getElementsByTagName("stars").item(0).getTextContent())
-						.review(root.getElementsByTagName("director").item(0).getTextContent()).build();
+				film = new Film.Builder(null).id(Integer.valueOf(root.getElementsByTagName("id").item(0).getTextContent()))
+				    .title(root.getElementsByTagName("title").item(0).getTextContent())
+				    .year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
+				    .director(root.getElementsByTagName("director").item(0).getTextContent())
+				    .stars(root.getElementsByTagName("stars").item(0).getTextContent())
+				    .review(root.getElementsByTagName("director").item(0).getTextContent()).build();
 			}
 			return film;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	static Film csvToFilm(String csvFilm) {
+		System.out.println(csvFilm);
+
+		String[] filmAttributes = csvFilm.split(",,");
+
+		return new Film.Builder(null).id(ISQLOperations.generateNewID()).title(filmAttributes[0])
+		    .year(Integer.valueOf(filmAttributes[1])).director(filmAttributes[2]).stars(filmAttributes[3])
+		    .review(filmAttributes[4]).build();
 	}
 
 	static String getRequestBody(HttpServletRequest request) {

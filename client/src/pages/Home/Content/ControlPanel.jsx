@@ -3,13 +3,14 @@ import * as endpoints from '../../../constants/endpoints';
 import CSVRequest from '../../../utils/requests/CSVRequest';
 import Input from '../../../components/Input/Input';
 import JSONRequest from '../../../utils/requests/JSONRequest';
+import Output from './Output/Output';
 import Radio from '../../../components/Radio/Radio';
 import XMLRequest from '../../../utils/requests/XMLRequest';
 import classes from './ControlPanel.module.scss';
+import jsonToCSV from '../../../utils/jsonToCSV';
 import jsontoxml from 'jsontoxml';
 import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
 import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
-import Output from './Output/Output';
 
 const ControlPanel = () => {
   const [endpoint, setEndpoint] = useState('');
@@ -158,15 +159,15 @@ const ControlPanel = () => {
 
       try {
         switch (format) {
-          case 'json':
-            await JSONRequest(url, 'POST', formData);
-            break;
           case 'xml':
             await XMLRequest(url, 'POST', `<film>${jsontoxml(formData)}</film>`);
             break;
-          // case 'csv':
-          //   films = insertCSVFilm(url);
-          //   break;
+          case 'csv':
+            await CSVRequest(url, 'POST', jsonToCSV(formData));
+            break;
+          default:
+            await JSONRequest(url, 'POST', formData);
+            break;
         }
       } catch (e) {
         console.error(e);
