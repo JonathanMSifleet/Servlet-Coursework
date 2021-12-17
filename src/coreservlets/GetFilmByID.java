@@ -38,10 +38,8 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 				xstream.alias("film", Film.class);
 				payload = xstream.toXML(film);
 			}
-			case "csv" -> {
-				payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector() + ",,"
-				    + film.getStars() + ",," + film.getReview();
-			}
+			case "csv" -> payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector()
+			    + ",," + film.getStars() + ",," + film.getReview();
 			default -> {
 				response.setContentType("application/json");
 				payload = new Gson().toJson(film);
