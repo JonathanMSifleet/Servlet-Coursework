@@ -146,7 +146,7 @@ const ControlPanel = () => {
       if (useREST) {
         url = `${endpoints.restEndpoint}?${url}`;
       } else {
-        url = `${endpoints.insertFilmEndpoint}?${url}`;
+        url = `${endpoints.getFilmByIDEndpoint}?${url}`;
       }
 
       setShowSpinner(true);
@@ -182,7 +182,13 @@ const ControlPanel = () => {
   // create new film
   useEffect(() => {
     async function postFilm() {
-      const url = `${endpoint}?format=${format}`;
+      let url = `format=${format}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}`;
+      } else {
+        url = `${endpoints.insertFilmEndpoint}?${url}`;
+      }
+
       setShowSpinner(true);
 
       try {
