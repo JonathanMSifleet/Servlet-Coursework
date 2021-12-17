@@ -199,18 +199,15 @@ const ControlPanel = () => {
 
       try {
         switch (format) {
-          case 'json':
-            await JSONRequest(url, 'PUT', updateFormData);
-            break;
           case 'xml':
             const xmlFilm = jsontoxml(updateFormData);
             await XMLRequest(url, 'PUT', `<film>${xmlFilm}</film>`);
             break;
           case 'csv':
-            console.log('🚀 ~ file: ControlPanel.jsx ~ line 211 ~ updateFilm ~ updateFormData', updateFormData);
-            const csvFilm = jsonToCSV(updateFormData);
-            console.log('🚀 ~ file: ControlPanel.jsx ~ line 211 ~ updateFilm ~ film', csvFilm);
-            await CSVRequest(url, 'PUT', csvFilm);
+            await CSVRequest(url, 'PUT', jsonToCSV(updateFormData));
+            break;
+          default:
+            await JSONRequest(url, 'PUT', updateFormData);
             break;
         }
       } catch (e) {

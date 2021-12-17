@@ -63,8 +63,6 @@ public interface IMonoObjServletCommon {
 	}
 
 	static Film csvToFilm(String csvFilm, Boolean newFilm) {
-		System.out.println(csvFilm);
-
 		String[] filmAttributes = csvFilm.split(",,");
 
 		Film film = null;
