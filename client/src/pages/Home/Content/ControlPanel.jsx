@@ -75,9 +75,14 @@ const ControlPanel = () => {
   useEffect(() => {
     async function getFilms() {
       try {
-        const url = `${endpoints.getAllFilmsEndpoint}?format=${format}`;
-        setShowSpinner(true);
+        let url = `format=${format}&getType=all`;
+        if (useREST) {
+          url = `${endpoints.restEndpoint}?${url}`;
+        } else {
+          url = `${endpoints.getAllFilmsEndpoint}?${url}`;
+        }
 
+        setShowSpinner(true);
         switch (format) {
           case 'xml':
             setFilms(await XMLRequest(url, 'GET'));
@@ -104,9 +109,14 @@ const ControlPanel = () => {
     const getFilms = async () => {
       if (!formData.title) return;
 
-      setShowSpinner(true);
-      const url = `${endpoint}?format=${format}&title=${formData.title}`;
+      let url = `format=${format}&getType=byTitle&title=${formData.title}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}`;
+      } else {
+        url = `${endpoints.getFilmByTitleEndpoint}?${url}`;
+      }
 
+      setShowSpinner(true);
       try {
         switch (format) {
           case 'xml':

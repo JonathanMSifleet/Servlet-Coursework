@@ -6,3 +6,5 @@ export const getFilmByIDEndpoint = `${root}/getFilmByID`;
 export const getFilmByTitleEndpoint = `${root}/getFilmByTitle`;
 export const insertFilmEndpoint = `${root}/insertFilm`;
 export const updateFilmEndpoint = `${root}/updateFilm`;
+
+export const restEndpoint = `${root}/REST`;

@@ -26,11 +26,9 @@ public class GetAllFilms extends HttpServlet
 
 		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 		ArrayList<Film> films = filmDAO.getAllFilms();
-
 		String format = IGetFormat.getFormat(request);
 
 		Object payload;
-
 		switch (format) {
 			case "xml" -> {
 				response.setContentType("text/xml");

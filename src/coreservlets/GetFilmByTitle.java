@@ -30,7 +30,6 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 		String format = IGetFormat.getFormat(request);
 
 		Object payload;
-
 		switch (format) {
 			case "xml" -> {
 				response.setContentType("text/xml");
