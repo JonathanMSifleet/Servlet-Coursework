@@ -18,7 +18,7 @@ public class FilmDAOSingleton {
 
 	public ArrayList<Film> getAllFilms() {
 		try {
-			String SQL = "SELECT * FROM films";
+			String SQL = "SELECT * FROM epcoursework";
 
 			java.sql.ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, null);
 			assert results != null;
@@ -30,7 +30,7 @@ public class FilmDAOSingleton {
 	}
 
 	public ArrayList<Film> getFilmByTitle(String title) {
-		String SQL = "SELECT * FROM films WHERE title LIKE ?";
+		String SQL = "SELECT * FROM epcoursework WHERE title LIKE ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -47,7 +47,7 @@ public class FilmDAOSingleton {
 	}
 
 	public Film getFilmByID(int id) {
-		String SQL = "SELECT * FROM films WHERE id = ? LIMIT 1";
+		String SQL = "SELECT * FROM epcoursework WHERE id = ? LIMIT 1";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -58,9 +58,9 @@ public class FilmDAOSingleton {
 			assert result != null;
 			result.next();
 
-			return new Film.Builder(null).id(result.getInt("id")).title(result.getString("title")).year(result.getInt("year"))
-			    .director(result.getString("director")).stars(result.getString("stars")).review(result.getString("review"))
-			    .build();
+			return new Film.Builder(null).id(result.getInt("id")).title(result.getString("title"))
+					.year(result.getInt("year")).director(result.getString("director")).stars(result.getString("stars"))
+					.review(result.getString("review")).build();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,19 +69,23 @@ public class FilmDAOSingleton {
 	}
 
 	public int insertFilm(Film film) {
-		String SQL = "INSERT INTO films VALUES (?, ?, ?, ?, ?, ?)";
+		String SQL = "INSERT INTO epcoursework VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
+			if (film.getId() == -1)
+				throw new Exception("Invalid film ID");
+
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
 			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
 		}
+		return -1;
 	}
 
 	public int updateFilm(Film film) {
-		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, " + "director = ?, stars = ?, review = ? WHERE id = ?";
+		String SQL = "UPDATE epcoursework SET id = ?, title = ?, year = ?, "
+				+ "director = ?, stars = ?, review = ? WHERE id = ?";
 
 		try {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
@@ -91,12 +95,12 @@ public class FilmDAOSingleton {
 			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
 		}
+		return -1;
 	}
 
 	public int deleteFilm(int id) {
-		String SQL = "DELETE FROM films WHERE id = ?";
+		String SQL = "DELETE FROM epcoursework WHERE id = ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -105,8 +109,8 @@ public class FilmDAOSingleton {
 			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
 		}
+		return -1;
 	}
 
 	private ArrayList<Film> resultsToList(java.sql.ResultSet results) {
@@ -119,31 +123,34 @@ public class FilmDAOSingleton {
 			return films;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 
 	private Film resultToFilm(java.sql.ResultSet results) {
-
 		try {
 			return new Film.Builder(null).id((int) results.getObject(1)).title((String) results.getObject(2))
-			    .year((int) results.getObject(3)).director((String) results.getObject(4)).stars((String) results.getObject(5))
-			    .review((String) results.getObject(6)).build();
+					.year((int) results.getObject(3)).director((String) results.getObject(4))
+					.stars((String) results.getObject(5)).review((String) results.getObject(6)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 
 	private ArrayList<Object> filmAttributesToParamList(Film film) {
 		ArrayList<Object> paramVals = new ArrayList<>();
 
-		paramVals.add(film.getId());
-		paramVals.add(film.getTitle());
-		paramVals.add(film.getYear());
-		paramVals.add(film.getDirector());
-		paramVals.add(film.getStars());
-		paramVals.add(film.getReview());
+		try {
+			paramVals.add(film.getId());
+			paramVals.add(film.getTitle());
+			paramVals.add(film.getYear());
+			paramVals.add(film.getDirector());
+			paramVals.add(film.getStars());
+			paramVals.add(film.getReview());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return paramVals;
 	}

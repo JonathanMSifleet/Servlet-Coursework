@@ -10,13 +10,13 @@ public interface ISQLOperations {
 
 	static Connection loadDriver() {
 
-//		String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
-//		String username = "sifleetj";
-//		String password = "Joosderg6";
+		String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
+		String username = "sifleetj";
+		String password = "Joosderg6";
 
-		String url = "jdbc:mysql://localhost:3306/epcoursework";
-		String username = "root";
-		String password = "Phantom2011!";
+//		String url = "jdbc:mysql://localhost:3306/epcoursework";
+//		String username = "root";
+//		String password = "Phantom2011!";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -53,7 +53,7 @@ public interface ISQLOperations {
 	}
 
 	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals)
-	    throws SQLException {
+			throws SQLException {
 
 		int paramIndex = 1;
 
@@ -87,11 +87,9 @@ public interface ISQLOperations {
 			while (result.next()) {
 				return result.getInt(1) + 1;
 			}
-			return -1;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
 		}
+		return -1;
 	}
-
 }

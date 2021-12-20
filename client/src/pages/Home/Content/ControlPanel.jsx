@@ -132,6 +132,7 @@ const ControlPanel = () => {
         console.error(e);
       }
 
+      setFormData(null);
       setShowSpinner(false);
       setShouldGetFilmByTitle(false);
     };
