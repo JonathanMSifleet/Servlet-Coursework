@@ -41,7 +41,6 @@ public interface ISQLOperations {
 
 	static int sqlManipulate(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
-
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			statement = prepareStatement(statement, paramVals);
 

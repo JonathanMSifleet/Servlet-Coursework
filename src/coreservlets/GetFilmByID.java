@@ -20,17 +20,21 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
+		// set relevant headers
 		response = IHandleHTTP.setHeaders(response, "GET");
 
+		// get ID from URL
 		int id = Integer.parseInt(request.getParameter("id"));
 
-		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
-		Film film = filmDAO.getFilmByID(id);
+		// get film by ID from data access object
+		Film film = new FilmDAOSingleton().getFilmByID(id);
+		// get format from URL
 		String format = IGetFormat.getFormat(request);
 
-		Object payload = null;
+		Object payload;
+		// format film based upon relevant format
 		switch (format) {
 			case "xml" -> {
 				response.setContentType("text/xml");
@@ -38,15 +42,22 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 				xstream.alias("film", Film.class);
 				payload = xstream.toXML(film);
 			}
-			case "csv" -> payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector()
-			    + ",," + film.getStars() + ",," + film.getReview();
+			case "csv" -> {
+				response.setContentType("text/csv");
+				payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector() + ",,"
+						+ film.getStars() + ",," + film.getReview();
+			}
 			default -> {
 				response.setContentType("application/json");
 				payload = new Gson().toJson(film);
 			}
 		}
 
-		IHandleHTTP.sendResponse(response, payload);
+		// send formatted film as response
+		try {
+			IHandleHTTP.sendResponse(response, payload);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-
 }

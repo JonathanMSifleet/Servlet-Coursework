@@ -19,17 +19,22 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
+		// set relevant headers
 		response = IHandleHTTP.setHeaders(response, "GET");
 
+		// get film title from url
 		String title = request.getParameter("title");
 
-		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
-		ArrayList<Film> films = filmDAO.getFilmByTitle(title);
+		// get films with title containing title from url
+		ArrayList<Film> films = new FilmDAOSingleton().getFilmByTitle(title);
+		// get format from url
 		String format = IGetFormat.getFormat(request);
 
 		Object payload;
+		// convert film array list to relevant data type
+		// and set appropriate header for HTTP response
 		switch (format) {
 			case "xml" -> {
 				response.setContentType("text/xml");
@@ -45,7 +50,12 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 			}
 		}
 
-		IHandleHTTP.sendResponse(response, payload);
+		// send formatted film array list as formatted response
+		try {
+			IHandleHTTP.sendResponse(response, payload);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

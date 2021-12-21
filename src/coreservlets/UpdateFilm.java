@@ -15,25 +15,34 @@ import models.Film;
 
 @WebServlet("/updateFilm")
 public class UpdateFilm extends HttpServlet
-    implements interfaces.IHandleHTTP, interfaces.IMonoObjServletCommon, interfaces.IGetFormat {
+		implements interfaces.IHandleHTTP, interfaces.IMonoObjServletCommon, interfaces.IGetFormat {
 	private static final long serialVersionUID = -909062916095173117L;
 
 	@Override
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) {
 
+		// set relevant headers
 		response = IHandleHTTP.setHeaders(response, "PUT");
 
-		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
-		String filmString = IMonoObjServletCommon.getRequestBody(request);
+		// get film from HTTP body
+		String requestBodyFilm = IMonoObjServletCommon.getRequestBody(request);
+		// get format from url
 		String format = IGetFormat.getFormat(request);
 
+		// set film equal to film object converted based on
+		// relevant format
 		Film film = switch (format) {
-			case "xml" -> IMonoObjServletCommon.xmlToFilm(filmString, false);
-			case "csv" -> IMonoObjServletCommon.csvToFilm(filmString, false);
-			default -> IMonoObjServletCommon.jsonToFilm(filmString, false);
+			case "xml" -> IMonoObjServletCommon.xmlToFilm(requestBodyFilm, false);
+			case "csv" -> IMonoObjServletCommon.csvToFilm(requestBodyFilm, false);
+			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, false);
 		};
 
-		IHandleHTTP.sendResponse(response, filmDAO.updateFilm(film));
+		// send number of affected rows as a result of updating film
+		try {
+			IHandleHTTP.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -61,7 +61,6 @@ public class FilmDAOSingleton {
 			return new Film.Builder(null).id(result.getInt("id")).title(result.getString("title"))
 					.year(result.getInt("year")).director(result.getString("director")).stars(result.getString("stars"))
 					.review(result.getString("review")).build();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -16,19 +16,22 @@ import models.Film;
 
 @WebServlet("/getAllFilms")
 public class GetAllFilms extends HttpServlet
-    implements interfaces.IHandleHTTP, interfaces.IGetFormat, interfaces.IPolyObjServletCommon {
+		implements interfaces.IHandleHTTP, interfaces.IGetFormat, interfaces.IPolyObjServletCommon {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		// set relevant headers
 		response = IHandleHTTP.setHeaders(response, "GET");
 
-		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
-		ArrayList<Film> films = filmDAO.getAllFilms();
+		// get all films from data access object
+		ArrayList<Film> films = new FilmDAOSingleton().getAllFilms();
+		// get format from url
 		String format = IGetFormat.getFormat(request);
 
 		Object payload;
+		// convert film array list to relevant data type
+		// and set appropriate header for HTTP response
 		switch (format) {
 			case "xml" -> {
 				response.setContentType("text/xml");
@@ -43,7 +46,12 @@ public class GetAllFilms extends HttpServlet
 				payload = IPolyObjServletCommon.filmsToJSONArray(films);
 			}
 		}
-		
-		IHandleHTTP.sendResponse(response, payload);
+
+		// send film array list as formatted response
+		try {
+			IHandleHTTP.sendResponse(response, payload);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
