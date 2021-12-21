@@ -1,7 +1,5 @@
 package coreservlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.servlet.annotation.WebServlet;
@@ -50,13 +48,8 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 			}
 		}
 
-		// send result of above switch
-		try {
-			IHandleHTTP.sendResponse(response, payload);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		// send response containing film(s)
+		IHandleHTTP.sendResponse(response, payload);
 	}
 
 	@Override
@@ -77,13 +70,9 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
 		};
 
-		// send number of affected rows as a result of inserting film
-		try {
-			IHandleHTTP.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		// send response containing number of rows affected by inserting
+		// new film
+		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
 	}
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) {
@@ -103,13 +92,8 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, false);
 		};
 
-		// send number of affected rows as a result of updating film
-		try {
-			IHandleHTTP.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		// print number of affected rows due to updating film
+		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
 	}
 
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
@@ -119,14 +103,7 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		// print number of affected rows due to deleting film
-		try {
-			PrintWriter out = response.getWriter();
-			out.print(new FilmDAOSingleton().deleteFilm(id));
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().deleteFilm(id));
 	}
 
 	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {

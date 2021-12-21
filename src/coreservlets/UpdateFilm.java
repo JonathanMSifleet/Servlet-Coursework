@@ -1,7 +1,5 @@
 package coreservlets;
 
-import java.io.IOException;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,12 +35,7 @@ public class UpdateFilm extends HttpServlet
 			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, false);
 		};
 
-		// send number of affected rows as a result of updating film
-		try {
-			IHandleHTTP.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// print number of affected rows due to updating film
+		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
 	}
-
 }

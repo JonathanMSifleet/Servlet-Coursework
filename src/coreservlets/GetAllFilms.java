@@ -1,6 +1,5 @@
 package coreservlets;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.annotation.WebServlet;
@@ -46,12 +45,8 @@ public class GetAllFilms extends HttpServlet
 				payload = IPolyObjServletCommon.filmsToJSONArray(films);
 			}
 		}
-
-		// send film array list as formatted response
-		try {
-			IHandleHTTP.sendResponse(response, payload);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		// send response containing formatted list of all films
+		IHandleHTTP.sendResponse(response, payload);
 	}
 }

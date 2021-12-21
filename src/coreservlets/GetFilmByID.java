@@ -1,7 +1,5 @@
 package coreservlets;
 
-import java.io.IOException;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -52,12 +50,8 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 				payload = new Gson().toJson(film);
 			}
 		}
-
-		// send formatted film as response
-		try {
-			IHandleHTTP.sendResponse(response, payload);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		// send response containing formatted film
+		IHandleHTTP.sendResponse(response, payload);
 	}
 }

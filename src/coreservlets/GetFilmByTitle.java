@@ -1,6 +1,5 @@
 package coreservlets;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.annotation.WebServlet;
@@ -33,6 +32,7 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 		String format = IGetFormat.getFormat(request);
 
 		Object payload;
+
 		// convert film array list to relevant data type
 		// and set appropriate header for HTTP response
 		switch (format) {
@@ -49,13 +49,8 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 				payload = IPolyObjServletCommon.filmsToJSONArray(films);
 			}
 		}
-
-		// send formatted film array list as formatted response
-		try {
-			IHandleHTTP.sendResponse(response, payload);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		// send response containing formatted list of films
+		IHandleHTTP.sendResponse(response, payload);
 	}
-
 }

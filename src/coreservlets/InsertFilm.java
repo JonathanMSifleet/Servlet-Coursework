@@ -1,7 +1,5 @@
 package coreservlets;
 
-import java.io.IOException;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,13 +34,9 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 			case "csv" -> IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
 			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
 		};
-
-		// send number of affected rows as a result of inserting film
-		try {
-			IHandleHTTP.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		// send response containing number of rows affected by inserting new film
+		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
 	}
 
 }

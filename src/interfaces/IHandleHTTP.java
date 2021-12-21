@@ -7,10 +7,15 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface IHandleHTTP {
 	
-	static void sendResponse(javax.servlet.http.HttpServletResponse response, Object payload) throws IOException {
-		PrintWriter out = response.getWriter();
-		out.print(payload);
-		out.flush();
+	static void sendResponse(javax.servlet.http.HttpServletResponse response, Object payload) {
+		try {
+			PrintWriter out = response.getWriter();
+			out.print(payload);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	static HttpServletResponse setHeaders(javax.servlet.http.HttpServletResponse response, String method) {
