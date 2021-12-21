@@ -138,7 +138,7 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 			HttpServletResponse response) {
 		// return formatted list of all films with a title
 		// containing the value of the title parameter
-		return handleGetAllOrByTitleFormat(filmDAO.getFilmByTitle(title), format, response);
+		return handleGetAllOrByTitleFormat(filmDAO.getFilmsByTitle(title), format, response);
 	}
 
 	private static Object getFilmByID(FilmDAOSingleton filmDAO, String format, int id, HttpServletResponse response) {

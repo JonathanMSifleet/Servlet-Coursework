@@ -28,7 +28,7 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 		String title = request.getParameter("title");
 
 		// get films with title containing title from url
-		ArrayList<Film> films = new FilmDAOSingleton().getFilmByTitle(title);
+		ArrayList<Film> films = new FilmDAOSingleton().getFilmsByTitle(title);
 		// get format from url
 		String format = IGetFormat.getFormat(request);
 
