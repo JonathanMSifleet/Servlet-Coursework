@@ -33,13 +33,13 @@ const ControlPanel = () => {
   const [updateFormData, setUpdateFormData] = useState(false);
   const [useREST, setUseREST] = useState(false);
 
-  // reset state data on format change:
+  // reset state data on format change or REST toggle:
   useEffect(() => {
     setFilms(null);
     setFormatChanged(false);
     setSelectedFilm(null);
     setSelectedFilmID(null);
-  }, [format]);
+  }, [format, useREST]);
 
   const sharedSetSelectedFilmID = (id) => {
     setSelectedFilmID(id);
