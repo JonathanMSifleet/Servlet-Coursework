@@ -9,86 +9,94 @@ import java.util.ArrayList;
 public interface ISQLOperations {
 
 	static Connection loadDriver() {
-
+		// mudfoot details
 		String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
 		String username = "sifleetj";
 		String password = "Joosderg6";
 
-//		String url = "jdbc:mysql://localhost:3306/epcoursework";
-//		String username = "root";
-//		String password = "Phantom2011!";
-
+		// initialise MySQL driver
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			return DriverManager.getConnection(url, username, password);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return null;
 	}
 
 	static java.sql.ResultSet sqlSelect(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
+			// convert list of MySQL query parameter's into query
 			statement = prepareStatement(statement, paramVals);
 
+			// execute SQL query
 			return statement.executeQuery();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return null;
 	}
 
 	static int sqlManipulate(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
+			// convert list of MySQL query parameter's into query
 			statement = prepareStatement(statement, paramVals);
 
+			// execute query that manipulates data
 			return statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -1;
 		}
+
+		return -1;
 	}
 
-	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals)
-			throws SQLException {
-
+	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals) {
 		int paramIndex = 1;
 
+		// set statement's parameters equal to list of parameters
 		if (paramVals != null) {
 			for (Object param : paramVals) {
-				if (param instanceof String) {
-					statement.setString(paramIndex, (String) param);
-				} else if (param instanceof Integer) {
-					statement.setInt(paramIndex, (int) param);
+				try {
+					if (param instanceof String) {
+						statement.setString(paramIndex, (String) param);
+					} else if (param instanceof Integer) {
+						statement.setInt(paramIndex, (int) param);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
-
 				paramIndex++;
 			}
 		}
-
 		return statement;
 	}
 
 	static int generateNewID() {
 		Connection conn = loadDriver();
 
-		String SQL = "SELECT(MAX(id)) FROM films";
+		// select the largest ID from 
+		String SQL = "SELECT(MAX(id)) FROM epcoursework";
 
 		try {
-			assert conn != null;
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			prepareStatement(statement, null);
 
+			// execute SQL
 			java.sql.ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
+				// return new ID of value of largest ID + 1
 				return result.getInt(1) + 1;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return -1;
 	}
 }
