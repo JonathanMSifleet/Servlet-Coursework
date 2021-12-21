@@ -1,6 +1,7 @@
 package models;
 
 public class Film {
+	// use builder design pattern
 
 	private final int id;
 	private final String title;
@@ -10,6 +11,8 @@ public class Film {
 	private final String review;
 
 	private Film(Builder builder) {
+		// constructor sets film's attributes equal to
+		// builder's attributes
 		this.id = builder.id;
 		this.title = builder.title;
 		this.year = builder.year;
@@ -44,8 +47,10 @@ public class Film {
 
 	@Override
 	public String toString() {
+		// returns Film's attributes separated by double comma
+		// to avoid issues with attributes containing commas
 		return this.getId() + ",, " + this.getTitle() + ",, " + this.getYear() + ",, " + this.getDirector() + ",, "
-		    + this.getStars() + ",, " + this.getReview();
+				+ this.getStars() + ",, " + this.getReview();
 	}
 
 	public static class Builder {
@@ -57,7 +62,8 @@ public class Film {
 		private String review;
 
 		public Builder(Film film) {
-
+			// allows passing of existing film to set Film
+			// equal to existing film, for converting to JSON
 			if (film != null) {
 				this.id = film.getId();
 				this.title = film.getTitle();
