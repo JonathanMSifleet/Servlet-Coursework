@@ -29,10 +29,16 @@ public class UpdateFilm extends HttpServlet
 
 		// set film equal to film object converted based on
 		// relevant format
-		Film film = switch (format) {
-			case "xml" -> IMonoObjServletCommon.xmlToFilm(requestBodyFilm, false);
-			case "csv" -> IMonoObjServletCommon.csvToFilm(requestBodyFilm, false);
-			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, false);
+		Film film;
+		switch (format) {
+			case "xml":
+				film = IMonoObjServletCommon.xmlToFilm(requestBodyFilm, false);
+				break;
+			case "csv":
+				film = IMonoObjServletCommon.csvToFilm(requestBodyFilm, false);
+				break;
+			default:
+				film = IMonoObjServletCommon.jsonToFilm(requestBodyFilm, false);
 		};
 
 		// print number of affected rows due to updating film

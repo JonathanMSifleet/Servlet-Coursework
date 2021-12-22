@@ -32,20 +32,19 @@ public class GetAllFilms extends HttpServlet
 		// convert film array list to relevant data type
 		// and set appropriate header for HTTP response
 		switch (format) {
-			case "xml" -> {
+			case "xml":
 				response.setContentType("text/xml");
 				payload = IPolyObjServletCommon.filmsToXMLArray(films);
-			}
-			case "csv" -> {
+				break;
+			case "csv":
 				response.setContentType("text/csv");
 				payload = IPolyObjServletCommon.filmsToCSVArray(films);
-			}
-			default -> {
+				break;
+			default:
 				response.setContentType("application/json");
 				payload = IPolyObjServletCommon.filmsToJSONArray(films);
-			}
 		}
-		
+
 		// send response containing formatted list of all films
 		IHandleHTTP.sendResponse(response, payload);
 	}

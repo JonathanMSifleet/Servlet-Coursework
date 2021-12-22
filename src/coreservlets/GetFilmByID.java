@@ -34,23 +34,22 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 		Object payload;
 		// format film based upon relevant format
 		switch (format) {
-			case "xml" -> {
+			case "xml":
 				response.setContentType("text/xml");
 				XStream xstream = new XStream();
 				xstream.alias("film", Film.class);
 				payload = xstream.toXML(film);
-			}
-			case "csv" -> {
+				break;
+			case "csv":
 				response.setContentType("text/csv");
 				payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector() + ",,"
 						+ film.getStars() + ",," + film.getReview();
-			}
-			default -> {
+				break;
+			default:
 				response.setContentType("application/json");
 				payload = new Gson().toJson(film);
-			}
 		}
-		
+
 		// send response containing formatted film
 		IHandleHTTP.sendResponse(response, payload);
 	}

@@ -29,12 +29,18 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 
 		// set film equal to film object converted based on
 		// relevant format
-		Film film = switch (format) {
-			case "xml" -> IMonoObjServletCommon.xmlToFilm(requestBodyFilm, true);
-			case "csv" -> IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
-			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
+		Film film;
+		switch (format) {
+			case "xml":
+				film = IMonoObjServletCommon.xmlToFilm(requestBodyFilm, true);
+				break;
+			case "csv":
+				film = IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
+				break;
+			default:
+				film = IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
 		};
-		
+
 		// send response containing number of rows affected by inserting new film
 		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
 	}

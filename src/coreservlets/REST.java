@@ -37,15 +37,16 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		// determine which type of get function to use
 		// based on get type from url
 		switch (getType) {
-			case "all" -> payload = getAllFilms(filmDAO, format, response);
-			case "title" -> {
+			case "all":
+				payload = getAllFilms(filmDAO, format, response);
+				break;
+			case "title":
 				String title = request.getParameter("title");
 				payload = getFilmByTitle(filmDAO, format, title, response);
-			}
-			case "id" -> {
+				break;
+			case "id":
 				int id = Integer.parseInt(request.getParameter("id"));
 				payload = getFilmByID(filmDAO, format, id, response);
-			}
 		}
 
 		// send response containing film(s)
@@ -64,10 +65,16 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 
 		// set film equal to film object converted based on
 		// relevant format
-		Film film = switch (format) {
-			case "xml" -> IMonoObjServletCommon.xmlToFilm(requestBodyFilm, true);
-			case "csv" -> IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
-			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
+		Film film;
+		switch (format) {
+			case "xml":
+				film = IMonoObjServletCommon.xmlToFilm(requestBodyFilm, true);
+				break;
+			case "csv":
+				film = IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
+				break;
+			default:
+				film = IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
 		};
 
 		// send response containing number of rows affected by inserting
@@ -86,10 +93,16 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 
 		// set film equal to film object converted based on
 		// relevant format
-		Film film = switch (format) {
-			case "xml" -> IMonoObjServletCommon.xmlToFilm(requestBodyFilm, false);
-			case "csv" -> IMonoObjServletCommon.csvToFilm(requestBodyFilm, false);
-			default -> IMonoObjServletCommon.jsonToFilm(requestBodyFilm, false);
+		Film film;
+		switch (format) {
+			case "xml":
+				film = IMonoObjServletCommon.xmlToFilm(requestBodyFilm, false);
+				break;
+			case "csv":
+				film = IMonoObjServletCommon.csvToFilm(requestBodyFilm, false);
+				break;
+			default:
+				film = IMonoObjServletCommon.jsonToFilm(requestBodyFilm, false);
 		};
 
 		// print number of affected rows due to updating film
@@ -126,21 +139,20 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 
 		// format film by appropriate format
 		switch (format) {
-			case "xml" -> {
+			case "xml":
 				response.setContentType("text/xml");
 				XStream xstream = new XStream();
 				xstream.alias("film", Film.class);
 				payload = xstream.toXML(film);
-			}
-			case "csv" -> {
+				break;
+			case "csv":
 				response.setContentType("text/csv");
 				payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector() + ",,"
 						+ film.getStars() + ",," + film.getReview();
-			}
-			default -> {
+				break;
+			default:
 				response.setContentType("application/json");
 				payload = new Gson().toJson(film);
-			}
 		}
 
 		// return formatted film
@@ -153,18 +165,17 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 
 		// format list of films by appropriate format
 		switch (format) {
-			case "xml" -> {
+			case "xml":
 				response.setContentType("text/xml");
 				payload = IPolyObjServletCommon.filmsToXMLArray(films);
-			}
-			case "csv" -> {
+				break;
+			case "csv":
 				response.setContentType("text/csv");
 				payload = IPolyObjServletCommon.filmsToCSVArray(films);
-			}
-			default -> {
+				break;
+			default:
 				response.setContentType("application/json");
 				payload = IPolyObjServletCommon.filmsToJSONArray(films);
-			}
 		}
 
 		// return formatted films
