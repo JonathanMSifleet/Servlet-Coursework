@@ -2,9 +2,9 @@ import React from 'react';
 import classes from './Radio.module.scss';
 import { MDBRadio } from 'mdb-react-ui-kit';
 
-const Radio = ({ defaultChecked, label, name, onClick }) => {
+const Radio = ({ className, defaultChecked, label, name, onClick }) => {
   return (
-    <div className={classes.Wrapper}>
+    <div className={`${className} ${classes.Wrapper}`}>
       <MDBRadio
         defaultChecked={defaultChecked}
         inline
