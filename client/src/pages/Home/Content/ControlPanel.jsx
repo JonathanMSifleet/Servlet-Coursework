@@ -75,9 +75,9 @@ const ControlPanel = () => {
   useEffect(() => {
     async function getFilms() {
       try {
-        let url = `format=${format}&getType=all`;
+        let url = `format=${format}`;
         if (useREST) {
-          url = `${endpoints.restEndpoint}?${url}`;
+          url = `${endpoints.restEndpoint}?${url}&getType=all`;
         } else {
           url = `${endpoints.getAllFilmsEndpoint}?${url}`;
         }
@@ -109,9 +109,9 @@ const ControlPanel = () => {
     const getFilms = async () => {
       if (!formData.title) return;
 
-      let url = `format=${format}&getType=title&title=${formData.title}`;
+      let url = `format=${format}&title=${formData.title}`;
       if (useREST) {
-        url = `${endpoints.restEndpoint}?${url}`;
+        url = `${endpoints.restEndpoint}?${url}&getType=title`;
       } else {
         url = `${endpoints.getFilmByTitleEndpoint}?${url}`;
       }
@@ -143,9 +143,9 @@ const ControlPanel = () => {
   // get film by ID
   useEffect(() => {
     const getFilmByID = async () => {
-      let url = `format=${format}&getType=id&id=${selectedFilmID}`;
+      let url = `format=${format}&id=${selectedFilmID}`;
       if (useREST) {
-        url = `${endpoints.restEndpoint}?${url}`;
+        url = `${endpoints.restEndpoint}?${url}&getType=id`;
       } else {
         url = `${endpoints.getFilmByIDEndpoint}?${url}`;
       }
@@ -419,11 +419,11 @@ const ControlPanel = () => {
         </MDBBtnGroup>
 
         <MDBBtnGroup className={classes.OperationRadioGroup}>
-          <Radio name="operationGroup" label="Get all films" onClick={() => setEndpoint(endpoints.getAllFilmsEndpoint)} />
-          <Radio name="operationGroup" label="Get film by title" onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)} />
-          <Radio name="operationGroup" label="Add new film" onClick={() => setEndpoint(endpoints.insertFilmEndpoint)} />
-          <Radio name="operationGroup" label="Update film" onClick={() => setEndpoint(endpoints.getFilmByIDEndpoint)} />
-          <Radio name="operationGroup" label="Delete film" onClick={() => setEndpoint(endpoints.deleteFilmEndpoint)} />
+          <Radio className={classes.TopOperationRadio} name="operationGroup" label="Get all films" onClick={() => setEndpoint(endpoints.getAllFilmsEndpoint)} />
+          <Radio className={classes.TopOperationRadio} name="operationGroup" label="Get film by title" onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)} />
+          <Radio className={classes.TopOperationRadio} name="operationGroup" label="Add new film" onClick={() => setEndpoint(endpoints.insertFilmEndpoint)} />
+          <Radio className={classes.BottomOperationRadio} name="operationGroup" label="Update film" onClick={() => setEndpoint(endpoints.getFilmByIDEndpoint)} />
+          <Radio className={classes.BottomOperationRadio} name="operationGroup" label="Delete film" onClick={() => setEndpoint(endpoints.deleteFilmEndpoint)} />
         </MDBBtnGroup>
 
         {renderSwitch()}
