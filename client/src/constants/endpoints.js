@@ -1,4 +1,4 @@
-const root = 'http://localhost:8080/ServletCoursework';
+const root = 'https://industrial-pad-336114.nw.r.appspot.com';
 
 export const deleteFilmEndpoint = `${root}/deleteFilm`;
 export const getAllFilmsEndpoint = `${root}/getAllFilms`;

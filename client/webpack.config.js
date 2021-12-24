@@ -1,11 +1,12 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // hot reload CSS:
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 module.exports = {
-  devtool: 'inline-source-map',
   entry: './src/index.jsx',
   output: {
+    path: path.join(__dirname, 'build'),
     filename: 'index.bundle.js',
     assetModuleFilename: 'images/[hash][ext][query]'
   },
