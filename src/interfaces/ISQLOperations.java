@@ -10,14 +10,14 @@ public interface ISQLOperations {
 
 	static Connection loadDriver() {
 		// mudfoot details
-		String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
-		String username = "sifleetj";
-		String password = "Joosderg6";
+		String url = "jdbc:mysql://34.105.148.68:3306/servletcoursework?user=root";
+		// String username = "sifleetj";
+		// String password = "Joosderg6";
 
 		// initialise MySQL driver
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-			return DriverManager.getConnection(url, username, password);
+			Class.forName("com.mysql.jdbc.GoogleDriver").newInstance();
+			return DriverManager.getConnection(url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -79,8 +79,8 @@ public interface ISQLOperations {
 	static int generateNewID() {
 		Connection conn = loadDriver();
 
-		// select the largest ID from 
-		String SQL = "SELECT(MAX(id)) FROM epcoursework";
+		// select the largest ID from
+		String SQL = "SELECT(MAX(id)) FROM films";
 
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);

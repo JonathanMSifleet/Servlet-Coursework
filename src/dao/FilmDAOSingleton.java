@@ -21,7 +21,7 @@ public class FilmDAOSingleton {
 
 		try {
 			// select all fields and attributes from film table
-			String SQL = "SELECT * FROM epcoursework";
+			String SQL = "SELECT * FROM films";
 
 			// execute sql
 			java.sql.ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, null);
@@ -37,7 +37,7 @@ public class FilmDAOSingleton {
 	public ArrayList<Film> getFilmsByTitle(String title) {
 		// select all films and attributes where film's title contains
 		// value of title parameter
-		String SQL = "SELECT * FROM epcoursework WHERE title LIKE ?";
+		String SQL = "SELECT * FROM films WHERE title LIKE ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -60,7 +60,7 @@ public class FilmDAOSingleton {
 	public Film getFilmByID(int id) {
 		// select first film (id is unique per film) all attributes
 		// from film table where film's id is equal to id parameter
-		String SQL = "SELECT * FROM epcoursework WHERE id = ? LIMIT 1";
+		String SQL = "SELECT * FROM films WHERE id = ? LIMIT 1";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -81,7 +81,7 @@ public class FilmDAOSingleton {
 
 	public int insertFilm(Film film) {
 		// create new film
-		String SQL = "INSERT INTO epcoursework VALUES (?, ?, ?, ?, ?, ?)";
+		String SQL = "INSERT INTO films VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
 			// if film id = -1, i.e. the value the DAO returns
@@ -104,7 +104,7 @@ public class FilmDAOSingleton {
 	public int updateFilm(Film film) {
 		// front-end returns entire film so set each film attributes equal to
 		// film parameter's attributes
-		String SQL = "UPDATE epcoursework SET id = ?, title = ?, year = ?, "
+		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, "
 				+ "director = ?, stars = ?, review = ? WHERE id = ?";
 
 		try {
@@ -127,7 +127,7 @@ public class FilmDAOSingleton {
 	public int deleteFilm(int id) {
 		// delete film from table where film's ID
 		// is equal to id parameter's value
-		String SQL = "DELETE FROM epcoursework WHERE id = ?";
+		String SQL = "DELETE FROM films WHERE id = ?";
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
@@ -146,7 +146,6 @@ public class FilmDAOSingleton {
 		ArrayList<Film> films = new ArrayList<>();
 
 		try {
-
 			// convert all results to usable Film POJOs
 			while (results.next()) {
 				films.add(resultToFilm(results));
