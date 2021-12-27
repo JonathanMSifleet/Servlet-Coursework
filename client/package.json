@@ -1,8 +1,9 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@types/serverless": "^1.78.40",
     "jsontoxml": "^1.0.1",
     "mdb-react-ui-kit": "^2.0.0",
     "path": "^0.12.7",
@@ -10,7 +11,7 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
-    "web-vitals": "^2.1.2"
+    "serverless": "^2.70.0"
   },
   "devDependencies": {
     "@types/eslint": "^8.2.1",
@@ -36,7 +37,11 @@
   },
   "scripts": {
     "start": "webpack serve --mode=development",
-    "build": "webpack --mode=production"
+    "build": "webpack --mode=production",
+    "sync": "aws s3 rm s3://react-bucket-x3blze4m-dev --recursive && aws s3 sync ./build s3://react-bucket-x3blze4m-dev",
+    "deploy": "npm run build && npm run sync",
+    "-": "",
+    "serverlessDeploy": "serverless deploy"
   },
   "browserslist": {
     "production": [

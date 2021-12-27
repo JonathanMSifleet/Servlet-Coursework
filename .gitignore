@@ -1,10 +1,9 @@
-# files that should be removed go here:
+**/*.class
 **/.DS_Store
 **/Folder.jpg
 **/thumbs.db
-**/*.class
-.idea
-node_modules
-client/.angular
 *.class
+.idea
 /target/
+client/.serverless
+client/node_modules

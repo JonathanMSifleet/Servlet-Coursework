@@ -1,0 +1,214 @@
+service:
+  name: CritickerOverhaul
+
+plugins:
+  - serverless-webpack
+  - serverless-s3-deploy
+  - serverless-cloudfront-invalidate # must be last plugin
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-2
+  environment:
+    AUTH0_PUBLIC_KEY: ${file(secret.pem)}
+    REACT_BUCKET_NAME: ${self:custom.ReactBucket.name}
+    RATINGS_TABLE_NAME: ${self:custom.RatingsTable.name}
+    USER_AVATAR_BUCKET_NAME: ${self:custom.UserAvatarBucket.name}
+    USER_TABLE_NAME: ${self:custom.UserTable.name}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  lambdaHashingVersion: 20201221
+  iam:
+    role:
+      statements:
+        - ${file(aws/iam/UserTableIAM.yml):UserTableIAM}
+        - ${file(aws/iam/RatingsTableIAM.yml):RatingsTableIAM}
+
+package:
+  individually: true
+
+functions:
+  auth:
+    handler: aws/handlers/auth.handler
+  deleteAccount:
+    handler: aws/handlers/deleteAccount.handler
+    events:
+      - http:
+          method: DELETE
+          path: deleteAccount
+          authorizer: auth
+          cors: true
+  login:
+    handler: aws/handlers/login.handler
+    events:
+      - http:
+          method: POST
+          path: login
+          cors: true
+  getFilmByParam:
+    handler: aws/handlers/getFilmByParam.handler
+    events:
+      - http:
+          method: GET
+          path: getFilm/{id}
+          cors: true
+  getFilms:
+    handler: aws/handlers/getFilms.handler
+    events:
+      - http:
+          method: GET
+          path: getFilms/{page}
+          cors: true
+  getUserAvatar:
+    handler: aws/handlers/getUserAvatar.handler
+    events:
+      - http:
+          method: GET
+          path: user/avatar/{UID}
+          cors: true
+  uploadUserAvatar:
+    handler: aws/handlers/uploadUserAvatar.handler
+    events:
+      - http:
+          method: POST
+          path: user/avatar/{UID}
+          authorizer: ${self:custom.authorizer}
+          cors: true
+  getProfileByUsername:
+    handler: aws/handlers/getProfileByUsername.handler
+    events:
+      - http:
+          method: GET
+          path: user/profile/{username}
+          # authorizer: ${self:custom.authorizer}
+          cors: true
+  rateFilm:
+    handler: aws/handlers/rateFilm.handler
+    events:
+      - http:
+          method: POST
+          path: review/rateFilm
+          # authorizer: ${self:custom.authorizer}
+          cors: true
+  signup:
+    handler: aws/handlers/signup.handler
+    events:
+      - http:
+          method: POST
+          path: signup
+          cors: true
+  publicEndpoint:
+    handler: aws/handlers/public.handler
+    events:
+      - http:
+          path: public
+          method: POST
+          cors: true
+  privateEndpoint:
+    handler: aws/handlers/private.handler
+    events:
+      - http:
+          path: private
+          method: POST
+          authorizer: auth
+          cors: true
+resources:
+  Resources:
+    UserTable: ${file(aws/resources/UserTable.yml):UserTable}
+    RatingsTable: ${file(aws/resources/RatingsTable.yml):RatingsTable}
+    ReactBucket: ${file(aws/resources/ReactBucket.yml):ReactBucket}
+    UserAvatarBucket: ${file(aws/resources/UserAvatarBucket.yml):UserAvatarBucket}
+    # Policies:
+    ReactBucketPolicy: ${file(aws/resources/ReactBucket.yml):ReactBucketPolicy}
+    UserAvatarBucketPolicy: ${file(aws/resources/UserAvatarBucket.yml):UserAvatarBucketPolicy}
+    # Cloudfront:
+    CloudFrontOriginAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: Origin Access Identity for ${self:provider.stage} React Bucket
+    CloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          CustomErrorResponses:
+            - ErrorCachingMinTTL: 300
+              ErrorCode: 403
+              ResponseCode: 200
+              ResponsePagePath: /index.html
+            - ErrorCachingMinTTL: 300
+              ErrorCode: 404
+              ResponseCode: 200
+              ResponsePagePath: /index.html
+          DefaultCacheBehavior:
+            Compress: true
+            ForwardedValues:
+              QueryString: false
+            TargetOriginId: ${self:custom.ReactBucketTargetOrigin.name}
+            ViewerProtocolPolicy: 'redirect-to-https'
+          DefaultRootObject: index.html
+          Enabled: true
+          HttpVersion: http2
+          PriceClass: PriceClass_100
+          Origins:
+            - DomainName:
+                Fn::GetAtt:
+                  - ReactBucket
+                  - DomainName
+              Id: ${self:custom.ReactBucketTargetOrigin.name}
+              S3OriginConfig:
+                OriginAccessIdentity:
+                  Fn::Join:
+                    - ''
+                    - - origin-access-identity/cloudfront/
+                      - Ref: CloudFrontOriginAccessIdentity
+    # This response is needed for custom authorizer failures cors support
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    AuthFailureGatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+
+custom:
+  authorizer: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:CritickerOverhaul-${self:provider.stage}-auth
+  UserTable:
+    name: !Ref UserTable
+    arn: !GetAtt UserTable.Arn
+  RatingsTable:
+    name: !Ref RatingsTable
+    arn: !GetAtt RatingsTable.Arn
+  UserAvatarBucket:
+    name: user-avatar-bucket-tr628eqe-${self:provider.stage}
+  ReactBucket:
+    name: react-bucket-x3blze4m-${self:provider.stage}
+  BucketFolder:
+    name: CritickerOverhaul
+  ReactBucketTargetOrigin:
+    name: S3-${self:custom.ReactBucket.name}/${self:custom.BucketFolder.name}
+  bundle:
+    linting: true
+  cloudfrontInvalidate:
+    - distributionId: 'E25ASI4SIUBGJK'
+      autoInvalidate: true
+      items:
+        - '/*'

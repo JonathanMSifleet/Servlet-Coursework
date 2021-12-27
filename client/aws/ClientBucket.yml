@@ -1,0 +1,24 @@
+ClientBucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: ${self:custom.ClientBucket.name}
+    WebsiteConfiguration:
+      IndexDocument: index.html
+      ErrorDocument: index.html
+
+ClientBucketPolicy:
+  Type: AWS::S3::BucketPolicy
+  Properties:
+    Bucket: !Ref ClientBucket
+    PolicyDocument:
+      Statement:
+        - Sid: AllowBucketSync
+          Effect: Allow
+          Principal: '*'
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${self:custom.ClientBucket.name}
+            - arn:aws:s3:::${self:custom.ClientBucket.name}/*
