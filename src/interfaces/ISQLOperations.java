@@ -10,12 +10,20 @@ public interface ISQLOperations {
 
 	static Connection loadDriver() {
 		// mudfoot details
-		String url = "jdbc:mysql://34.105.148.68:3306/servletcoursework?user=root";
+		// String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
 		// String username = "sifleetj";
-		// String password = "Joosderg6";
+		// String password = "passwordgoeshere";
+
+		// for GCP SQL:
+		String url = "jdbc:mysql://34.105.148.68:3306/servletcoursework?user=root";
 
 		// initialise MySQL driver
 		try {
+			// for mudfoot:
+			// Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+			// return DriverManager.getConnection(url, username, password);
+
+			// for GCP SQL:
 			Class.forName("com.mysql.jdbc.GoogleDriver").newInstance();
 			return DriverManager.getConnection(url);
 		} catch (Exception e) {
