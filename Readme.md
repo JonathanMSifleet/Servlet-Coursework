@@ -1,5 +1,5 @@
-#Setup#
-##Local##
+# Setup #
+## Local ##
 1. Ensure Node and NPM are installed
 2. Open the project root in a terminal, such as the default terminal in VS Code
 3. Enter "cd client"
@@ -12,11 +12,11 @@
 10. Execute "createfilms.sql" using your preferred MySQL client, importing the file into your database
 11. Run the project using Tomcat 9.0. I.e. in Eclipse Enterprise "Run As" -> "Run on Server"
 
-##Cloud##
-###Back-end and Database###
+## Cloud ##
+### Back-end and Database ###
 
 
-###Front-end###
+### Front-end ###
 
 Pre-setup:
 1. Access the file with the path: "Servlet-Coursework/client/serverless.yml"
