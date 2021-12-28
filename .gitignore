@@ -4,7 +4,6 @@
 **/thumbs.db
 *.class
 .idea
-.settings
 /target/
 client/.serverless
 client/node_modules
