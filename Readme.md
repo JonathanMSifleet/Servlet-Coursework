@@ -106,9 +106,9 @@ Pre-setup:
     2. Create a group and attach "AdministratorAccess" policy
 3. If no access key has been generated, generate an access key by clicking the new user -> Security credentials -> Create access key 
 4. In your terminal run "aws configure"
-    1. Access Key ID and Secret Access Key can be found inside the generated access key csv file
-    2. Region: "eu-west-2"
-    3. Output format: "json"
+    - Access Key ID and Secret Access Key can be found inside the generated access key csv file
+    - Region: "eu-west-2"
+    - Output format: "json"
 5. In the terminal enter "cd client"
 6. Next, enter "npm i"
 7. Next, enter "npm run serverlessDeploy"
@@ -120,9 +120,8 @@ Pre-setup:
 13. Open the "package.json" file inside the client folder
 14. Modify the "sync" script such that it is as follows: "aws s3 rm s3://[bucket name] --recursive && aws s3 sync ./build s3://[bucket name]" e.g. "aws s3 rm s3://servletcourseworkclient9uo2ftpc-prod --recursive && aws s3 sync ./build s3://servletcourseworkclient9uo2ftpc-prod"
 15. Ensure that your terminal is still inside the client folder
-16. Enter "npm build"
-17. Enter "npm sync"
-18. Front-end can now be accessed via 
+16. Enter "npm deploy"
+17. Front-end can now be accessed via the URL from step 9
 
 ---
 To do:
