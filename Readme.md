@@ -7,19 +7,90 @@
 5. Once the installation has complete enter "npm start". This will start the front-end of the project
 6. Open the file "./src/interfaces/ISQLOperations.java"
 7. Uncomment, and replace the variables url, password, and username with your own, based upon your database
-8. If appropriate, comment out the GCP connection code and variables
+8. Comment out the GCP connection code and variables
 9. Save and close the file
 10. Execute "createfilms.sql" using your preferred MySQL client, importing the file into your database
 11. Run the project using Tomcat 9.0. I.e. in Eclipse Enterprise "Run As" -> "Run on Server"
 
 ## Cloud ##
-### Back-end and Database ###
+### Back-end ###
 1. After signing-up for Google Cloud Platform, access the Console via the following url: "https://console.cloud.google.com/"
 2. In the header, click "Select Project" -> "New Project"
 3. Give the project an appropriate name [img]
-4. Open the project files in Eclipse
-5. 
+4. Open Cloud Shell inside the GCP Console
+5. Enter the command "gcloud app create"
+    - If an error occurs suggesting no project is selected, close Cloud Shell, ensure the project you created is selected, reopen Cloud Shell and retry step 5
+6. When prompted enter the number "12", and press enter
+7. Open the project files in Eclipse Enterprise
+8. Install "Google Cloud Tools for Eclipse" via "Help" -> "Eclipse Marketplace" -> Search tab [img]
+9. Right click the project in Eclipse and click "Deploy to App Engine Standard"
+10. Under Eclipse's console, the URL for the backend can be found / accessed via the console's output similar to the following:
 
+"Deployed service [default] to [https://servletcoursework-336513.nw.r.appspot.com]
+
+You can stream logs from the command line by running:
+  $ gcloud app logs tail -s default
+
+To view your application in the web browser run:
+  $ gcloud app browse --project=servletcoursework-336513"
+
+11. After accessing the backend URL, open the file from the project root/client/src/constants/endpoints.js
+12. Replace the existing URL in the root constant to the value of the copied URL with no forward slashes appended to the end of the URL
+    - const root = 'https://industrial-pad-336114.nw.r.appspot.com';
+    - becomes:
+    - const root = 'https://servletcoursework-336513.nw.r.appspot.com';
+    
+### Database ###
+1. In GCP Console, access SQL
+2. Click "create instance" [img]
+3. Click "Choose MySQL"
+4. Click "Enable API"
+5. Set up Database:
+    - Enter an Instance ID e.g. "servletcourseworkdb"
+    - Check "No password"
+    - Database version: "MySQL 5.7"
+    - Region: "euroupe-west2"
+    - Zonal availibility: "Single Zone"
+    - Machine type: "Lightweight", "1 vCPU, 3.75 GB"
+    - Storage type: "SSD"
+    - Storage capacity: "10 GB"
+    - Connections: "Public IP"
+    - Authorized networks:
+        - Name: "Public"
+        - Network: "0.0.0.0/0"
+    - Uncheck "Automate backups"
+    - Create instance
+6. Go to "Cloud Storage" in GCP Console
+7. Click "Create Bucket"
+    - Enter a unique name e.g. "servletcourseworksqlfile"
+    - Location type: "Region"
+    - Location: "europe-west2"
+    - Storage class: "Standard"
+    - Uncheck Enforce public access prevention
+    - Access control: uniform
+    - Create bucket
+    - Click "Upload Files"
+    - Select "createfilms.sql" from inside project root
+8. Go to "SQL" in GCP Console
+9. Click the Instance ID of the previously created MySQL Instance
+10. Click "Databases" in the left side-panel
+    - Click "Create Database"
+    - Enter the database name "servletcoursework"
+    - Click "Create"
+10. Click "Overview" in the left side-panel
+11. Click "Import"
+    - Source: Click "browse" and select the previously created bucket and uploaded "createfilms.sql"
+    - File format: SQL
+    - Database: "servletcoursework"
+    - Click "Import"
+12. Scroll down to the section "Connect to this instance"
+13. Copy the Public IP address, e.g. "34.142.42.120"
+14. Open the file found in the project root/src/ISQLOperations.java
+15. Replace the IP address found in the url with the copied IP address, e.g.:
+    - String url = "jdbc:mysql://34.105.148.68:3306/servletcoursework?user=root";
+    - becomes:
+    - String url = "jdbc:mysql://34.142.42.120/servletcoursework?user=root";
+16. Repeat step 10 from the Back-end setup section
 
 ### Front-end ###
 
