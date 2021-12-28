@@ -14,6 +14,11 @@
 
 ## Cloud ##
 ### Back-end and Database ###
+1. After signing-up for Google Cloud Platform, access the Console via the following url: "https://console.cloud.google.com/"
+2. In the header, click "Select Project" -> "New Project"
+3. Give the project an appropriate name [img]
+4. Open the project files in Eclipse
+5. 
 
 
 ### Front-end ###
