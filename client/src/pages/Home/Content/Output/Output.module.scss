@@ -58,8 +58,12 @@
   width: 9vw;
 }
 
+.ReviewTextCell {
+  padding: 1% !important;
+}
+
 .ReviewText {
-  max-height: 5.5vh;
+  max-height: 13.5vh;
   overflow: hidden;
   text-overflow: ellipsis;
 }

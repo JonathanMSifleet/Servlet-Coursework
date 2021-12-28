@@ -90,7 +90,7 @@ const Output = ({ films, format, formatChanged, sharedSetSelectedFilmID }) => {
                     <td className={classes.YearCell}>{film.year}</td>
                     <td className={classes.DirectorCell}>{film.director}</td>
                     <td className={classes.StarsCell}>{film.stars}</td>
-                    <td>
+                    <td className={classes.ReviewTextCell}>
                       <div className={classes.ReviewText}>{film.review}</div>
                     </td>
                   </tr>

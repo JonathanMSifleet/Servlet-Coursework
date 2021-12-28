@@ -13,6 +13,17 @@
 11. Run the project using Tomcat 9.0. I.e. in Eclipse Enterprise "Run As" -> "Run on Server"
 
 ##Cloud##
+###Back-end and Database###
+
+
+###Front-end###
+
+Pre-setup:
+1. Access the file with the path: "Servlet-Coursework/client/serverless.yml"
+2. Under the "custom" section, modify the property under ClientBucket, name
+    - Replacing "9uo2ftpc" with a random string containing lowercase letters and numbers from "servletcourseworkclient9uo2ftpc-${self:provider.stage}"
+    - This is due to buckets needing a unique name across the entirety of AWS
+
 1. Sign up for AWS, and install AWS CLI
 2. Create an IAM user using the AWS (web) Console
     1. Enable "Access key - Programmatic access" & "Password - AWS Management Console access"
@@ -25,6 +36,17 @@
 5. In the terminal enter "cd client"
 6. Next, enter "npm i"
 7. Next, enter "npm run serverlessDeploy"
+8. Go to the AWS (web) console, and go to CloudFront -> Distributions
+9. The URL for the frontend can be found under "Domain name" for the distribution with a description of "Servlet Coursework Client"
+10. Go to "Amazon S3" in the console
+11. Click on the bucket with the suffix "-prod", e.g. "servletcourseworkclient9uo2ftpc-prod"
+12. Copy the name of the bucket including the suffix
+13. Open the "package.json" file inside the client folder
+14. Modify the "sync" script such that it is as follows: "aws s3 rm s3://[bucket name] --recursive && aws s3 sync ./build s3://[bucket name]" e.g. "aws s3 rm s3://servletcourseworkclient9uo2ftpc-prod --recursive && aws s3 sync ./build s3://servletcourseworkclient9uo2ftpc-prod"
+15. Ensure that your terminal is still inside the client folder
+16. Enter "npm build"
+17. Enter "npm sync"
+18. Front-end can now be accessed via 
 
 ---
 To do:

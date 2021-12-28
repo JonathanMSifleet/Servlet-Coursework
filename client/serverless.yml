@@ -19,11 +19,12 @@ resources:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
       Properties:
         CloudFrontOriginAccessIdentityConfig:
-          Comment: Origin Access Identity for ${self:provider.stage} React Bucke
+          Comment: Origin Access Identity for ${self:provider.stage} Servlet Coursework Client
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
+          Comment: Servlet Coursework Client
           CustomErrorResponses:
             - ErrorCachingMinTTL: 300
               ErrorCode: 403
@@ -55,26 +56,6 @@ resources:
                     - ''
                     - - origin-access-identity/cloudfront/
                       - Ref: CloudFrontOriginAccessIdentity
-    GatewayResponse:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-        ResponseType: EXPIRED_TOKEN
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-        StatusCode: '401'
-    AuthFailureGatewayResponse:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-        ResponseType: UNAUTHORIZED
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-        StatusCode: '401'
 
 custom:
   BucketFolder:
