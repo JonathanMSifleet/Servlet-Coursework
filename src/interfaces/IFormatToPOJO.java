@@ -8,9 +8,9 @@ import com.thoughtworks.xstream.XStream;
 
 import models.Film;
 
-public interface IMonoObjServletCommon {
+public interface IFormatToPOJO {
 
-	public static final Logger logger = LoggerFactory.getLogger(IMonoObjServletCommon.class);
+	public static final Logger logger = LoggerFactory.getLogger(IFormatToPOJO.class);
 
 	static Film jsonToFilm(String jsonString, Boolean newFilm) {
 

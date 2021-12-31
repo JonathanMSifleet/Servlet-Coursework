@@ -6,14 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
+import interfaces.IFormatToPOJO;
 import interfaces.IGetFormat;
 import interfaces.IHandleHTTP;
-import interfaces.IMonoObjServletCommon;
 import models.Film;
 
 @WebServlet("/insertFilm")
 public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, interfaces.ISQLOperations,
-		interfaces.IMonoObjServletCommon, interfaces.IGetFormat {
+		interfaces.IFormatToPOJO, interfaces.IGetFormat {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -32,13 +32,13 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 		Film film;
 		switch (format) {
 			case "xml":
-				film = IMonoObjServletCommon.xmlToFilm(requestBodyFilm, true);
+				film = IFormatToPOJO.xmlToFilm(requestBodyFilm, true);
 				break;
 			case "csv":
-				film = IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
+				film = IFormatToPOJO.csvToFilm(requestBodyFilm, true);
 				break;
 			default:
-				film = IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
+				film = IFormatToPOJO.jsonToFilm(requestBodyFilm, true);
 		};
 
 		// send response containing number of rows affected by inserting new film

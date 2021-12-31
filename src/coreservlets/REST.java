@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.XStream;
 import dao.FilmDAOSingleton;
 import interfaces.IGetFormat;
 import interfaces.IHandleHTTP;
-import interfaces.IMonoObjServletCommon;
+import interfaces.IFormatToPOJO;
 import interfaces.IPolyObjServletCommon;
 import models.Film;
 
@@ -68,13 +68,13 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		Film film;
 		switch (format) {
 			case "xml":
-				film = IMonoObjServletCommon.xmlToFilm(requestBodyFilm, true);
+				film = IFormatToPOJO.xmlToFilm(requestBodyFilm, true);
 				break;
 			case "csv":
-				film = IMonoObjServletCommon.csvToFilm(requestBodyFilm, true);
+				film = IFormatToPOJO.csvToFilm(requestBodyFilm, true);
 				break;
 			default:
-				film = IMonoObjServletCommon.jsonToFilm(requestBodyFilm, true);
+				film = IFormatToPOJO.jsonToFilm(requestBodyFilm, true);
 		};
 
 		// send response containing number of rows affected by inserting
@@ -97,13 +97,13 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		Film film;
 		switch (format) {
 			case "xml":
-				film = IMonoObjServletCommon.xmlToFilm(requestBodyFilm, false);
+				film = IFormatToPOJO.xmlToFilm(requestBodyFilm, false);
 				break;
 			case "csv":
-				film = IMonoObjServletCommon.csvToFilm(requestBodyFilm, false);
+				film = IFormatToPOJO.csvToFilm(requestBodyFilm, false);
 				break;
 			default:
-				film = IMonoObjServletCommon.jsonToFilm(requestBodyFilm, false);
+				film = IFormatToPOJO.jsonToFilm(requestBodyFilm, false);
 		};
 
 		// print number of affected rows due to updating film
