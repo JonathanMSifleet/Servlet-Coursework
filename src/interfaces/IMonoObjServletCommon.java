@@ -1,22 +1,16 @@
 package interfaces;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.thoughtworks.xstream.XStream;
 
 import models.Film;
 
 public interface IMonoObjServletCommon {
+
+	public static final Logger logger = LoggerFactory.getLogger(IMonoObjServletCommon.class);
 
 	static Film jsonToFilm(String jsonString, Boolean newFilm) {
 
@@ -32,38 +26,19 @@ public interface IMonoObjServletCommon {
 	}
 
 	static Film xmlToFilm(String xmlString, Boolean newFilm) {
+		XStream xstream = new XStream();
+		xstream.allowTypes(new Class[] { Film.class });
+		xstream.processAnnotations(Film.class);
 
 		try {
-			// initialise new xml builder
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document xmlObject;
-
-			// convert from string to XML
-			xmlObject = builder.parse(new InputSource(new StringReader(xmlString)));
-			Element root = xmlObject.getDocumentElement();
-
-			// same as above jsonToFilm method except using XML rather than JSON
 			if (newFilm) {
-				return new Film.Builder(null).id(ISQLOperations.generateNewID())
-						.title(root.getElementsByTagName("title").item(0).getTextContent())
-						.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
-						.director(root.getElementsByTagName("director").item(0).getTextContent())
-						.stars(root.getElementsByTagName("stars").item(0).getTextContent())
-						.review(root.getElementsByTagName("director").item(0).getTextContent()).build();
+				return new Film.Builder((Film) xstream.fromXML(xmlString)).id(ISQLOperations.generateNewID()).build();
 			} else {
-				return new Film.Builder(null).id(Integer.valueOf(root.getElementsByTagName("id").item(0).getTextContent()))
-						.title(root.getElementsByTagName("title").item(0).getTextContent())
-						.year(Integer.valueOf(root.getElementsByTagName("year").item(0).getTextContent()))
-						.director(root.getElementsByTagName("director").item(0).getTextContent())
-						.stars(root.getElementsByTagName("stars").item(0).getTextContent())
-						.review(root.getElementsByTagName("director").item(0).getTextContent()).build();
+				return new Film.Builder((Film) xstream.fromXML(xmlString)).build();
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
@@ -81,17 +56,6 @@ public interface IMonoObjServletCommon {
 					.review(filmAttributes[5]).build();
 		}
 
-	}
-
-	static String getRequestBody(HttpServletRequest request) {
-		// return request body as string
-		try {
-			return request.getReader().lines().collect(Collectors.joining());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 }
