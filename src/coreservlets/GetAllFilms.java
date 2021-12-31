@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
-import interfaces.IPolyObjServletCommon;
+import interfaces.IPolyPOJOToFormat;
 import models.Film;
 
 @WebServlet("/getAllFilms")
 public class GetAllFilms extends HttpServlet
-		implements interfaces.IRequestHelpers, interfaces.IPolyObjServletCommon {
+		implements interfaces.IRequestHelpers, interfaces.IPolyPOJOToFormat {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
@@ -31,15 +31,15 @@ public class GetAllFilms extends HttpServlet
 		switch (format) {
 			case "xml":
 				response.setContentType("text/xml");
-				payload = IPolyObjServletCommon.filmsToXMLArray(films);
+				payload = IPolyPOJOToFormat.filmsToXMLArray(films);
 				break;
 			case "csv":
 				response.setContentType("text/csv");
-				payload = IPolyObjServletCommon.filmsToCSVArray(films);
+				payload = IPolyPOJOToFormat.filmsToCSVArray(films);
 				break;
 			default:
 				response.setContentType("application/json");
-				payload = IPolyObjServletCommon.filmsToJSONArray(films);
+				payload = IPolyPOJOToFormat.filmsToJSONArray(films);
 		}
 		// send response containing formatted list of all films
 		IRequestHelpers.sendResponse(response, payload);

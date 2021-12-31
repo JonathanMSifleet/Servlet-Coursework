@@ -13,11 +13,11 @@ import com.thoughtworks.xstream.XStream;
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
 import interfaces.IFormatToPOJO;
-import interfaces.IPolyObjServletCommon;
+import interfaces.IPolyPOJOToFormat;
 import models.Film;
 
 @WebServlet("/REST")
-public class REST extends HttpServlet implements interfaces.IPolyObjServletCommon {
+public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 	private static final long serialVersionUID = -1942414154482873963L;
 
 	@Override
@@ -168,15 +168,15 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		switch (format) {
 			case "xml":
 				response.setContentType("text/xml");
-				payload = IPolyObjServletCommon.filmsToXMLArray(films);
+				payload = IPolyPOJOToFormat.filmsToXMLArray(films);
 				break;
 			case "csv":
 				response.setContentType("text/csv");
-				payload = IPolyObjServletCommon.filmsToCSVArray(films);
+				payload = IPolyPOJOToFormat.filmsToCSVArray(films);
 				break;
 			default:
 				response.setContentType("application/json");
-				payload = IPolyObjServletCommon.filmsToJSONArray(films);
+				payload = IPolyPOJOToFormat.filmsToJSONArray(films);
 		}
 
 		// return formatted films

@@ -8,7 +8,7 @@ import com.thoughtworks.xstream.XStream;
 
 import models.Film;
 
-public interface IPolyObjServletCommon {
+public interface IPolyPOJOToFormat {
 
 	static String filmsToJSONArray(ArrayList<Film> data) {
 		// return array list of films to JSON
