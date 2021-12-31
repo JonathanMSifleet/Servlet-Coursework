@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.ResultSet;
 
 public interface ISQLOperations {
 
@@ -33,7 +34,7 @@ public interface ISQLOperations {
 		return null;
 	}
 
-	static java.sql.ResultSet sqlSelect(Connection conn, String SQL, ArrayList<Object> paramVals) {
+	static ResultSet sqlSelect(Connection conn, String SQL, ArrayList<Object> paramVals) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			// convert list of MySQL query parameter's into query
@@ -95,7 +96,7 @@ public interface ISQLOperations {
 			prepareStatement(statement, null);
 
 			// execute SQL
-			java.sql.ResultSet result = statement.executeQuery();
+			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
 				// return new ID of value of largest ID + 1

@@ -1,19 +1,24 @@
 package dao;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import interfaces.ISQLOperations;
 import models.Film;
 
 public class FilmDAOSingleton {
 
+	public static final Logger logger = LoggerFactory.getLogger(FilmDAOSingleton.class);
+
 	private static FilmDAOSingleton filmDAO;
 
 	public static synchronized FilmDAOSingleton getFilmDAO() {
 		// instantiate new film DAO singleton if it doesn't already exist
-		if (filmDAO == null)
-			filmDAO = new FilmDAOSingleton();
+		if (filmDAO == null) filmDAO = new FilmDAOSingleton();
 		return filmDAO;
 	}
 
@@ -24,7 +29,7 @@ public class FilmDAOSingleton {
 			String SQL = "SELECT * FROM films";
 
 			// execute sql
-			java.sql.ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, null);
+			ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, null);
 			// convert results to usable list, then return list
 			return resultsToList(results);
 		} catch (Exception e) {
@@ -47,7 +52,7 @@ public class FilmDAOSingleton {
 			paramVals.add("%" + title + "%");
 
 			// execute sql with title as SQL parameter
-			java.sql.ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
+			ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
 			// convert results to usable list, then return list
 			return resultsToList(results);
 		} catch (Exception e) {
@@ -67,7 +72,7 @@ public class FilmDAOSingleton {
 			paramVals.add(id);
 
 			// execute sql with title as SQL parameter
-			java.sql.ResultSet result = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
+			ResultSet result = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
 			// move result pointer to first result
 			result.next();
 			// convert result to usable film POJO, then return film
@@ -87,8 +92,7 @@ public class FilmDAOSingleton {
 			// if film id = -1, i.e. the value the DAO returns
 			// if an error has occurred,
 			// throw an exception
-			if (film.getId() == -1)
-				throw new Exception("Invalid film ID");
+			if (film.getId() == -1) throw new Exception("Invalid film ID");
 
 			// convert film attributes to list of parameters for insert statement
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
@@ -104,8 +108,7 @@ public class FilmDAOSingleton {
 	public int updateFilm(Film film) {
 		// front-end returns entire film so set each film attributes equal to
 		// film parameter's attributes
-		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, "
-				+ "director = ?, stars = ?, review = ? WHERE id = ?";
+		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, " + "director = ?, stars = ?, review = ? WHERE id = ?";
 
 		try {
 			// convert film's parameters to array list
@@ -115,8 +118,11 @@ public class FilmDAOSingleton {
 			// to fulfill WHERE clause
 			paramVals.add(film.getId());
 
+			logger.info(paramVals.toString());
+
 			// execute SQL
-			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
+			int result = ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
+			logger.info("Update affected rows: " + Integer.toString(result));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -142,7 +148,7 @@ public class FilmDAOSingleton {
 		return -1;
 	}
 
-	private ArrayList<Film> resultsToList(java.sql.ResultSet results) {
+	private ArrayList<Film> resultsToList(ResultSet results) {
 		ArrayList<Film> films = new ArrayList<>();
 
 		try {
@@ -160,7 +166,7 @@ public class FilmDAOSingleton {
 		return null;
 	}
 
-	private Film resultToFilm(java.sql.ResultSet result) {
+	private Film resultToFilm(ResultSet result) {
 
 		// create new film POJO from result parameter
 		try {
