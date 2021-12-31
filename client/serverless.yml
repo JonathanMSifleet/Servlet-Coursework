@@ -40,6 +40,14 @@ resources:
               QueryString: false
             TargetOriginId: ${self:custom.ClientBucketTargetOrigin.name}
             ViewerProtocolPolicy: 'redirect-to-https'
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
           DefaultRootObject: index.html
           Enabled: true
           HttpVersion: http2

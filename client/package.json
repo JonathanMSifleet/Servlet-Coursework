@@ -43,9 +43,9 @@
     "start": "webpack serve --mode=development",
     "build": "webpack --mode=production",
     "sync": "aws s3 rm s3://servletcourseworkclient9uo2ftpc-prod --recursive && aws s3 sync ./build s3://servletcourseworkclient9uo2ftpc-prod",
-    "deploy": "npm run build && npm run sync",
+    "serverlessDeploy": "serverless deploy",
     "-": "",
-    "serverlessDeploy": "serverless deploy"
+    "deploy": "npm run build && npm run sync"
   },
   "browserslist": {
     "production": [
