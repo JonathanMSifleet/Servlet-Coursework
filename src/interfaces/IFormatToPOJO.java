@@ -1,16 +1,11 @@
 package interfaces;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 
 import models.Film;
 
 public interface IFormatToPOJO {
-
-	public static final Logger logger = LoggerFactory.getLogger(IFormatToPOJO.class);
 
 	static Film jsonToFilm(String jsonString, Boolean newFilm) {
 
