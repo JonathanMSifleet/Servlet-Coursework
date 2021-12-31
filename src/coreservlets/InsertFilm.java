@@ -23,7 +23,7 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 		response = IHandleHTTP.setHeaders(response, "POST");
 
 		// get film from HTTP body
-		String requestBodyFilm = IMonoObjServletCommon.getRequestBody(request);
+		String requestBodyFilm = IHandleHTTP.getRequestBody(request);
 		// get format from url
 		String format = IGetFormat.getFormat(request);
 
