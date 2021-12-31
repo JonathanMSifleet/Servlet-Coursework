@@ -23,10 +23,10 @@ public interface IPolyObjServletCommon {
 		// first function parameter
 		xstream.alias("root", List.class);
 		xstream.alias("film", models.Film.class);
-		
+
 		// convert films to XML
 		String xmlString = xstream.toXML(data);
-		
+
 		// return XML and XML declaration
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + "\n" + xmlString;
 	}
@@ -34,7 +34,7 @@ public interface IPolyObjServletCommon {
 	static String filmsToCSVArray(ArrayList<Film> data) {
 
 		String films = "";
-		
+
 		// use film model's toString function to convert
 		// film's attributes to CSV string
 		for (Film film : data) {

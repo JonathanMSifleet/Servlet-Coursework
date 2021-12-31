@@ -82,6 +82,7 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
 	}
 
+	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
 		response = IHandleHTTP.setHeaders(response, "PUT");
@@ -109,6 +110,7 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
 	}
 
+	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
 		response = IHandleHTTP.setHeaders(response, "DELETE");
