@@ -1,5 +1,8 @@
 package models;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+@XStreamAlias("Film")
 public class Film {
 	// use builder design pattern
 

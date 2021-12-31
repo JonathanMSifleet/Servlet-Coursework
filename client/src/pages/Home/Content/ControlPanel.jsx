@@ -194,7 +194,7 @@ const ControlPanel = () => {
       try {
         switch (format) {
           case 'xml':
-            await XMLRequest(url, 'POST', `<film>${jsontoxml(formData)}</film>`);
+            await XMLRequest(url, 'POST', `<Film>${jsontoxml(formData)}</Film>`);
             break;
           case 'csv':
             await CSVRequest(url, 'POST', jsonToCSV(formData));
