@@ -24,7 +24,7 @@ public interface ISQLOperations {
 			// return DriverManager.getConnection(url, username, password);
 
 			// for GCP SQL:
-			Class.forName("com.mysql.jdbc.GoogleDriver").newInstance();
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			return DriverManager.getConnection(url);
 		} catch (Exception e) {
 			e.printStackTrace();
