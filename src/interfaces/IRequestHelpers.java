@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public interface IHandleHTTP {
+public interface IRequestHelpers {
 	
 	static void sendResponse(javax.servlet.http.HttpServletResponse response, Object payload) {
 		// send value of payload parameter
@@ -43,6 +43,17 @@ public interface IHandleHTTP {
 		}
 
 		return null;
+	}
+	
+	static String getFormat(javax.servlet.http.HttpServletRequest request) {
+		// get format from URL
+		String format = request.getParameter("format");
+		// set default format as JSON
+		if (format == null)
+			format = "json";
+
+		// return format
+		return format;
 	}
 
 }

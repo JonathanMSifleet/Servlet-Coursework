@@ -6,26 +6,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
-import interfaces.IGetFormat;
-import interfaces.IHandleHTTP;
+import interfaces.IRequestHelpers;
 import interfaces.IFormatToPOJO;
 import models.Film;
 
 @WebServlet("/updateFilm")
 public class UpdateFilm extends HttpServlet
-		implements interfaces.IHandleHTTP, interfaces.IFormatToPOJO, interfaces.IGetFormat {
+		implements interfaces.IRequestHelpers, interfaces.IFormatToPOJO {
 	private static final long serialVersionUID = -909062916095173117L;
 
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) {
 
 		// set relevant headers
-		response = IHandleHTTP.setHeaders(response, "PUT");
+		response = IRequestHelpers.setHeaders(response, "PUT");
 
 		// get film from HTTP body
-		String requestBodyFilm = IHandleHTTP.getRequestBody(request);
+		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 		// get format from url
-		String format = IGetFormat.getFormat(request);
+		String format = IRequestHelpers.getFormat(request);
 
 		// set film equal to film object converted based on
 		// relevant format
@@ -42,6 +41,6 @@ public class UpdateFilm extends HttpServlet
 		};
 
 		// print number of affected rows due to updating film
-		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
+		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
 	}
 }

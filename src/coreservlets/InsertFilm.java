@@ -7,25 +7,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
 import interfaces.IFormatToPOJO;
-import interfaces.IGetFormat;
-import interfaces.IHandleHTTP;
+import interfaces.IRequestHelpers;
 import models.Film;
 
 @WebServlet("/insertFilm")
-public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, interfaces.ISQLOperations,
-		interfaces.IFormatToPOJO, interfaces.IGetFormat {
+public class InsertFilm extends HttpServlet implements interfaces.IRequestHelpers, interfaces.ISQLOperations,
+		interfaces.IFormatToPOJO {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
 		// set relevant headers
-		response = IHandleHTTP.setHeaders(response, "POST");
+		response = IRequestHelpers.setHeaders(response, "POST");
 
 		// get film from HTTP body
-		String requestBodyFilm = IHandleHTTP.getRequestBody(request);
+		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 		// get format from url
-		String format = IGetFormat.getFormat(request);
+		String format = IRequestHelpers.getFormat(request);
 
 		// set film equal to film object converted based on
 		// relevant format
@@ -42,7 +41,7 @@ public class InsertFilm extends HttpServlet implements interfaces.IHandleHTTP, i
 		};
 
 		// send response containing number of rows affected by inserting new film
-		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
+		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
 	}
 
 }

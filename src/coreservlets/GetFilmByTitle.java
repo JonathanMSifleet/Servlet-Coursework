@@ -8,20 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
-import interfaces.IGetFormat;
-import interfaces.IHandleHTTP;
+import interfaces.IRequestHelpers;
 import interfaces.IPolyObjServletCommon;
 import models.Film;
 
 @WebServlet("/getFilmByTitle")
-public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTTP, interfaces.IGetFormat {
+public class GetFilmByTitle extends HttpServlet implements interfaces.IRequestHelpers {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
 		// set relevant headers
-		response = IHandleHTTP.setHeaders(response, "GET");
+		response = IRequestHelpers.setHeaders(response, "GET");
 
 		// get film title from url
 		String title = request.getParameter("title");
@@ -29,7 +28,7 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 		// get films with title containing title from url
 		ArrayList<Film> films = new FilmDAOSingleton().getFilmsByTitle(title);
 		// get format from url
-		String format = IGetFormat.getFormat(request);
+		String format = IRequestHelpers.getFormat(request);
 
 		Object payload;
 
@@ -50,6 +49,6 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IHandleHTT
 		}
 
 		// send response containing formatted list of films
-		IHandleHTTP.sendResponse(response, payload);
+		IRequestHelpers.sendResponse(response, payload);
 	}
 }

@@ -229,7 +229,7 @@ const ControlPanel = () => {
         switch (format) {
           case 'xml':
             const xmlFilm = jsontoxml(updateFormData);
-            await XMLRequest(url, 'PUT', `<film>${xmlFilm}</film>`);
+            await XMLRequest(url, 'PUT', `<Film>${xmlFilm}</Film>`);
             break;
           case 'csv':
             await CSVRequest(url, 'PUT', jsonToCSV(updateFormData));

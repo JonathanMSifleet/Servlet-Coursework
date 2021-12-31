@@ -9,19 +9,18 @@ import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 
 import dao.FilmDAOSingleton;
-import interfaces.IGetFormat;
-import interfaces.IHandleHTTP;
+import interfaces.IRequestHelpers;
 import models.Film;
 
 @WebServlet("/getFilmByID")
-public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, interfaces.IGetFormat {
+public class GetFilmByID extends HttpServlet implements interfaces.IRequestHelpers {
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
 		// set relevant headers
-		response = IHandleHTTP.setHeaders(response, "GET");
+		response = IRequestHelpers.setHeaders(response, "GET");
 
 		// get ID from URL
 		int id = Integer.parseInt(request.getParameter("id"));
@@ -29,7 +28,7 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 		// get film by ID from data access object
 		Film film = new FilmDAOSingleton().getFilmByID(id);
 		// get format from URL
-		String format = IGetFormat.getFormat(request);
+		String format = IRequestHelpers.getFormat(request);
 
 		Object payload;
 		// format film based upon relevant format
@@ -51,6 +50,6 @@ public class GetFilmByID extends HttpServlet implements interfaces.IHandleHTTP, 
 		}
 
 		// send response containing formatted film
-		IHandleHTTP.sendResponse(response, payload);
+		IRequestHelpers.sendResponse(response, payload);
 	}
 }

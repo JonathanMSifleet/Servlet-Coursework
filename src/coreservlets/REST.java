@@ -11,8 +11,7 @@ import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 
 import dao.FilmDAOSingleton;
-import interfaces.IGetFormat;
-import interfaces.IHandleHTTP;
+import interfaces.IRequestHelpers;
 import interfaces.IFormatToPOJO;
 import interfaces.IPolyObjServletCommon;
 import models.Film;
@@ -24,11 +23,11 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
-		response = IHandleHTTP.setHeaders(response, "GET");
+		response = IRequestHelpers.setHeaders(response, "GET");
 
 		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
 		// get format from url
-		String format = IGetFormat.getFormat(request);
+		String format = IRequestHelpers.getFormat(request);
 		Object payload = null;
 
 		// get get type from url
@@ -50,18 +49,18 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		}
 
 		// send response containing film(s)
-		IHandleHTTP.sendResponse(response, payload);
+		IRequestHelpers.sendResponse(response, payload);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
-		response = IHandleHTTP.setHeaders(response, "POST");
+		response = IRequestHelpers.setHeaders(response, "POST");
 
 		// get film from HTTP body
-		String requestBodyFilm = IHandleHTTP.getRequestBody(request);
+		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 		// get format from url
-		String format = IGetFormat.getFormat(request);
+		String format = IRequestHelpers.getFormat(request);
 
 		// set film equal to film object converted based on
 		// relevant format
@@ -79,18 +78,18 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 
 		// send response containing number of rows affected by inserting
 		// new film
-		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
+		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
 	}
 
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
-		response = IHandleHTTP.setHeaders(response, "PUT");
+		response = IRequestHelpers.setHeaders(response, "PUT");
 
 		// get film from HTTP body
-		String requestBodyFilm = IHandleHTTP.getRequestBody(request);
+		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 		// get format from url
-		String format = IGetFormat.getFormat(request);
+		String format = IRequestHelpers.getFormat(request);
 
 		// set film equal to film object converted based on
 		// relevant format
@@ -107,18 +106,18 @@ public class REST extends HttpServlet implements interfaces.IPolyObjServletCommo
 		};
 
 		// print number of affected rows due to updating film
-		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
+		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
 	}
 
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
-		response = IHandleHTTP.setHeaders(response, "DELETE");
+		response = IRequestHelpers.setHeaders(response, "DELETE");
 		// get id from url
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		// print number of affected rows due to deleting film
-		IHandleHTTP.sendResponse(response, new FilmDAOSingleton().deleteFilm(id));
+		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().deleteFilm(id));
 	}
 
 	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {
