@@ -26,11 +26,6 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>com.google.cloud</groupId>
-			<artifactId>google-cloud-logging-logback</artifactId>
-			<version>0.122.5-alpha</version>
-		</dependency>
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>4.0.1</version>
