@@ -1,3 +1,7 @@
+# Miscellaneous #
+Frontend: https://d2icepsfo58cxr.cloudfront.net/
+Backend: https://servletcoursework-336513.nw.r.appspot.com/
+
 # Setup #
 ## Local ##
 1. Ensure Node and NPM are installed
