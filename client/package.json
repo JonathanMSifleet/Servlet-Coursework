@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "json2csv": "^5.0.6",
     "jsontoxml": "^1.0.1",
     "mdb-react-ui-kit": "^2.0.0",
     "react": "^17.0.2",

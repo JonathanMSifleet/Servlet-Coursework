@@ -8,8 +8,8 @@ import Radio from '../../../components/Radio/Radio';
 import XMLRequest from '../../../utils/requests/XMLRequest';
 import classes from './ControlPanel.module.scss';
 import csvToJSON from '../../../utils/csvToJSON';
-import jsonToCSV from '../../../utils/jsonToCSV';
 import jsontoxml from 'jsontoxml';
+import { Parser as json2csv } from 'json2csv';
 import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
 import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 
@@ -197,7 +197,7 @@ const ControlPanel = () => {
             await XMLRequest(url, 'POST', `<Film>${jsontoxml(formData)}</Film>`);
             break;
           case 'csv':
-            await CSVRequest(url, 'POST', jsonToCSV(formData));
+            await CSVRequest(url, 'POST', new json2csv({ header: false, delimiter: ',,'}).parse(formData));
             break;
           default:
             await JSONRequest(url, 'POST', formData);
@@ -232,7 +232,7 @@ const ControlPanel = () => {
             await XMLRequest(url, 'PUT', `<Film>${xmlFilm}</Film>`);
             break;
           case 'csv':
-            await CSVRequest(url, 'PUT', jsonToCSV(updateFormData));
+            await CSVRequest(url, 'PUT', new json2csv({ header: false, delimiter: ',,'}).parse(updateFormData));
             break;
           default:
             await JSONRequest(url, 'PUT', updateFormData);

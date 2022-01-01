@@ -17,7 +17,6 @@ public interface IFormatToPOJO {
 		} else {
 			return new Film.Builder(new Gson().fromJson(jsonString, Film.class)).build();
 		}
-
 	}
 
 	static Film xmlToFilm(String xmlString, Boolean newFilm) {
@@ -39,6 +38,11 @@ public interface IFormatToPOJO {
 
 	static Film csvToFilm(String csvFilm, Boolean newFilm) {
 		String[] filmAttributes = csvFilm.split(",,");
+
+		// remove quotations from all attributes
+		for (int i = 0; i <= filmAttributes.length; i++) {
+			filmAttributes[i] = filmAttributes[i].replace("\"", "");
+		}
 
 		// same as above jsonToFilm method except using CSV rather than JSON
 		if (newFilm) {
