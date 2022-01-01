@@ -9,9 +9,9 @@ import XMLRequest from '../../../utils/requests/XMLRequest';
 import classes from './ControlPanel.module.scss';
 import csvToJSON from '../../../utils/csvToJSON';
 import jsontoxml from 'jsontoxml';
-import { Parser as json2csv } from 'json2csv';
 import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
 import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
+import { Parser as json2csv } from 'json2csv';
 
 const ControlPanel = () => {
   const [endpoint, setEndpoint] = useState('');
