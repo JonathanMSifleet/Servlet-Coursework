@@ -122,8 +122,3 @@ Pre-setup:
 15. Ensure that your terminal is still inside the client folder
 16. Enter "npm deploy"
 17. Front-end can now be accessed via the URL from step 9
-
----
-To do:
-- cloud
-- Write up
