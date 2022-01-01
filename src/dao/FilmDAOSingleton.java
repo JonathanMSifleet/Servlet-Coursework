@@ -4,15 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import interfaces.ISQLOperations;
 import models.Film;
 
 public class FilmDAOSingleton {
-
-	public static final Logger logger = LoggerFactory.getLogger(FilmDAOSingleton.class);
 
 	private static FilmDAOSingleton filmDAO;
 
@@ -115,14 +110,11 @@ public class FilmDAOSingleton {
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
 
 			// set last parameter in list equal to films id
-			// to fulfill WHERE clause
+			// to fulfil WHERE clause
 			paramVals.add(film.getId());
 
-			logger.info(paramVals.toString());
-
 			// execute SQL
-			int result = ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
-			logger.info("Update affected rows: " + Integer.toString(result));
+			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
