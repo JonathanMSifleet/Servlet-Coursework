@@ -16,17 +16,17 @@
 ### Back-end ###
 1. After signing-up for Google Cloud Platform, access the Console via the following url: "https://console.cloud.google.com/"
 2. In the header, click "Select Project" -> "New Project"
-3. Give the project an appropriate name [img]
+3. Give the project an appropriate name
 4. Open Cloud Shell inside the GCP Console
 5. Enter the command "gcloud app create"
     - If an error occurs suggesting no project is selected, close Cloud Shell, ensure the project you created is selected, reopen Cloud Shell and retry step 5
 6. When prompted enter the number "12", and press enter
 7. Open the project files in Eclipse Enterprise
-8. Install "Google Cloud Tools for Eclipse" via "Help" -> "Eclipse Marketplace" -> Search tab [img]
+8. Install "Google Cloud Tools for Eclipse" via "Help" -> "Eclipse Marketplace" -> Search tab
 9. Right click the project in Eclipse and click "Deploy to App Engine Standard"
 10. Under Eclipse's console, the URL for the backend can be found / accessed via the console's output similar to the following:
 
-"Deployed service [default] to [https://servletcoursework-336513.nw.r.appspot.com]
+"Deployed service [default] to [https://servletcoursework-336513.nw.r.appspot.com]"
 
 You can stream logs from the command line by running:
   $ gcloud app logs tail -s default
@@ -39,10 +39,10 @@ To view your application in the web browser run:
     - const root = 'https://industrial-pad-336114.nw.r.appspot.com';
     - becomes:
     - const root = 'https://servletcoursework-336513.nw.r.appspot.com';
-    
+
 ### Database ###
 1. In GCP Console, access SQL
-2. Click "create instance" [img]
+2. Click "create instance"
 3. Click "Choose MySQL"
 4. Click "Enable API"
 5. Set up Database:
