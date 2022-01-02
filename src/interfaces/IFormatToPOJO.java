@@ -40,7 +40,7 @@ public interface IFormatToPOJO {
 		String[] filmAttributes = csvFilm.split(",,");
 
 		// remove quotations from all attributes
-		for (int i = 0; i <= filmAttributes.length; i++) {
+		for (int i = 0; i < filmAttributes.length; i++) {
 			filmAttributes[i] = filmAttributes[i].replace("\"", "");
 		}
 
