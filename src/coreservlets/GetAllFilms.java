@@ -22,7 +22,7 @@ public class GetAllFilms extends HttpServlet
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "GET");
 		// get all films from data access object
-		ArrayList<Film> films = new FilmDAOSingleton().getAllFilms();
+		ArrayList<Film> films = FilmDAOSingleton.getFilmDAO().getAllFilms();
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
 		Object payload;

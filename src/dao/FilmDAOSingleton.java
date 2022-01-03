@@ -10,6 +10,9 @@ import models.Film;
 public class FilmDAOSingleton {
 
 	private static FilmDAOSingleton filmDAO;
+	
+	// prevent other classes instantiating DAO
+	private FilmDAOSingleton() {}
 
 	public static synchronized FilmDAOSingleton getFilmDAO() {
 		// instantiate new film DAO singleton if it doesn't already exist

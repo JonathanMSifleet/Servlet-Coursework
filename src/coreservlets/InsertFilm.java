@@ -41,7 +41,7 @@ public class InsertFilm extends HttpServlet implements interfaces.IRequestHelper
 		};
 
 		// send response containing number of rows affected by inserting new film
-		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
+		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().insertFilm(film));
 	}
 
 }

@@ -19,7 +19,7 @@ public interface ISQLOperations {
 		// String password = "passwordgoeshere";
 
 		// for GCP SQL:
-		String url = "jdbc:mysql://34.142.42.120/servletcoursework?user=root";
+		String url = "jdbc:mysql://34.142.22.192/servletcoursework?user=root&password=wu31wMas9nclNh05";
 
 		// initialise MySQL driver
 		try {
