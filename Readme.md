@@ -22,7 +22,7 @@ You can stream logs from the command line by running:
   $ gcloud app logs tail -s default
 
 To view your application in the web browser run:
-  $ gcloud app browse --project=servletcoursework-336513"
+    - "gcloud app browse --project=servletcoursework-336513"
 
 11. After accessing the backend URL, open the file from the project root/client/src/constants/endpoints.js
 12. Replace the existing URL in the root constant to the value of the copied URL with no forward slashes appended to the end of the URL
@@ -34,14 +34,14 @@ To view your application in the web browser run:
 1. In GCP Console, access SQL
 2. Click "create instance"
 3. Click "Choose MySQL"
-4. Click "Enable API"
+4. Click "Enable API" if not already enabled
 5. Set up Database:
     - Enter an Instance ID e.g. "servletcourseworkdb"
-    - Check "No password"
+    - Generate password, and make a note of it for later
     - Database version: "MySQL 5.7"
     - Region: "euroupe-west2"
     - Zonal availibility: "Single Zone"
-    - Machine type: "Lightweight", "1 vCPU, 3.75 GB"
+    - Machine type: "Standard", "1 vCPU, 3.75 GB"
     - Storage type: "SSD"
     - Storage capacity: "10 GB"
     - Connections: "Public IP"
@@ -67,20 +67,20 @@ To view your application in the web browser run:
     - Click "Create Database"
     - Enter the database name "servletcoursework"
     - Click "Create"
-10. Click "Overview" in the left side-panel
-11. Click "Import"
+11. Click "Overview" in the left side-panel
+12. Click "Import"
     - Source: Click "browse" and select the previously created bucket and uploaded "createfilms.sql"
     - File format: SQL
     - Database: "servletcoursework"
     - Click "Import"
-12. Scroll down to the section "Connect to this instance"
-13. Copy the Public IP address, e.g. "34.142.42.120"
-14. Open the file found in the project root/src/ISQLOperations.java
-15. Replace the IP address found in the url with the copied IP address, e.g.:
-    - String url = "jdbc:mysql://34.105.148.68:3306/servletcoursework?user=root";
-    - becomes:
-    - String url = "jdbc:mysql://34.142.42.120/servletcoursework?user=root";
-16. Repeat step 10 from the Back-end setup section
+13. Scroll down to the section "Connect to this instance"
+14. Copy the connection string
+15. Open the file found in the project root/src/ConnectionPool/ConnectionPoolSingleton.java
+16. Replace the variable "connectionName" with the connection string e.g.:
+    - String url = "servletcoursework-336513:europe-west2:servletcourseworkdb2";
+17. Replace the variable "databaseName" with the name of the database, it should be "servletcoursework" if step 10 was followed correctly 
+18. Replace the variable "password" with the password generated in step 5
+19. Repeat step 9 from the Back-end setup section
 
 ## Front-end ##
 
