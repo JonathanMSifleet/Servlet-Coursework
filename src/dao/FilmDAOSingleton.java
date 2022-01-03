@@ -18,10 +18,10 @@ public class FilmDAOSingleton {
 	}
 
 	public ArrayList<Film> getAllFilms() {
-
+		// select all fields and attributes from film table
+		String SQL = "SELECT * FROM films";
+		
 		try {
-			// select all fields and attributes from film table
-			String SQL = "SELECT * FROM films";
 
 			// execute sql
 			ResultSet results = ISQLOperations.sqlSelect(SQL, null);
@@ -41,9 +41,8 @@ public class FilmDAOSingleton {
 
 		try {
 			ArrayList<Object> paramVals = new ArrayList<>();
-			// percentage symbols acts as wild card
-			// allowing for any string before and after
-			// the value of title
+			// percentage symbols acts as wild card  allowing 
+			// for any string before and after the value of title
 			paramVals.add("%" + title + "%");
 
 			// execute sql with title as SQL parameter
@@ -61,9 +60,9 @@ public class FilmDAOSingleton {
 		// select first film (id is unique per film) all attributes
 		// from film table where film's id is equal to id parameter
 		String SQL = "SELECT * FROM films WHERE id = ? LIMIT 1";
+		ArrayList<Object> paramVals = new ArrayList<>();
 
 		try {
-			ArrayList<Object> paramVals = new ArrayList<>();
 			paramVals.add(id);
 
 			// execute sql with title as SQL parameter
@@ -85,8 +84,7 @@ public class FilmDAOSingleton {
 
 		try {
 			// if film id = -1, i.e. the value the DAO returns
-			// if an error has occurred,
-			// throw an exception
+			// if an error has occurred, throw an exception
 			if (film.getId() == -1) throw new Exception("Invalid film ID");
 
 			// convert film attributes to list of parameters for insert statement
@@ -126,9 +124,9 @@ public class FilmDAOSingleton {
 		// delete film from table where film's ID
 		// is equal to id parameter's value
 		String SQL = "DELETE FROM films WHERE id = ?";
+		ArrayList<Object> paramVals = new ArrayList<>();
 
 		try {
-			ArrayList<Object> paramVals = new ArrayList<>();
 			paramVals.add(id);
 
 			// execute SQL

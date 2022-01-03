@@ -38,6 +38,8 @@ public interface ISQLOperations {
 	}
 
 	static ResultSet sqlSelect(String SQL, ArrayList<Object> paramVals) {
+		// creating connection closes connection regardless of whether
+		// it succeeds or fails, freeing up connection to be reused
 		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
 			
 			PreparedStatement statement = conn.prepareStatement(SQL);
@@ -54,6 +56,8 @@ public interface ISQLOperations {
 	}
 
 	static int sqlManipulate(String SQL, ArrayList<Object> paramVals) {
+		// creating connection closes connection regardless of whether
+		// it succeeds or fails, freeing up connection to be reused
 		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
 			
 			PreparedStatement statement = conn.prepareStatement(SQL);
@@ -93,7 +97,9 @@ public interface ISQLOperations {
 	static int generateNewID() {
 		// select the largest ID from
 		String SQL = "SELECT(MAX(id)) FROM films";
-
+		
+		// creating connection closes connection regardless of whether
+		// it succeeds or fails, freeing up connection to be reused
 		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			prepareStatement(statement, null);
