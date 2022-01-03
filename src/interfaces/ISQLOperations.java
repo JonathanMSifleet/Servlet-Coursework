@@ -40,7 +40,7 @@ public interface ISQLOperations {
 	static ResultSet sqlSelect(String SQL, ArrayList<Object> paramVals) {
 		// creating connection closes connection regardless of whether
 		// it succeeds or fails, freeing up connection to be reused
-		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
+		try (Connection conn = ConnectionPoolSingleton.getConnectionPool().getPool().getConnection()) {
 			
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			// convert list of MySQL query parameter's into query
@@ -58,7 +58,7 @@ public interface ISQLOperations {
 	static int sqlManipulate(String SQL, ArrayList<Object> paramVals) {
 		// creating connection closes connection regardless of whether
 		// it succeeds or fails, freeing up connection to be reused
-		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
+		try (Connection conn = ConnectionPoolSingleton.getConnectionPool().getPool().getConnection()) {
 			
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			// convert list of MySQL query parameter's into query
@@ -100,7 +100,7 @@ public interface ISQLOperations {
 		
 		// creating connection closes connection regardless of whether
 		// it succeeds or fails, freeing up connection to be reused
-		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
+		try (Connection conn = ConnectionPoolSingleton.getConnectionPool().getPool().getConnection()) {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			prepareStatement(statement, null);
 

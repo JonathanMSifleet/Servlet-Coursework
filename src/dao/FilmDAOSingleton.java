@@ -25,7 +25,6 @@ public class FilmDAOSingleton {
 		String SQL = "SELECT * FROM films";
 		
 		try {
-
 			// execute sql
 			ResultSet results = ISQLOperations.sqlSelect(SQL, null);
 			// convert results to usable list, then return list
