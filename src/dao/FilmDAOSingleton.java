@@ -24,7 +24,7 @@ public class FilmDAOSingleton {
 			String SQL = "SELECT * FROM films";
 
 			// execute sql
-			ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, null);
+			ResultSet results = ISQLOperations.sqlSelect(SQL, null);
 			// convert results to usable list, then return list
 			return resultsToList(results);
 		} catch (Exception e) {
@@ -47,7 +47,7 @@ public class FilmDAOSingleton {
 			paramVals.add("%" + title + "%");
 
 			// execute sql with title as SQL parameter
-			ResultSet results = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
+			ResultSet results = ISQLOperations.sqlSelect(SQL, paramVals);
 			// convert results to usable list, then return list
 			return resultsToList(results);
 		} catch (Exception e) {
@@ -67,7 +67,7 @@ public class FilmDAOSingleton {
 			paramVals.add(id);
 
 			// execute sql with title as SQL parameter
-			ResultSet result = ISQLOperations.sqlSelect(ISQLOperations.loadDriver(), SQL, paramVals);
+			ResultSet result = ISQLOperations.sqlSelect(SQL, paramVals);
 			// move result pointer to first result
 			result.next();
 			// convert result to usable film POJO, then return film
@@ -92,7 +92,7 @@ public class FilmDAOSingleton {
 			// convert film attributes to list of parameters for insert statement
 			ArrayList<Object> paramVals = filmAttributesToParamList(film);
 			// execute SQL
-			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
+			return ISQLOperations.sqlManipulate(SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -114,7 +114,7 @@ public class FilmDAOSingleton {
 			paramVals.add(film.getId());
 
 			// execute SQL
-			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
+			return ISQLOperations.sqlManipulate(SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -132,7 +132,7 @@ public class FilmDAOSingleton {
 			paramVals.add(id);
 
 			// execute SQL
-			return ISQLOperations.sqlManipulate(ISQLOperations.loadDriver(), SQL, paramVals);
+			return ISQLOperations.sqlManipulate(SQL, paramVals);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

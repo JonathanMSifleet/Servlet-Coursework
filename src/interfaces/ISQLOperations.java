@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import ConnectionPool.ConnectionPoolSingleton;
+
 import java.sql.ResultSet;
 
 public interface ISQLOperations {
@@ -34,8 +37,9 @@ public interface ISQLOperations {
 		return null;
 	}
 
-	static ResultSet sqlSelect(Connection conn, String SQL, ArrayList<Object> paramVals) {
-		try {
+	static ResultSet sqlSelect(String SQL, ArrayList<Object> paramVals) {
+		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
+			
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			// convert list of MySQL query parameter's into query
 			statement = prepareStatement(statement, paramVals);
@@ -49,8 +53,9 @@ public interface ISQLOperations {
 		return null;
 	}
 
-	static int sqlManipulate(Connection conn, String SQL, ArrayList<Object> paramVals) {
-		try {
+	static int sqlManipulate(String SQL, ArrayList<Object> paramVals) {
+		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
+			
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			// convert list of MySQL query parameter's into query
 			statement = prepareStatement(statement, paramVals);
@@ -86,12 +91,10 @@ public interface ISQLOperations {
 	}
 
 	static int generateNewID() {
-		Connection conn = loadDriver();
-
 		// select the largest ID from
 		String SQL = "SELECT(MAX(id)) FROM films";
 
-		try {
+		try (Connection conn = new ConnectionPoolSingleton().getPool().getConnection()) {
 			PreparedStatement statement = conn.prepareStatement(SQL);
 			prepareStatement(statement, null);
 
