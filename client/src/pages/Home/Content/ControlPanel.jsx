@@ -22,10 +22,10 @@ import { Parser as json2csv } from 'json2csv';
 const ControlPanel = () => {
   const [endpoint, setEndpoint] = useState('');
   const [films, setFilms] = useState(null);
+  const [fontReady, setFontReady] = useState(false);
   const [formData, setFormData] = useState({});
   const [format, setFormat] = useState('json');
   const [formatChanged, setFormatChanged] = useState(false);
-  const [ready, setReady] = useState(false);
   const [selectedAttributeVal, setSelectedAttributeVal] = useState(null);
   const [selectedFilm, setSelectedFilm] = useState(null);
   const [selectedFilmID, setSelectedFilmID] = useState(null);
@@ -40,9 +40,10 @@ const ControlPanel = () => {
   const [updateFormData, setUpdateFormData] = useState(false);
   const [useREST, setUseREST] = useState(false);
 
+  // Require font to load before rendering
   useEffect(() => {
-    document.fonts.load('1em "Roboto"').then(() => {
-      setReady(true);
+    document.fonts.load('1rem "Roboto"').then(() => {
+      setFontReady(true);
     });
   }, []);
 
@@ -473,9 +474,10 @@ const ControlPanel = () => {
     }
   };
 
+  // only render if font has loaded
   return (
     <>
-      {ready ? (
+      {fontReady ? (
         <>
           <MDBCol size="md-3" className={classes.LeftContent}>
             <h3>Format: </h3>

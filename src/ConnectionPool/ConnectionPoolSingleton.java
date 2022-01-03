@@ -23,7 +23,7 @@ public class ConnectionPoolSingleton {
 
 	private static DataSource createConnectionPool() {
 		HikariConfig config = new HikariConfig();
-		
+
 		String connectionName = "servletcoursework-336513:europe-west2:servletcourseworkdb2";
 		String databaseName = "servletcoursework";
 		String password = "wu31wMas9nclNh05";
@@ -33,13 +33,13 @@ public class ConnectionPoolSingleton {
 		config.setUsername("root");
 		config.setPassword(password);
 		config.addDataSourceProperty("ipTypes", "PUBLIC");
-		
+
 		config.addDataSourceProperty("socketFactory", "com.google.cloud.sql.mysql.SocketFactory");
 		config.addDataSourceProperty("cloudSqlInstance", connectionName);
 
 		config.setMaximumPoolSize(99);
 		config.setMinimumIdle(5);
-		
+
 		// establish connection timeout: 10 seconds
 		config.setConnectionTimeout(10 * 1000);
 		// timeout: 5 minutes
