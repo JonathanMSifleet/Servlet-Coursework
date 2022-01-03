@@ -1,23 +1,9 @@
 # Miscellaneous #
-Frontend: https://d2icepsfo58cxr.cloudfront.net/
-Backend: https://servletcoursework-336513.nw.r.appspot.com/
+- Frontend: https://d2icepsfo58cxr.cloudfront.net/
+- Backend: https://servletcoursework-336513.nw.r.appspot.com/
 
 # Setup #
-## Local ##
-1. Ensure Node and NPM are installed
-2. Open the project root in a terminal, such as the default terminal in VS Code
-3. Enter "cd client"
-4. Followed by "npm i"
-5. Once the installation has complete enter "npm start". This will start the front-end of the project
-6. Open the file "./src/interfaces/ISQLOperations.java"
-7. Uncomment, and replace the variables url, password, and username with your own, based upon your database
-8. Comment out the GCP connection code and variables
-9. Save and close the file
-10. Execute "createfilms.sql" using your preferred MySQL client, importing the file into your database
-11. Run the project using Tomcat 9.0. I.e. in Eclipse Enterprise "Run As" -> "Run on Server"
-
-## Cloud ##
-### Back-end ###
+## Back-end ##
 1. After signing-up for Google Cloud Platform, access the Console via the following url: "https://console.cloud.google.com/"
 2. In the header, click "Select Project" -> "New Project"
 3. Give the project an appropriate name
@@ -44,7 +30,7 @@ To view your application in the web browser run:
     - becomes:
     - const root = 'https://servletcoursework-336513.nw.r.appspot.com';
 
-### Database ###
+## Database ##
 1. In GCP Console, access SQL
 2. Click "create instance"
 3. Click "Choose MySQL"
@@ -96,7 +82,7 @@ To view your application in the web browser run:
     - String url = "jdbc:mysql://34.142.42.120/servletcoursework?user=root";
 16. Repeat step 10 from the Back-end setup section
 
-### Front-end ###
+## Front-end ##
 
 Pre-setup:
 1. Access the file with the path: "Servlet-Coursework/client/serverless.yml"

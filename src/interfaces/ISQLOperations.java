@@ -1,7 +1,6 @@
 package interfaces;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,31 +11,6 @@ import models.Film;
 import java.sql.ResultSet;
 
 public interface ISQLOperations {
-
-	static Connection loadDriver() {
-		// mudfoot details
-		// String url = "jdbc:mysql://mudfoot.doc.stu.mmu.ac.uk:6306/sifleetj";
-		// String username = "sifleetj";
-		// String password = "passwordgoeshere";
-
-		// for GCP SQL:
-		String url = "jdbc:mysql://34.142.22.192/servletcoursework?user=root&password=wu31wMas9nclNh05";
-
-		// initialise MySQL driver
-		try {
-			// for mudfoot:
-			// Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-			// return DriverManager.getConnection(url, username, password);
-
-			// for GCP SQL:
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			return DriverManager.getConnection(url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
 
 	static ArrayList<Film> sqlSelect(String SQL, ArrayList<Object> paramVals) {
 		// creating connection closes connection regardless of whether
