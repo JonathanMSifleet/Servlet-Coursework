@@ -25,7 +25,7 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "GET");
 
-		FilmDAOSingleton filmDAO = new FilmDAOSingleton();
+		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
 		Object payload = null;
@@ -78,7 +78,7 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 
 		// send response containing number of rows affected by inserting
 		// new film
-		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().insertFilm(film));
+		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().insertFilm(film));
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 		};
 
 		// print number of affected rows due to updating film
-		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
+		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().updateFilm(film));
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		// print number of affected rows due to deleting film
-		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().deleteFilm(id));
+		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().deleteFilm(id));
 	}
 
 	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {

@@ -20,6 +20,6 @@ public class DeleteFilm extends HttpServlet implements interfaces.IRequestHelper
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		// print number of affected rows due to deleting film
-		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().deleteFilm(id));
+		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().deleteFilm(id));
 	}
 }

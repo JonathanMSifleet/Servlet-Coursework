@@ -26,7 +26,7 @@ public class GetFilmByID extends HttpServlet implements interfaces.IRequestHelpe
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		// get film by ID from data access object
-		Film film = new FilmDAOSingleton().getFilmByID(id);
+		Film film = FilmDAOSingleton.getFilmDAO().getFilmByID(id);
 		// get format from URL
 		String format = IRequestHelpers.getFormat(request);
 

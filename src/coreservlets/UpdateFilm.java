@@ -40,6 +40,6 @@ public class UpdateFilm extends HttpServlet implements interfaces.IRequestHelper
 		};
 
 		// print number of affected rows due to updating film
-		IRequestHelpers.sendResponse(response, new FilmDAOSingleton().updateFilm(film));
+		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().updateFilm(film));
 	}
 }
