@@ -74,10 +74,9 @@ To view your application in the web browser run:
     - Database: "servletcoursework"
     - Click "Import"
 13. Scroll down to the section "Connect to this instance"
-14. Copy the connection string
+14. Copy the text under "Connection name", e.g. "servletcoursework-336513:europe-west2:servletcourseworkdb2"
 15. Open the file found in the project root/src/ConnectionPool/ConnectionPoolSingleton.java
-16. Replace the variable "connectionName" with the connection string e.g.:
-    - String url = "servletcoursework-336513:europe-west2:servletcourseworkdb2";
+16. Replace the variable "connectionName" with the previously copied connection name
 17. Replace the variable "databaseName" with the name of the database, it should be "servletcoursework" if step 10 was followed correctly 
 18. Replace the variable "password" with the password generated in step 5
 19. Repeat step 9 from the Back-end setup section
