@@ -10,7 +10,13 @@ import classes from './ControlPanel.module.scss';
 import csvToJSON from '../../../utils/csvToJSON';
 import jsontoxml from 'jsontoxml';
 import singleXMLFilmToJSON from '../../../utils/singleXMLFilmToJSON';
-import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
+import {
+  MDBBtn,
+  MDBBtnGroup,
+  MDBCol,
+  MDBSpinner,
+  MDBSwitch
+} from 'mdb-react-ui-kit';
 import { Parser as json2csv } from 'json2csv';
 
 const ControlPanel = () => {
@@ -19,6 +25,7 @@ const ControlPanel = () => {
   const [formData, setFormData] = useState({});
   const [format, setFormat] = useState('json');
   const [formatChanged, setFormatChanged] = useState(false);
+  const [ready, setReady] = useState(false);
   const [selectedAttributeVal, setSelectedAttributeVal] = useState(null);
   const [selectedFilm, setSelectedFilm] = useState(null);
   const [selectedFilmID, setSelectedFilmID] = useState(null);
@@ -32,6 +39,12 @@ const ControlPanel = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [updateFormData, setUpdateFormData] = useState(false);
   const [useREST, setUseREST] = useState(false);
+
+  useEffect(() => {
+    document.fonts.load('1em "Roboto"').then(() => {
+      setReady(true);
+    });
+  }, []);
 
   // reset state data on format change or REST toggle:
   useEffect(() => {
@@ -194,7 +207,11 @@ const ControlPanel = () => {
       try {
         switch (format) {
           case 'xml':
-            await XMLRequest(url, 'POST', `<Film>${jsontoxml(formData)}</Film>`);
+            await XMLRequest(
+              url,
+              'POST',
+              `<Film>${jsontoxml(formData)}</Film>`
+            );
             break;
           case 'csv':
             await CSVRequest(
@@ -239,7 +256,9 @@ const ControlPanel = () => {
             await CSVRequest(
               url,
               'PUT',
-              new json2csv({ header: false, delimiter: ',,' }).parse(updateFormData)
+              new json2csv({ header: false, delimiter: ',,' }).parse(
+                updateFormData
+              )
             );
             break;
           default:
@@ -286,7 +305,9 @@ const ControlPanel = () => {
   const renderSwitch = () => {
     switch (endpoint) {
       case endpoints.getAllFilmsEndpoint:
-        return <MDBBtn onClick={() => setShouldGetAllFilms(true)}>Get films</MDBBtn>;
+        return (
+          <MDBBtn onClick={() => setShouldGetAllFilms(true)}>Get films</MDBBtn>
+        );
       case endpoints.getFilmByTitleEndpoint:
         return (
           <>
@@ -296,7 +317,9 @@ const ControlPanel = () => {
                 formChangedHandler(event, 'title', 'filmForm');
               }}
             />
-            <MDBBtn onClick={() => setShouldGetFilmByTitle(true)}>Get film(s)</MDBBtn>
+            <MDBBtn onClick={() => setShouldGetFilmByTitle(true)}>
+              Get film(s)
+            </MDBBtn>
           </>
         );
       case endpoints.insertFilmEndpoint:
@@ -311,26 +334,38 @@ const ControlPanel = () => {
             >
               <Input
                 label="Title"
-                onChange={(event) => formChangedHandler(event, 'title', 'filmForm')}
+                onChange={(event) =>
+                  formChangedHandler(event, 'title', 'filmForm')
+                }
               />
               <Input
                 label="Year"
-                onChange={(event) => formChangedHandler(event, 'year', 'filmForm')}
+                onChange={(event) =>
+                  formChangedHandler(event, 'year', 'filmForm')
+                }
               />
               <Input
                 label="Director"
-                onChange={(event) => formChangedHandler(event, 'director', 'filmForm')}
+                onChange={(event) =>
+                  formChangedHandler(event, 'director', 'filmForm')
+                }
               />
               <Input
                 label="Stars"
-                onChange={(event) => formChangedHandler(event, 'stars', 'filmForm')}
+                onChange={(event) =>
+                  formChangedHandler(event, 'stars', 'filmForm')
+                }
               />
               <Input
                 label="Review"
-                onChange={(event) => formChangedHandler(event, 'review', 'filmForm')}
+                onChange={(event) =>
+                  formChangedHandler(event, 'review', 'filmForm')
+                }
               />
 
-              <MDBBtn onClick={() => setShouldPostFilm(true)}>Create new film</MDBBtn>
+              <MDBBtn onClick={() => setShouldPostFilm(true)}>
+                Create new film
+              </MDBBtn>
             </form>
           </>
         );
@@ -360,18 +395,34 @@ const ControlPanel = () => {
                   {selectedLabel !== 'Review' ? (
                     <input
                       className={classes.SelectInput}
-                      placeholder={selectedAttributeVal ? selectedAttributeVal : selectedFilm.title}
+                      placeholder={
+                        selectedAttributeVal
+                          ? selectedAttributeVal
+                          : selectedFilm.title
+                      }
                       onChange={(event) =>
-                        formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')
+                        formChangedHandler(
+                          event,
+                          selectedLabel.toLowerCase(),
+                          'updateForm'
+                        )
                       }
                       type="text"
                     />
                   ) : (
                     <textarea
                       className={`${classes.SelectInput} ${classes.ReviewInput}`}
-                      placeholder={selectedAttributeVal ? selectedAttributeVal : selectedFilm.title}
+                      placeholder={
+                        selectedAttributeVal
+                          ? selectedAttributeVal
+                          : selectedFilm.title
+                      }
                       onChange={(event) =>
-                        formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')
+                        formChangedHandler(
+                          event,
+                          selectedLabel.toLowerCase(),
+                          'updateForm'
+                        )
                       }
                     />
                   )}
@@ -390,13 +441,16 @@ const ControlPanel = () => {
                   Selected film ID:
                   {' ' + selectedFilmID}
                 </p>
-                <MDBBtn onClick={() => setShouldGetFilmByID(true)}>Get film data</MDBBtn>
+                <MDBBtn onClick={() => setShouldGetFilmByID(true)}>
+                  Get film data
+                </MDBBtn>
               </>
             ) : null}
             {!selectedFilm && !selectedFilmID ? (
               <p>
-                In order to update a film, you must click a film&apos;s ID from the table, which can
-                be retrieved via getting all films, or getting a film by its title
+                In order to update a film, you must click a film&apos;s ID from
+                the table, which can be retrieved via getting all films, or
+                getting a film by its title
               </p>
             ) : null}
           </>
@@ -409,7 +463,9 @@ const ControlPanel = () => {
                 <p>
                   <b>Film ID:</b> {selectedFilmID}
                 </p>
-                <MDBBtn onClick={() => setShouldDeleteFilm(true)}>Delete film</MDBBtn>
+                <MDBBtn onClick={() => setShouldDeleteFilm(true)}>
+                  Delete film
+                </MDBBtn>
               </>
             ) : null}
           </>
@@ -419,90 +475,94 @@ const ControlPanel = () => {
 
   return (
     <>
-      <MDBCol size="md-3" className={classes.LeftContent}>
-        <h3>Format: </h3>
-        <MDBSwitch
-          className={classes.RESTToggle}
-          label="Use REST servlet"
-          onChange={() => toggleHandler()}
-          checked={useREST}
-        />
+      {ready ? (
+        <>
+          <MDBCol size="md-3" className={classes.LeftContent}>
+            <h3>Format: </h3>
+            <MDBSwitch
+              className={classes.RESTToggle}
+              label="Use REST servlet"
+              onChange={() => toggleHandler()}
+              checked={useREST}
+            />
 
-        <MDBBtnGroup className={classes.FormatRadioGroup}>
-          <Radio
-            defaultChecked
-            label="JSON"
-            name="formatGroup"
-            onClick={() => {
-              setFormatChanged(true);
-              setFormat('json');
-            }}
-          />
-          <Radio
-            label="XML"
-            name="formatGroup"
-            onClick={() => {
-              setFormatChanged(true);
-              setFormat('xml');
-            }}
-          />
-          <Radio
-            label="Text"
-            name="formatGroup"
-            onClick={() => {
-              setFormatChanged(true);
-              setFormat('csv');
-            }}
-          />
-        </MDBBtnGroup>
+            <MDBBtnGroup className={classes.FormatRadioGroup}>
+              <Radio
+                defaultChecked
+                label="JSON"
+                name="formatGroup"
+                onClick={() => {
+                  setFormatChanged(true);
+                  setFormat('json');
+                }}
+              />
+              <Radio
+                label="XML"
+                name="formatGroup"
+                onClick={() => {
+                  setFormatChanged(true);
+                  setFormat('xml');
+                }}
+              />
+              <Radio
+                label="Text"
+                name="formatGroup"
+                onClick={() => {
+                  setFormatChanged(true);
+                  setFormat('csv');
+                }}
+              />
+            </MDBBtnGroup>
 
-        <MDBBtnGroup className={classes.OperationRadioGroup}>
-          <Radio
-            className={classes.TopOperationRadio}
-            label="Get all films"
-            name="operationGroup"
-            onClick={() => setEndpoint(endpoints.getAllFilmsEndpoint)}
-          />
-          <Radio
-            className={classes.TopOperationRadio}
-            label="Get film by title"
-            name="operationGroup"
-            onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)}
-          />
-          <Radio
-            className={classes.TopOperationRadio}
-            label="Add new film"
-            name="operationGroup"
-            onClick={() => setEndpoint(endpoints.insertFilmEndpoint)}
-          />
-          <Radio
-            className={classes.BottomOperationRadio}
-            label="Update film"
-            name="operationGroup"
-            onClick={() => setEndpoint(endpoints.getFilmByIDEndpoint)}
-          />
-          <Radio
-            className={classes.BottomOperationRadio}
-            label="Delete film"
-            name="operationGroup"
-            onClick={() => setEndpoint(endpoints.deleteFilmEndpoint)}
-          />
-        </MDBBtnGroup>
+            <MDBBtnGroup className={classes.OperationRadioGroup}>
+              <Radio
+                className={classes.TopOperationRadio}
+                label="Get all films"
+                name="operationGroup"
+                onClick={() => setEndpoint(endpoints.getAllFilmsEndpoint)}
+              />
+              <Radio
+                className={classes.TopOperationRadio}
+                label="Get film by title"
+                name="operationGroup"
+                onClick={() => setEndpoint(endpoints.getFilmByTitleEndpoint)}
+              />
+              <Radio
+                className={classes.TopOperationRadio}
+                label="Add new film"
+                name="operationGroup"
+                onClick={() => setEndpoint(endpoints.insertFilmEndpoint)}
+              />
+              <Radio
+                className={classes.BottomOperationRadio}
+                label="Update film"
+                name="operationGroup"
+                onClick={() => setEndpoint(endpoints.getFilmByIDEndpoint)}
+              />
+              <Radio
+                className={classes.BottomOperationRadio}
+                label="Delete film"
+                name="operationGroup"
+                onClick={() => setEndpoint(endpoints.deleteFilmEndpoint)}
+              />
+            </MDBBtnGroup>
 
-        {renderSwitch()}
+            {renderSwitch()}
 
-        {showSpinner ? (
-          <div className="d-flex justify-content-center">
-            <MDBSpinner role="status" />
-          </div>
-        ) : null}
-      </MDBCol>
-      <Output
-        films={films}
-        format={format}
-        formatChanged={formatChanged}
-        sharedSetSelectedFilmID={sharedSetSelectedFilmID}
-      />
+            {showSpinner ? (
+              <div className="d-flex justify-content-center">
+                <MDBSpinner role="status" />
+              </div>
+            ) : null}
+          </MDBCol>
+          <Output
+            films={films}
+            format={format}
+            formatChanged={formatChanged}
+            sharedSetSelectedFilmID={sharedSetSelectedFilmID}
+          />
+        </>
+      ) : null}
     </>
   );
 };
