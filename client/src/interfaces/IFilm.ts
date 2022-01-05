@@ -1,5 +1,5 @@
 export default interface IFilm {
-  id: number;
+  id?: number;
   title: string;
   year: number;
   director: string;

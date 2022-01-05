@@ -1,32 +1,23 @@
-import { Parser as json2csv } from 'json2csv';
-import jsontoxml from 'jsontoxml';
 import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react';
 import Input from '../../../components/Input/Input';
 import Radio from '../../../components/Radio/Radio';
 import * as endpoints from '../../../constants/endpoints';
+import createFilm from '../../../crudFunctionality/createFilm';
+import deleteFilm from '../../../crudFunctionality/deleteFilm';
+import getAllFilms from '../../../crudFunctionality/getAllFIlms';
+import getFilmByID from '../../../crudFunctionality/getFilmByID';
+import getFilmsByTitle from '../../../crudFunctionality/getFilmsByTitle';
+import updateFilm from '../../../crudFunctionality/updateFilm';
 import IFilm from '../../../interfaces/IFilm';
-import csvToJSON from '../../../utils/csvToJSON';
-import generateURL from '../../../utils/generateURL';
-import { csvRequest, jsonRequest, xmlRequest } from '../../../utils/requests';
-import xmlToJSON from '../../../utils/xmlToJSON';
 import classes from './ControlPanel.module.scss';
 import Output from './Output/Output';
-
-interface IFormData {
-  id?: number;
-  director: string;
-  review: string;
-  stars: string;
-  title: string;
-  year: number;
-}
 
 const ControlPanel: React.FC = () => {
   const [endpoint, setEndpoint] = useState('');
   const [films, setFilms] = useState(null as IFilm[] | string | null);
   const [fontReady, setFontReady] = useState(false);
-  const [formData, setFormData] = useState(null as IFormData | null);
+  const [formData, setFormData] = useState(null as IFilm | null);
   const [format, setFormat] = useState('json');
   const [formatChanged, setFormatChanged] = useState(false);
   const [searchByTitleVal, setSearchByTitleVal] = useState('');
@@ -43,7 +34,7 @@ const ControlPanel: React.FC = () => {
   const [shouldPostFilm, setShouldPostFilm] = useState(false);
   const [shouldUpdateFilm, setShouldUpdateFilm] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
-  const [updateFormData, setUpdateFormData] = useState(null as IFormData | null);
+  const [updateFormData, setUpdateFormData] = useState(null as IFilm | null);
   const [useREST, setUseREST] = useState(false);
 
   // Require font to load before rendering
@@ -101,62 +92,23 @@ const ControlPanel: React.FC = () => {
 
   // get all films
   useEffect(() => {
-    async function getFilms(): Promise<void> {
-      let url = generateURL(endpoint, format, useREST);
-
-      
-      if (useREST) url = `${url}&getType=all`;
-
+    const getFilms = async () => {
       setShowSpinner(true);
-      try {
-        switch (format) {
-          case 'xml':
-            setFilms(await xmlRequest(url, 'GET'));
-            break;
-          case 'csv':
-            setFilms(await csvRequest(url, 'GET'));
-            break;
-          default:
-            setFilms((await jsonRequest(url, 'GET')) as IFilm[]);
-        }
-      } catch (e) {
-        console.error(e);
-      }
+
+      setFilms(await getAllFilms(endpoint, format, useREST));
 
       setShowSpinner(false);
       setShouldGetAllFilms(false);
-    }
-
+    };
     if (shouldGetAllFilms) getFilms();
   }, [shouldGetAllFilms]);
 
   // get film by title
   useEffect(() => {
     const getFilms = async (): Promise<void> => {
-      if (searchByTitleVal === '') return;
-
-      let url = generateURL(endpoint, format, useREST);
-      url = `${url}&title=${searchByTitleVal}`;
-
-      if (useREST) {
-        url = `${url}&getType=title`;
-      }
-
       setShowSpinner(true);
-      try {
-        switch (format) {
-          case 'xml':
-            setFilms(await xmlRequest(url, 'GET'));
-            break;
-          case 'csv':
-            setFilms(await csvRequest(url, 'GET'));
-            break;
-          default:
-            setFilms((await jsonRequest(url, 'GET')) as IFilm[]);
-        }
-      } catch (e) {
-        console.error(e);
-      }
+
+      setFilms(await getFilmsByTitle(endpoint, format, searchByTitleVal, useREST));
 
       setFormData(null);
       setSearchByTitleVal('');
@@ -169,68 +121,23 @@ const ControlPanel: React.FC = () => {
 
   // get film by ID
   useEffect(() => {
-    const getFilmByID = async (): Promise<void> => {
-      let url = generateURL(endpoint, format, useREST);
-      url = `${url}&id=${selectedFilmID}`;
-
-      if (useREST) {
-        url = `${url}&getType=id`;
-      }
-
+    const getFilm = async (): Promise<void> => {
       setShowSpinner(true);
-      try {
-        let film: IFilm;
-
-        switch (format) {
-          case 'xml':
-            const xmlResponse = await xmlRequest(url, 'GET');
-            film = xmlToJSON(xmlResponse);
-            break;
-          case 'csv':
-            const csvResponse = await csvRequest(url, 'GET');
-            film = csvToJSON(csvResponse);
-            break;
-          default:
-            film = (await jsonRequest(url, 'GET')) as IFilm;
-            break;
-        }
-        setSelectedFilm(film);
-      } catch (e) {
-        console.error(e);
-      }
+      setSelectedFilm(await getFilmByID(endpoint, format, selectedFilmID!, useREST));
 
       setShowSpinner(false);
       setShouldGetFilmByID(false);
     };
 
-    if (shouldGetFilmByID) getFilmByID();
+    if (shouldGetFilmByID) getFilm();
   }, [shouldGetFilmByID]);
 
   // create new film
   useEffect(() => {
     const postFilm = async (): Promise<void> => {
-      let url = generateURL(endpoint, format, useREST);
-
       setShowSpinner(true);
-      try {
-        switch (format) {
-          case 'xml':
-            await xmlRequest(url, 'POST', `<Film>${jsontoxml(formData)}</Film>`);
-            break;
-          case 'csv':
-            await csvRequest(
-              url,
-              'POST',
-              new json2csv({ header: false, delimiter: ',,' }).parse(formData!)
-            );
-            break;
-          default:
-            await jsonRequest(url, 'POST', formData);
-            break;
-        }
-      } catch (e) {
-        console.error(e);
-      }
+
+      await createFilm(endpoint, format, formData!, useREST);
 
       setShouldPostFilm(false);
       setShowSpinner(false);
@@ -241,30 +148,10 @@ const ControlPanel: React.FC = () => {
 
   // update film
   useEffect(() => {
-    const updateFilm = async (): Promise<void> => {
-      let url = generateURL(endpoint, format, useREST);
-
+    const putFilm = async (): Promise<void> => {
       setShowSpinner(true);
-      try {
-        switch (format) {
-          case 'xml':
-            const xmlFilm = jsontoxml(updateFormData);
-            await xmlRequest(url, 'PUT', `<Film>${xmlFilm}</Film>`);
-            break;
-          case 'csv':
-            await csvRequest(
-              url,
-              'PUT',
-              new json2csv({ header: false, delimiter: ',,' }).parse(updateFormData!)
-            );
-            break;
-          default:
-            await jsonRequest(url, 'PUT', updateFormData);
-            break;
-        }
-      } catch (e) {
-        console.error(e);
-      }
+
+      await updateFilm(endpoint, format, updateFormData!, useREST);
 
       setUpdateFormData(null);
       setShowSpinner(false);
@@ -272,26 +159,21 @@ const ControlPanel: React.FC = () => {
       setSelectedFilm(null);
     };
 
-    if (shouldUpdateFilm) updateFilm();
+    if (shouldUpdateFilm) putFilm();
   }, [shouldUpdateFilm]);
 
   // delete film
   useEffect(() => {
-    const deleteFilm = async (): Promise<void> => {
-      let url = generateURL(endpoint, format, useREST);
-
+    const deleteFilmByID = async (): Promise<void> => {
       setShowSpinner(true);
-      try {
-        await jsonRequest(url, 'DELETE');
-      } catch (e) {
-        console.error(e);
-      }
+
+      await deleteFilm(endpoint, format, useREST);
 
       setShowSpinner(false);
       setShouldDeleteFilm(false);
     };
 
-    if (shouldDeleteFilm) deleteFilm();
+    if (shouldDeleteFilm) deleteFilmByID();
   }, [shouldDeleteFilm]);
 
   const renderSwitch = (): JSX.Element | null => {
