@@ -1,0 +1,549 @@
+import { Parser as json2csv } from 'json2csv';
+import jsontoxml from 'jsontoxml';
+import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
+import React, { useEffect, useState } from 'react';
+import Input from '../../../components/Input/Input';
+import Radio from '../../../components/Radio/Radio';
+import * as endpoints from '../../../constants/endpoints';
+import IFilm from '../../../interfaces/IFilm';
+import csvToJSON from '../../../utils/csvToJSON';
+import { csvRequest, jsonRequest, xmlRequest } from '../../../utils/requests';
+import xmlToJSON from '../../../utils/xmlToJSON';
+import classes from './ControlPanel.module.scss';
+import Output from './Output/Output';
+
+interface IFormData {
+  id?: number;
+  director: string;
+  review: string;
+  stars: string;
+  title: string;
+  year: number;
+}
+
+const ControlPanel: React.FC = () => {
+  const [endpoint, setEndpoint] = useState('');
+  const [films, setFilms] = useState(null as unknown as IFilm[] | string);
+  const [fontReady, setFontReady] = useState(false);
+  const [formData, setFormData] = useState(null as IFormData | null);
+  const [format, setFormat] = useState('json');
+  const [formatChanged, setFormatChanged] = useState(false);
+  const [selectedAttributeVal, setSelectedAttributeVal] = useState(
+    null as unknown as number | string
+  );
+  const [selectedFilm, setSelectedFilm] = useState(null as IFilm | null);
+  const [selectedFilmID, setSelectedFilmID] = useState(null as number | null);
+  const [selectedLabel, setSelectedLabel] = useState('Title');
+  const [shouldDeleteFilm, setShouldDeleteFilm] = useState(false);
+  const [shouldGetAllFilms, setShouldGetAllFilms] = useState(false);
+  const [shouldGetFilmByID, setShouldGetFilmByID] = useState(false);
+  const [shouldGetFilmByTitle, setShouldGetFilmByTitle] = useState(false);
+  const [shouldPostFilm, setShouldPostFilm] = useState(false);
+  const [shouldUpdateFilm, setShouldUpdateFilm] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [updateFormData, setUpdateFormData] = useState(null as IFormData | null);
+  const [useREST, setUseREST] = useState(false);
+
+  // Require font to load before rendering
+  useEffect(() => {
+    document.fonts.load('1rem "Roboto"').then(() => {
+      setFontReady(true);
+    });
+  }, []);
+
+  // reset state data on format change or REST toggle:
+  useEffect(() => {
+    setFilms([]);
+    setFormatChanged(false);
+    setSelectedFilm(null);
+    setSelectedFilmID(null);
+  }, [format, useREST]);
+
+  const sharedSetSelectedFilmID = (id: number): void => {
+    setSelectedFilmID(id);
+  };
+
+  const formChangedHandler = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    inputName: string,
+    form: string
+  ): void => {
+    switch (form) {
+      case 'filmForm':
+        setFormData({
+          ...formData!,
+          [inputName]: event.target.value!
+        });
+        break;
+      case 'updateForm':
+        let updateValue;
+        if (inputName === 'id' || inputName === 'year') {
+          updateValue = parseInt(event.target.value);
+        } else {
+          updateValue = event.target.value;
+        }
+
+        setUpdateFormData({
+          ...selectedFilm!,
+          [inputName]: updateValue!
+        });
+        break;
+    }
+  };
+
+  const toggleHandler = (): void => {
+    setUseREST(!useREST);
+  };
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    setSelectedAttributeVal(event.target.value);
+    setSelectedLabel(event.target.selectedOptions[0].innerText);
+  };
+
+  // get all films
+  useEffect(() => {
+    async function getFilms(): Promise<void> {
+      let url = `format=${format}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}&getType=all`;
+      } else {
+        url = `${endpoints.getAllFilmsEndpoint}?${url}`;
+      }
+
+      setShowSpinner(true);
+      try {
+        switch (format) {
+          case 'xml':
+            setFilms(await xmlRequest(url, 'GET'));
+            break;
+          case 'csv':
+            setFilms(await csvRequest(url, 'GET'));
+            break;
+          default:
+            setFilms((await jsonRequest(url, 'GET')) as IFilm[]);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      setShowSpinner(false);
+      setShouldGetAllFilms(false);
+    }
+
+    if (shouldGetAllFilms) getFilms();
+  }, [shouldGetAllFilms]);
+
+  // get film by title
+  useEffect(() => {
+    const getFilms = async (): Promise<void> => {
+      if (!formData!.title || formData!.title === '') return;
+
+      let url = `format=${format}&title=${formData!.title}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}&getType=title`;
+      } else {
+        url = `${endpoints.getFilmByTitleEndpoint}?${url}`;
+      }
+
+      setShowSpinner(true);
+      try {
+        switch (format) {
+          case 'xml':
+            setFilms(await xmlRequest(url, 'GET'));
+            break;
+          case 'csv':
+            setFilms(await csvRequest(url, 'GET'));
+            break;
+          default:
+            setFilms((await jsonRequest(url, 'GET')) as IFilm[]);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      setFormData(null);
+      setShowSpinner(false);
+      setShouldGetFilmByTitle(false);
+    };
+
+    if (shouldGetFilmByTitle) getFilms();
+  }, [shouldGetFilmByTitle]);
+
+  // get film by ID
+  useEffect(() => {
+    const getFilmByID = async (): Promise<void> => {
+      let url = `format=${format}&id=${selectedFilmID}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}&getType=id`;
+      } else {
+        url = `${endpoints.getFilmByIDEndpoint}?${url}`;
+      }
+
+      setShowSpinner(true);
+      try {
+        let film: IFilm;
+
+        switch (format) {
+          case 'xml':
+            const xmlResponse = await xmlRequest(url, 'GET');
+            film = xmlToJSON(xmlResponse);
+            break;
+          case 'csv':
+            const csvResponse = await csvRequest(url, 'GET');
+            film = csvToJSON(csvResponse);
+            break;
+          default:
+            film = (await jsonRequest(url, 'GET')) as IFilm;
+            break;
+        }
+        setSelectedFilm(film);
+      } catch (e) {
+        console.error(e);
+      }
+
+      setShowSpinner(false);
+      setShouldGetFilmByID(false);
+    };
+
+    if (shouldGetFilmByID) getFilmByID();
+  }, [shouldGetFilmByID]);
+
+  // create new film
+  useEffect(() => {
+    const postFilm = async (): Promise<void> => {
+      let url = `format=${format}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}`;
+      } else {
+        url = `${endpoints.insertFilmEndpoint}?${url}`;
+      }
+
+      setShowSpinner(true);
+      try {
+        switch (format) {
+          case 'xml':
+            await xmlRequest(url, 'POST', `<Film>${jsontoxml(formData)}</Film>`);
+            break;
+          case 'csv':
+            await csvRequest(
+              url,
+              'POST',
+              new json2csv({ header: false, delimiter: ',,' }).parse(formData!)
+            );
+            break;
+          default:
+            await jsonRequest(url, 'POST', formData);
+            break;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      setShouldPostFilm(false);
+      setShowSpinner(false);
+    };
+
+    if (shouldPostFilm) postFilm();
+  }, [shouldPostFilm]);
+
+  // update film
+  useEffect(() => {
+    const updateFilm = async (): Promise<void> => {
+      let url = `format=${format}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}`;
+      } else {
+        url = `${endpoints.updateFilmEndpoint}?${url}`;
+      }
+
+      setShowSpinner(true);
+      try {
+        switch (format) {
+          case 'xml':
+            const xmlFilm = jsontoxml(updateFormData);
+            await xmlRequest(url, 'PUT', `<Film>${xmlFilm}</Film>`);
+            break;
+          case 'csv':
+            await csvRequest(
+              url,
+              'PUT',
+              new json2csv({ header: false, delimiter: ',,' }).parse(updateFormData!)
+            );
+            break;
+          default:
+            await jsonRequest(url, 'PUT', updateFormData);
+            break;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      setUpdateFormData(null);
+      setShowSpinner(false);
+      setShouldUpdateFilm(false);
+      setSelectedFilm(null);
+    };
+
+    if (shouldUpdateFilm) updateFilm();
+  }, [shouldUpdateFilm]);
+
+  // delete film
+  useEffect(() => {
+    const deleteFilm = async (): Promise<void> => {
+      let url = `format=${format}&id=${selectedFilmID}`;
+      if (useREST) {
+        url = `${endpoints.restEndpoint}?${url}`;
+      } else {
+        url = `${endpoints.deleteFilmEndpoint}?${url}`;
+      }
+
+      setShowSpinner(true);
+      try {
+        await jsonRequest(url, 'DELETE');
+      } catch (e) {
+        console.error(e);
+      }
+
+      setShowSpinner(false);
+      setShouldDeleteFilm(false);
+    };
+
+    if (shouldDeleteFilm) deleteFilm();
+  }, [shouldDeleteFilm]);
+
+  const renderSwitch = (): JSX.Element | null => {
+    switch (endpoint) {
+      case endpoints.getAllFilmsEndpoint:
+        return <MDBBtn onClick={(): void => setShouldGetAllFilms(true)}>Get films</MDBBtn>;
+      case endpoints.getFilmByTitleEndpoint:
+        return (
+          <>
+            <Input
+              label="Title"
+              onChange={(event): void => {
+                formChangedHandler(event, 'title', 'filmForm');
+              }}
+            />
+            <MDBBtn onClick={(): void => setShouldGetFilmByTitle(true)}>Get film(s)</MDBBtn>
+          </>
+        );
+      case endpoints.insertFilmEndpoint:
+        return (
+          <>
+            <h3>Film attributes:</h3>
+
+            <form
+              onSubmit={(event): void => {
+                event.preventDefault();
+              }}
+            >
+              <Input
+                label="Title"
+                onChange={(event): void => formChangedHandler(event, 'title', 'filmForm')}
+              />
+              <Input
+                label="Year"
+                onChange={(event): void => formChangedHandler(event, 'year', 'filmForm')}
+              />
+              <Input
+                label="Director"
+                onChange={(event): void => formChangedHandler(event, 'director', 'filmForm')}
+              />
+              <Input
+                label="Stars"
+                onChange={(event): void => formChangedHandler(event, 'stars', 'filmForm')}
+              />
+              <Input
+                label="Review"
+                onChange={(event): void => formChangedHandler(event, 'review', 'filmForm')}
+              />
+
+              <MDBBtn onClick={(): void => setShouldPostFilm(true)}>Create new film</MDBBtn>
+            </form>
+          </>
+        );
+      // actually the update method
+      case endpoints.getFilmByIDEndpoint:
+        return (
+          <>
+            {selectedFilm ? (
+              <>
+                <p>
+                  <b>Film:</b> {selectedFilm.title}
+                </p>
+
+                <div className={classes.SelectWrapper}>
+                  <select
+                    className={classes.Select}
+                    name="filmAttributes"
+                    onChange={(event): void => handleSelectChange(event)}
+                  >
+                    <option value={selectedFilm.title}>Title</option>
+                    <option value={selectedFilm.year}>Year</option>
+                    <option value={selectedFilm.director}>Director</option>
+                    <option value={selectedFilm.stars}>Stars</option>
+                    <option value={selectedFilm.review}>Review</option>
+                  </select>
+
+                  {selectedLabel !== 'Review' ? (
+                    <input
+                      className={classes.SelectInput}
+                      placeholder={
+                        selectedAttributeVal ? String(selectedAttributeVal) : selectedFilm.title
+                      }
+                      onChange={(event): void =>
+                        formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')
+                      }
+                      type="text"
+                    />
+                  ) : (
+                    <textarea
+                      className={`${classes.SelectInput} ${classes.ReviewInput}`}
+                      placeholder={
+                        selectedAttributeVal ? String(selectedAttributeVal) : selectedFilm.title
+                      }
+                      onChange={(event): void =>
+                        formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')
+                      }
+                    />
+                  )}
+                </div>
+                <MDBBtn
+                  className={classes.UpdateFilmButton}
+                  onClick={(): void => setShouldUpdateFilm(true)}
+                >
+                  Update film
+                </MDBBtn>
+              </>
+            ) : null}
+            {!selectedFilm && selectedFilmID ? (
+              <>
+                <p>
+                  Selected film ID:
+                  {' ' + selectedFilmID}
+                </p>
+                <MDBBtn onClick={(): void => setShouldGetFilmByID(true)}>Get film data</MDBBtn>
+              </>
+            ) : null}
+            {!selectedFilm && !selectedFilmID ? (
+              <p>
+                In order to update a film, you must click a film&apos;s ID from the table, which can
+                be retrieved via getting all films, or getting a film by its title
+              </p>
+            ) : null}
+          </>
+        );
+      case endpoints.deleteFilmEndpoint:
+        return (
+          <>
+            {selectedFilmID ? (
+              <>
+                <p>
+                  <b>Film ID:</b> {selectedFilmID}
+                </p>
+                <MDBBtn onClick={(): void => setShouldDeleteFilm(true)}>Delete film</MDBBtn>
+              </>
+            ) : null}
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
+  // only render if font has loaded
+  return (
+    <>
+      {fontReady ? (
+        <>
+          <MDBCol size="md-3" className={classes.LeftContent}>
+            <h3>Format: </h3>
+            <MDBSwitch
+              className={classes.RESTToggle}
+              label="Use REST servlet"
+              onChange={(): void => toggleHandler()}
+              checked={useREST}
+            />
+
+            <MDBBtnGroup className={classes.FormatRadioGroup}>
+              <Radio
+                defaultChecked
+                label="JSON"
+                name="formatGroup"
+                onClick={(): void => {
+                  setFormatChanged(true);
+                  setFormat('json');
+                }}
+              />
+              <Radio
+                label="XML"
+                name="formatGroup"
+                onClick={(): void => {
+                  setFormatChanged(true);
+                  setFormat('xml');
+                }}
+              />
+              <Radio
+                label="Text"
+                name="formatGroup"
+                onClick={(): void => {
+                  setFormatChanged(true);
+                  setFormat('csv');
+                }}
+              />
+            </MDBBtnGroup>
+
+            <MDBBtnGroup className={classes.OperationRadioGroup}>
+              <Radio
+                className={classes.TopOperationRadio}
+                label="Get all films"
+                name="operationGroup"
+                onClick={(): void => setEndpoint(endpoints.getAllFilmsEndpoint)}
+              />
+              <Radio
+                className={classes.TopOperationRadio}
+                label="Get film by title"
+                name="operationGroup"
+                onClick={(): void => setEndpoint(endpoints.getFilmByTitleEndpoint)}
+              />
+              <Radio
+                className={classes.TopOperationRadio}
+                label="Add new film"
+                name="operationGroup"
+                onClick={(): void => setEndpoint(endpoints.insertFilmEndpoint)}
+              />
+              <Radio
+                className={classes.BottomOperationRadio}
+                label="Update film"
+                name="operationGroup"
+                onClick={(): void => setEndpoint(endpoints.getFilmByIDEndpoint)}
+              />
+              <Radio
+                className={classes.BottomOperationRadio}
+                label="Delete film"
+                name="operationGroup"
+                onClick={(): void => setEndpoint(endpoints.deleteFilmEndpoint)}
+              />
+            </MDBBtnGroup>
+
+            {renderSwitch()}
+
+            {showSpinner ? (
+              <div className="d-flex justify-content-center">
+                <MDBSpinner role="status" />
+              </div>
+            ) : null}
+          </MDBCol>
+          <Output
+            films={films}
+            format={format}
+            formatChanged={formatChanged}
+            sharedSetSelectedFilmID={sharedSetSelectedFilmID}
+          />
+        </>
+      ) : null}
+    </>
+  );
+};
+
+export default ControlPanel;
