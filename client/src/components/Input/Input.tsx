@@ -7,9 +7,10 @@ interface IProps {
   label: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  value?: string;
 }
 
-const Input: React.FC<IProps> = ({ className, label, onChange, placeholder }) => {
+const Input: React.FC<IProps> = ({ className, label, onChange, placeholder, value }) => {
   return (
     <MDBInput
       className={`${classes.Input} ${className}`}
@@ -17,6 +18,7 @@ const Input: React.FC<IProps> = ({ className, label, onChange, placeholder }) =>
       onChange={onChange}
       placeholder={placeholder}
       type="text"
+      value={value}
     />
   );
 };
