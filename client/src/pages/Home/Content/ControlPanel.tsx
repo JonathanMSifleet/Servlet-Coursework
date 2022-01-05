@@ -7,6 +7,7 @@ import Radio from '../../../components/Radio/Radio';
 import * as endpoints from '../../../constants/endpoints';
 import IFilm from '../../../interfaces/IFilm';
 import csvToJSON from '../../../utils/csvToJSON';
+import generateURL from '../../../utils/generateURL';
 import { csvRequest, jsonRequest, xmlRequest } from '../../../utils/requests';
 import xmlToJSON from '../../../utils/xmlToJSON';
 import classes from './ControlPanel.module.scss';
@@ -28,6 +29,7 @@ const ControlPanel: React.FC = () => {
   const [formData, setFormData] = useState(null as IFormData | null);
   const [format, setFormat] = useState('json');
   const [formatChanged, setFormatChanged] = useState(false);
+  const [searchByTitleVal, setSearchByTitleVal] = useState('');
   const [selectedAttributeVal, setSelectedAttributeVal] = useState(
     null as unknown as number | string
   );
@@ -57,6 +59,7 @@ const ControlPanel: React.FC = () => {
     setFormatChanged(false);
     setSelectedFilm(null);
     setSelectedFilmID(null);
+    setSearchByTitleVal('');
   }, [format, useREST]);
 
   const sharedSetSelectedFilmID = (id: number): void => {
@@ -75,17 +78,13 @@ const ControlPanel: React.FC = () => {
           [inputName]: event.target.value!
         });
         break;
+      case 'searchByTitleForm':
+        setSearchByTitleVal(event.target.value!);
+        break;
       case 'updateForm':
-        let updateValue;
-        if (inputName === 'id' || inputName === 'year') {
-          updateValue = parseInt(event.target.value);
-        } else {
-          updateValue = event.target.value;
-        }
-
         setUpdateFormData({
           ...selectedFilm!,
-          [inputName]: updateValue!
+          [inputName]: event.target.value!
         });
         break;
     }
@@ -103,12 +102,10 @@ const ControlPanel: React.FC = () => {
   // get all films
   useEffect(() => {
     async function getFilms(): Promise<void> {
-      let url = `format=${format}`;
-      if (useREST) {
-        url = `${endpoints.restEndpoint}?${url}&getType=all`;
-      } else {
-        url = `${endpoints.getAllFilmsEndpoint}?${url}`;
-      }
+      let url = generateURL(endpoint, format, useREST);
+
+      
+      if (useREST) url = `${url}&getType=all`;
 
       setShowSpinner(true);
       try {
@@ -136,13 +133,13 @@ const ControlPanel: React.FC = () => {
   // get film by title
   useEffect(() => {
     const getFilms = async (): Promise<void> => {
-      if (!formData!.title || formData!.title === '') return;
+      if (searchByTitleVal === '') return;
 
-      let url = `format=${format}&title=${formData!.title}`;
+      let url = generateURL(endpoint, format, useREST);
+      url = `${url}&title=${searchByTitleVal}`;
+
       if (useREST) {
-        url = `${endpoints.restEndpoint}?${url}&getType=title`;
-      } else {
-        url = `${endpoints.getFilmByTitleEndpoint}?${url}`;
+        url = `${url}&getType=title`;
       }
 
       setShowSpinner(true);
@@ -162,6 +159,7 @@ const ControlPanel: React.FC = () => {
       }
 
       setFormData(null);
+      setSearchByTitleVal('');
       setShowSpinner(false);
       setShouldGetFilmByTitle(false);
     };
@@ -172,11 +170,11 @@ const ControlPanel: React.FC = () => {
   // get film by ID
   useEffect(() => {
     const getFilmByID = async (): Promise<void> => {
-      let url = `format=${format}&id=${selectedFilmID}`;
+      let url = generateURL(endpoint, format, useREST);
+      url = `${url}&id=${selectedFilmID}`;
+
       if (useREST) {
-        url = `${endpoints.restEndpoint}?${url}&getType=id`;
-      } else {
-        url = `${endpoints.getFilmByIDEndpoint}?${url}`;
+        url = `${url}&getType=id`;
       }
 
       setShowSpinner(true);
@@ -211,12 +209,7 @@ const ControlPanel: React.FC = () => {
   // create new film
   useEffect(() => {
     const postFilm = async (): Promise<void> => {
-      let url = `format=${format}`;
-      if (useREST) {
-        url = `${endpoints.restEndpoint}?${url}`;
-      } else {
-        url = `${endpoints.insertFilmEndpoint}?${url}`;
-      }
+      let url = generateURL(endpoint, format, useREST);
 
       setShowSpinner(true);
       try {
@@ -249,12 +242,7 @@ const ControlPanel: React.FC = () => {
   // update film
   useEffect(() => {
     const updateFilm = async (): Promise<void> => {
-      let url = `format=${format}`;
-      if (useREST) {
-        url = `${endpoints.restEndpoint}?${url}`;
-      } else {
-        url = `${endpoints.updateFilmEndpoint}?${url}`;
-      }
+      let url = generateURL(endpoint, format, useREST);
 
       setShowSpinner(true);
       try {
@@ -290,12 +278,7 @@ const ControlPanel: React.FC = () => {
   // delete film
   useEffect(() => {
     const deleteFilm = async (): Promise<void> => {
-      let url = `format=${format}&id=${selectedFilmID}`;
-      if (useREST) {
-        url = `${endpoints.restEndpoint}?${url}`;
-      } else {
-        url = `${endpoints.deleteFilmEndpoint}?${url}`;
-      }
+      let url = generateURL(endpoint, format, useREST);
 
       setShowSpinner(true);
       try {
@@ -313,21 +296,22 @@ const ControlPanel: React.FC = () => {
 
   const renderSwitch = (): JSX.Element | null => {
     switch (endpoint) {
-      case endpoints.getAllFilmsEndpoint:
+      case endpoints.getAllFilms:
         return <MDBBtn onClick={(): void => setShouldGetAllFilms(true)}>Get films</MDBBtn>;
-      case endpoints.getFilmByTitleEndpoint:
+      case endpoints.getFilmByTitle:
         return (
           <>
             <Input
               label="Title"
               onChange={(event): void => {
-                formChangedHandler(event, 'title', 'filmForm');
+                formChangedHandler(event, 'title', 'searchByTitleForm');
               }}
+              value={searchByTitleVal}
             />
             <MDBBtn onClick={(): void => setShouldGetFilmByTitle(true)}>Get film(s)</MDBBtn>
           </>
         );
-      case endpoints.insertFilmEndpoint:
+      case endpoints.insertFilm:
         return (
           <>
             <h3>Film attributes:</h3>
@@ -363,7 +347,7 @@ const ControlPanel: React.FC = () => {
           </>
         );
       // actually the update method
-      case endpoints.getFilmByIDEndpoint:
+      case endpoints.getFilmByID:
         return (
           <>
             {selectedFilm ? (
@@ -433,7 +417,7 @@ const ControlPanel: React.FC = () => {
             ) : null}
           </>
         );
-      case endpoints.deleteFilmEndpoint:
+      case endpoints.deleteFilm:
         return (
           <>
             {selectedFilmID ? (
@@ -498,31 +482,31 @@ const ControlPanel: React.FC = () => {
                 className={classes.TopOperationRadio}
                 label="Get all films"
                 name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.getAllFilmsEndpoint)}
+                onClick={(): void => setEndpoint(endpoints.getAllFilms)}
               />
               <Radio
                 className={classes.TopOperationRadio}
                 label="Get film by title"
                 name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.getFilmByTitleEndpoint)}
+                onClick={(): void => setEndpoint(endpoints.getFilmByTitle)}
               />
               <Radio
                 className={classes.TopOperationRadio}
                 label="Add new film"
                 name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.insertFilmEndpoint)}
+                onClick={(): void => setEndpoint(endpoints.insertFilm)}
               />
               <Radio
                 className={classes.BottomOperationRadio}
                 label="Update film"
                 name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.getFilmByIDEndpoint)}
+                onClick={(): void => setEndpoint(endpoints.getFilmByID)}
               />
               <Radio
                 className={classes.BottomOperationRadio}
                 label="Delete film"
                 name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.deleteFilmEndpoint)}
+                onClick={(): void => setEndpoint(endpoints.deleteFilm)}
               />
             </MDBBtnGroup>
 
