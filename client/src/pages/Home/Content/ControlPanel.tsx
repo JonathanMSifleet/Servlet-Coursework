@@ -23,7 +23,7 @@ interface IFormData {
 
 const ControlPanel: React.FC = () => {
   const [endpoint, setEndpoint] = useState('');
-  const [films, setFilms] = useState(null as unknown as IFilm[] | string);
+  const [films, setFilms] = useState(null as IFilm[] | string | null);
   const [fontReady, setFontReady] = useState(false);
   const [formData, setFormData] = useState(null as IFormData | null);
   const [format, setFormat] = useState('json');
@@ -53,7 +53,7 @@ const ControlPanel: React.FC = () => {
 
   // reset state data on format change or REST toggle:
   useEffect(() => {
-    setFilms([]);
+    setFilms(null);
     setFormatChanged(false);
     setSelectedFilm(null);
     setSelectedFilmID(null);
@@ -535,7 +535,7 @@ const ControlPanel: React.FC = () => {
             ) : null}
           </MDBCol>
           <Output
-            films={films}
+            films={films as IFilm[]}
             format={format}
             formatChanged={formatChanged}
             sharedSetSelectedFilmID={sharedSetSelectedFilmID}
