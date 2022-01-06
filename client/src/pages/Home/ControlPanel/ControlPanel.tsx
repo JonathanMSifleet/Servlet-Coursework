@@ -1,5 +1,6 @@
-import { MDBBtn, MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
+import { MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react';
+import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
 import Radio from '../../../components/Radio/Radio';
 import * as endpoints from '../../../constants/endpoints';
@@ -180,7 +181,7 @@ const ControlPanel: React.FC = () => {
   const renderSwitch = (): JSX.Element | null => {
     switch (endpoint) {
       case endpoints.getAllFilms:
-        return <MDBBtn onClick={(): void => setShouldGetAllFilms(true)}>Get films</MDBBtn>;
+        return <Button onClick={(): void => setShouldGetAllFilms(true)} text={'Get films'} />;
       case endpoints.getFilmByTitle:
         return (
           <>
@@ -191,7 +192,7 @@ const ControlPanel: React.FC = () => {
               }}
               value={searchByTitleVal}
             />
-            <MDBBtn onClick={(): void => setShouldGetFilmByTitle(true)}>Get film(s)</MDBBtn>
+            <Button onClick={(): void => setShouldGetFilmByTitle(true)} text={'Get film(s)'} />
           </>
         );
       case endpoints.insertFilm:
@@ -225,7 +226,7 @@ const ControlPanel: React.FC = () => {
                 onChange={(event): void => formChangedHandler(event, 'review', 'filmForm')}
               />
 
-              <MDBBtn onClick={(): void => setShouldPostFilm(true)}>Create new film</MDBBtn>
+              <Button onClick={(): void => setShouldPostFilm(true)} text={'Create new film'} />
             </form>
           </>
         );
@@ -275,12 +276,11 @@ const ControlPanel: React.FC = () => {
                     />
                   )}
                 </div>
-                <MDBBtn
+                <Button
                   className={classes.UpdateFilmButton}
                   onClick={(): void => setShouldUpdateFilm(true)}
-                >
-                  Update film
-                </MDBBtn>
+                  text={'Update Film'}
+                />
               </>
             ) : null}
             {!selectedFilm && selectedFilmID ? (
@@ -289,7 +289,7 @@ const ControlPanel: React.FC = () => {
                   Selected film ID:
                   {' ' + selectedFilmID}
                 </p>
-                <MDBBtn onClick={(): void => setShouldGetFilmByID(true)}>Get film data</MDBBtn>
+                <Button onClick={(): void => setShouldGetFilmByID(true)} text={'Get film data'} />
               </>
             ) : null}
             {!selectedFilm && !selectedFilmID ? (
@@ -308,7 +308,7 @@ const ControlPanel: React.FC = () => {
                 <p>
                   <b>Film ID:</b> {selectedFilmID}
                 </p>
-                <MDBBtn onClick={(): void => setShouldDeleteFilm(true)}>Delete film</MDBBtn>
+                <Button onClick={(): void => setShouldDeleteFilm(true)} text={'Delete film'} />
               </>
             ) : null}
           </>
