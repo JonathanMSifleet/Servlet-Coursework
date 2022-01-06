@@ -10,8 +10,8 @@ import getFilmByID from '../../../crudFunctionality/getFilmByID';
 import getFilmsByTitle from '../../../crudFunctionality/getFilmsByTitle';
 import updateFilm from '../../../crudFunctionality/updateFilm';
 import IFilm from '../../../interfaces/IFilm';
+import Output from '../Output/Output';
 import classes from './ControlPanel.module.scss';
-import Output from './Output/Output';
 
 const ControlPanel: React.FC = () => {
   const [endpoint, setEndpoint] = useState('');
@@ -53,6 +53,7 @@ const ControlPanel: React.FC = () => {
     setSearchByTitleVal('');
   }, [format, useREST]);
 
+  // function for lifting state up from data component
   const sharedSetSelectedFilmID = (id: number): void => {
     setSelectedFilmID(id);
   };

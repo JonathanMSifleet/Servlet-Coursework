@@ -1,7 +1,7 @@
 import { MDBCol, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import React from 'react';
-import IFilm from '../../../../interfaces/IFilm';
-import csvToJSON from '../../../../utils/csvToJSON';
+import IFilm from '../../../interfaces/IFilm';
+import csvToJSON from '../../../utils/csvToJSON';
 import classes from './Output.module.scss';
 
 interface IProps {
@@ -77,14 +77,16 @@ const Output: React.FC<IProps> = ({ films, format, formatChanged, sharedSetSelec
             <th className={classes.StarsCell} scope="col">
               Stars
             </th>
-            <th scope="col">Review</th>
+            <th className={classes.ReviewTextCell} scope="col">
+              Review
+            </th>
           </tr>
         </MDBTableHead>
         <MDBTableBody>
           {preparedFilms
             ? preparedFilms.map((film: IFilm) => {
                 return (
-                  <tr key={film.id} onClick={(): void => sharedSetSelectedFilmID(film.id)}>
+                  <tr key={film.id} onClick={(): void => sharedSetSelectedFilmID(film.id!)}>
                     <td className={classes.IDCell}>{film.id}</td>
                     <td className={classes.TitleCell}>{film.title}</td>
                     <td className={classes.YearCell}>{film.year}</td>

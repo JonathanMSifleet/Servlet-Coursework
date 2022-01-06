@@ -1,6 +1,6 @@
 import { MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import React from 'react';
-import ControlPanel from './Content/ControlPanel';
+import ControlPanel from './ControlPanel/ControlPanel';
 import classes from './Home.module.scss';
 
 const Home: React.FC = () => {
