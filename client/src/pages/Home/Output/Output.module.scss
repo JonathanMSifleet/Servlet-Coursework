@@ -64,6 +64,6 @@
 
 .ReviewText {
   max-height: 13.5vh;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
