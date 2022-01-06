@@ -1,3 +1,4 @@
+import Button from '../components/Button/Button';
 import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
 import { csvRequest, jsonRequest, xmlRequest } from '../utils/requests';
@@ -23,6 +24,10 @@ const getAllFilms = async (
     console.error(e);
     return null;
   }
+};
+
+export const renderGetAllFilmsUI = (onClick: () => void) => {
+  return <Button onClick={onClick} text={'Get films'} />;
 };
 
 export default getAllFilms;

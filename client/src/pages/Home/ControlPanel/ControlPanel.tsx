@@ -1,15 +1,13 @@
 import { MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
-import React, { useEffect, useState } from 'react';
-import Button from '../../../components/Button/Button';
-import Input from '../../../components/Input/Input';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Radio from '../../../components/Radio/Radio';
 import * as endpoints from '../../../constants/endpoints';
-import createFilm from '../../../crudFunctionality/createFilm';
-import deleteFilm from '../../../crudFunctionality/deleteFilm';
-import getAllFilms from '../../../crudFunctionality/getAllFIlms';
-import getFilmByID from '../../../crudFunctionality/getFilmByID';
+import createFilm, { renderCreateFilmUI } from '../../../crudFunctionality/createFilm';
+import deleteFilm, { renderDeleteFilmUI } from '../../../crudFunctionality/deleteFilm';
+import getAllFilms, { renderGetAllFilmsUI } from '../../../crudFunctionality/getAllFIlms';
+import getFilmByID, { renderGetFilmsByIDUI } from '../../../crudFunctionality/getFilmsByID';
 import getFilmsByTitle from '../../../crudFunctionality/getFilmsByTitle';
-import updateFilm from '../../../crudFunctionality/updateFilm';
+import updateFilm, { renderUpdateFilmUI } from '../../../crudFunctionality/updateFilm';
 import IFilm from '../../../interfaces/IFilm';
 import Output from '../Output/Output';
 import classes from './ControlPanel.module.scss';
@@ -64,6 +62,8 @@ const ControlPanel: React.FC = () => {
     inputName: string,
     form: string
   ): void => {
+    console.log('inputName', inputName);
+
     switch (form) {
       case 'filmForm':
         setFormData({
@@ -87,7 +87,7 @@ const ControlPanel: React.FC = () => {
     setUseREST(!useREST);
   };
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     setSelectedAttributeVal(event.target.value);
     setSelectedLabel(event.target.selectedOptions[0].innerText);
   };
@@ -153,7 +153,7 @@ const ControlPanel: React.FC = () => {
     const putFilm = async (): Promise<void> => {
       setShowSpinner(true);
 
-      await updateFilm(endpoint, format, updateFormData!, useREST);
+      await updateFilm(endpoints.updateFilm, format, updateFormData!, useREST);
 
       setUpdateFormData(null);
       setShowSpinner(false);
@@ -181,138 +181,50 @@ const ControlPanel: React.FC = () => {
   const renderSwitch = (): JSX.Element | null => {
     switch (endpoint) {
       case endpoints.getAllFilms:
-        return <Button onClick={(): void => setShouldGetAllFilms(true)} text={'Get films'} />;
+        return renderGetAllFilmsUI((): void => setShouldGetAllFilms(true));
       case endpoints.getFilmByTitle:
-        return (
-          <>
-            <Input
-              label="Title"
-              onChange={(event): void => {
-                formChangedHandler(event, 'title', 'searchByTitleForm');
-              }}
-              value={searchByTitleVal}
-            />
-            <Button onClick={(): void => setShouldGetFilmByTitle(true)} text={'Get film(s)'} />
-          </>
+        return renderGetFilmsByIDUI(
+          (): void => {
+            formChangedHandler(
+              event as unknown as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              'title',
+              'searchByTitleForm'
+            );
+          },
+          (): void => setShouldGetFilmByTitle(true),
+          searchByTitleVal
         );
       case endpoints.insertFilm:
-        return (
-          <>
-            <h3>Film attributes:</h3>
-
-            <form
-              onSubmit={(event): void => {
-                event.preventDefault();
-              }}
-            >
-              <Input
-                label="Title"
-                onChange={(event): void => formChangedHandler(event, 'title', 'filmForm')}
-              />
-              <Input
-                label="Year"
-                onChange={(event): void => formChangedHandler(event, 'year', 'filmForm')}
-              />
-              <Input
-                label="Director"
-                onChange={(event): void => formChangedHandler(event, 'director', 'filmForm')}
-              />
-              <Input
-                label="Stars"
-                onChange={(event): void => formChangedHandler(event, 'stars', 'filmForm')}
-              />
-              <Input
-                label="Review"
-                onChange={(event): void => formChangedHandler(event, 'review', 'filmForm')}
-              />
-
-              <Button onClick={(): void => setShouldPostFilm(true)} text={'Create new film'} />
-            </form>
-          </>
+        return renderCreateFilmUI(
+          (): void => {
+            formChangedHandler(
+              event as unknown as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              // @ts-expect-error name does exist on event.target
+              event!.target!.name!,
+              'filmForm'
+            );
+          },
+          (): void => setShouldPostFilm(true)
         );
       // actually the update method
       case endpoints.getFilmByID:
-        return (
-          <>
-            {selectedFilm ? (
-              <>
-                <p>
-                  <b>Film:</b> {selectedFilm.title}
-                </p>
-
-                <div className={classes.SelectWrapper}>
-                  <select
-                    className={classes.Select}
-                    name="filmAttributes"
-                    onChange={(event): void => handleSelectChange(event)}
-                  >
-                    <option value={selectedFilm.title}>Title</option>
-                    <option value={selectedFilm.year}>Year</option>
-                    <option value={selectedFilm.director}>Director</option>
-                    <option value={selectedFilm.stars}>Stars</option>
-                    <option value={selectedFilm.review}>Review</option>
-                  </select>
-
-                  {selectedLabel !== 'Review' ? (
-                    <input
-                      className={classes.SelectInput}
-                      placeholder={
-                        selectedAttributeVal ? String(selectedAttributeVal) : selectedFilm.title
-                      }
-                      onChange={(event): void =>
-                        formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')
-                      }
-                      type="text"
-                    />
-                  ) : (
-                    <textarea
-                      className={`${classes.SelectInput} ${classes.ReviewInput}`}
-                      placeholder={
-                        selectedAttributeVal ? String(selectedAttributeVal) : selectedFilm.title
-                      }
-                      onChange={(event): void =>
-                        formChangedHandler(event, selectedLabel.toLowerCase(), 'updateForm')
-                      }
-                    />
-                  )}
-                </div>
-                <Button
-                  className={classes.UpdateFilmButton}
-                  onClick={(): void => setShouldUpdateFilm(true)}
-                  text={'Update Film'}
-                />
-              </>
-            ) : null}
-            {!selectedFilm && selectedFilmID ? (
-              <>
-                <p>
-                  Selected film ID:
-                  {' ' + selectedFilmID}
-                </p>
-                <Button onClick={(): void => setShouldGetFilmByID(true)} text={'Get film data'} />
-              </>
-            ) : null}
-            {!selectedFilm && !selectedFilmID ? (
-              <p>
-                In order to update a film, you must click a film&apos;s ID from the table, which can
-                be retrieved via getting all films, or getting a film by its title
-              </p>
-            ) : null}
-          </>
+        return renderUpdateFilmUI(
+          (): void =>
+            formChangedHandler(
+              event as unknown as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              selectedLabel.toLowerCase(),
+              'updateForm'
+            ),
+          (): void => handleSelectChange(event as unknown as ChangeEvent<HTMLSelectElement>),
+          (): void => setShouldGetFilmByID(true),
+          (): void => setShouldUpdateFilm(true),
+          selectedFilm!,
+          selectedFilmID!,
+          selectedLabel,
+          selectedAttributeVal
         );
       case endpoints.deleteFilm:
-        return (
-          <>
-            {selectedFilmID ? (
-              <>
-                <p>
-                  <b>Film ID:</b> {selectedFilmID}
-                </p>
-                <Button onClick={(): void => setShouldDeleteFilm(true)} text={'Delete film'} />
-              </>
-            ) : null}
-          </>
-        );
+        return renderDeleteFilmUI((): void => setShouldDeleteFilm(true), selectedFilmID!);
       default:
         return null;
     }

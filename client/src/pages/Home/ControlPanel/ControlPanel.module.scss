@@ -26,38 +26,3 @@
 .BottomOperationRadio {
   height: auto;
 }
-
-.SelectWrapper {
-  min-height: 1px;
-  overflow: hidden;
-  width: 100%;
-}
-
-.Select,
-.SelectInput {
-  height: 4vh;
-  padding: 1%;
-}
-
-.SelectWrapper {
-  height: auto;
-  width: 100%;
-}
-
-.Select {
-  width: fit-content;
-}
-
-.SelectInput {
-  width: auto;
-}
-
-.ReviewInput {
-  clear: left;
-  min-height: 20vh;
-  width: 98%;
-}
-
-.UpdateFilmButton {
-  margin-top: 6%;
-}
