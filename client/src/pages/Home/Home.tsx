@@ -93,7 +93,7 @@ const Home: React.FC = () => {
 
   // get all films
   useEffect(() => {
-    const getFilms = async () => {
+    const getFilms = async (): Promise<void> => {
       setShowSpinner(true);
 
       setFilms(await getAllFilms(endpoint, format, useREST));

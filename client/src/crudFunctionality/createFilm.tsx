@@ -6,7 +6,12 @@ import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
 import { csvRequest, jsonRequest, xmlRequest } from '../utils/requests';
 
-const createFilm = async (endpoint: string, format: string, formData: IFilm, useREST: boolean) => {
+const createFilm = async (
+  endpoint: string,
+  format: string,
+  formData: IFilm,
+  useREST: boolean
+): Promise<void> => {
   const url = generateURL(endpoint, format, useREST);
 
   try {
@@ -30,7 +35,10 @@ const createFilm = async (endpoint: string, format: string, formData: IFilm, use
   }
 };
 
-export const renderCreateFilmUI = (formChangedHandler: () => void, onClick: () => void) => {
+export const renderCreateFilmUI = (
+  formChangedHandler: () => void,
+  onClick: () => void
+): JSX.Element => {
   return (
     <>
       <h3>Film attributes:</h3>
