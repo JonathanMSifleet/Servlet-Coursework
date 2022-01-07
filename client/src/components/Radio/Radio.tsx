@@ -6,16 +6,18 @@ interface IProps {
   children?: React.ReactNode;
   className?: string;
   defaultChecked?: boolean;
+  id?: string;
   label: string;
   name: string;
   onClick: () => void;
 }
 
-const Radio: React.FC<IProps> = ({ className, defaultChecked, label, name, onClick }) => {
+const Radio: React.FC<IProps> = ({ className, defaultChecked, id, label, name, onClick }) => {
   return (
     <div className={`${className} ${classes.Wrapper}`}>
       <MDBRadio
         defaultChecked={defaultChecked}
+        id={id}
         inline
         label={label}
         name={name}

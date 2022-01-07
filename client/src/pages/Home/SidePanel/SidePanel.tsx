@@ -1,5 +1,6 @@
 import { MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import FormatRadioGroup from '../../../components/FormatRadioGroup/FormatRadioGroup';
 import Radio from '../../../components/Radio/Radio';
 import * as endpoints from '../../../constants/endpoints';
 import createFilm, { renderCreateFilmUI } from '../../../crudFunctionality/createFilm';
@@ -10,7 +11,7 @@ import getFilmsByTitle from '../../../crudFunctionality/getFilmsByTitle';
 import updateFilm, { renderUpdateFilmUI } from '../../../crudFunctionality/updateFilm';
 import IFilm from '../../../interfaces/IFilm';
 import Output from '../Output/Output';
-import classes from './ControlPanel.module.scss';
+import classes from './SidePanel.module.scss';
 
 const SidePanel: React.FC = () => {
   const [endpoint, setEndpoint] = useState('');
@@ -244,33 +245,13 @@ const SidePanel: React.FC = () => {
               checked={useREST}
             />
 
-            <MDBBtnGroup className={classes.FormatRadioGroup}>
-              <Radio
-                defaultChecked
-                label="JSON"
-                name="formatGroup"
-                onClick={(): void => {
-                  setFormatChanged(true);
-                  setFormat('json');
-                }}
-              />
-              <Radio
-                label="XML"
-                name="formatGroup"
-                onClick={(): void => {
-                  setFormatChanged(true);
-                  setFormat('xml');
-                }}
-              />
-              <Radio
-                label="Text"
-                name="formatGroup"
-                onClick={(): void => {
-                  setFormatChanged(true);
-                  setFormat('csv');
-                }}
-              />
-            </MDBBtnGroup>
+            <FormatRadioGroup
+              onClick={(): void => {
+                setFormatChanged(true);
+                // @ts-expect-error id does exist on event.target
+                setFormat(event!.target!.id);
+              }}
+            />
 
             <MDBBtnGroup className={classes.OperationRadioGroup}>
               <Radio
