@@ -1,7 +1,7 @@
-import { MDBBtnGroup, MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
+import { MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import FormatRadioGroup from '../../../components/FormatRadioGroup/FormatRadioGroup';
-import Radio from '../../../components/Radio/Radio';
+import FormatRadioGroup from '../../../components/RadioGroups/FormatRadioGroup/FormatRadioGroup';
+import OperationRadioGroup from '../../../components/RadioGroups/OperationRadioGroup/OperationRadioGroup';
 import * as endpoints from '../../../constants/endpoints';
 import createFilm, { renderCreateFilmUI } from '../../../crudFunctionality/createFilm';
 import deleteFilm, { renderDeleteFilmUI } from '../../../crudFunctionality/deleteFilm';
@@ -63,8 +63,6 @@ const SidePanel: React.FC = () => {
     inputName: string,
     form: string
   ): void => {
-    console.log('inputName', inputName);
-
     switch (form) {
       case 'filmForm':
         setFormData({
@@ -253,38 +251,12 @@ const SidePanel: React.FC = () => {
               }}
             />
 
-            <MDBBtnGroup className={classes.OperationRadioGroup}>
-              <Radio
-                className={classes.TopOperationRadio}
-                label="Get all films"
-                name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.getAllFilms)}
-              />
-              <Radio
-                className={classes.TopOperationRadio}
-                label="Get film by title"
-                name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.getFilmByTitle)}
-              />
-              <Radio
-                className={classes.TopOperationRadio}
-                label="Add new film"
-                name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.insertFilm)}
-              />
-              <Radio
-                className={classes.BottomOperationRadio}
-                label="Update film"
-                name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.getFilmByID)}
-              />
-              <Radio
-                className={classes.BottomOperationRadio}
-                label="Delete film"
-                name="operationGroup"
-                onClick={(): void => setEndpoint(endpoints.deleteFilm)}
-              />
-            </MDBBtnGroup>
+            <OperationRadioGroup
+              onClick={(): void => {
+                // @ts-expect-error
+                setEndpoint(endpoints[event!.target!.id]);
+              }}
+            />
 
             {renderSwitch()}
 

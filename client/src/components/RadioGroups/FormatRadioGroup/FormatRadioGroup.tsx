@@ -1,6 +1,6 @@
 import { MDBBtnGroup } from 'mdb-react-ui-kit';
 import React from 'react';
-import Radio from '../Radio/Radio';
+import Radio from '../../Radio/Radio';
 import classes from './FormatRadioGroup.module.scss';
 
 interface IProps {

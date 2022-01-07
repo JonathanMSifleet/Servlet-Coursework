@@ -6,7 +6,7 @@ interface IProps {
   children?: React.ReactNode;
   className?: string;
   defaultChecked?: boolean;
-  id?: string;
+  id: string;
   label: string;
   name: string;
   onClick: () => void;
