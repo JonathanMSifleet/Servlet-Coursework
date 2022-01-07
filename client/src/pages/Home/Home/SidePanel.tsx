@@ -1,4 +1,4 @@
-import { MDBCol, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
+import { MDBCol, MDBContainer, MDBRow, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import FormatRadioGroup from '../../../components/RadioGroups/FormatRadioGroup/FormatRadioGroup';
 import OperationRadioGroup from '../../../components/RadioGroups/OperationRadioGroup/OperationRadioGroup';
@@ -11,9 +11,9 @@ import getFilmsByTitle from '../../../crudFunctionality/getFilmsByTitle';
 import updateFilm, { renderUpdateFilmUI } from '../../../crudFunctionality/updateFilm';
 import IFilm from '../../../interfaces/IFilm';
 import Output from '../Output/Output';
-import classes from './SidePanel.module.scss';
+import classes from './Home.module.scss';
 
-const SidePanel: React.FC = () => {
+const Home: React.FC = () => {
   const [endpoint, setEndpoint] = useState('');
   const [films, setFilms] = useState(null as IFilm[] | string | null);
   const [fontReady, setFontReady] = useState(false);
@@ -231,51 +231,53 @@ const SidePanel: React.FC = () => {
 
   // only render if font has loaded
   return (
-    <>
-      {fontReady ? (
-        <>
-          <MDBCol size="md-3" className={classes.LeftContent}>
-            <h3>Format: </h3>
-            <MDBSwitch
-              className={classes.RESTToggle}
-              label="Use REST servlet"
-              onChange={(): void => toggleHandler()}
-              checked={useREST}
+    <MDBContainer className={classes.PageWrapper}>
+      <MDBRow className={classes.PageContent}>
+        {fontReady ? (
+          <>
+            <MDBCol size="md-3" className={classes.LeftContent}>
+              <h3>Format: </h3>
+              <MDBSwitch
+                className={classes.RESTToggle}
+                label="Use REST servlet"
+                onChange={(): void => toggleHandler()}
+                checked={useREST}
+              />
+
+              <FormatRadioGroup
+                onClick={(): void => {
+                  setFormatChanged(true);
+                  // @ts-expect-error id does exist on event.target
+                  setFormat(event!.target!.id);
+                }}
+              />
+
+              <OperationRadioGroup
+                onClick={(): void => {
+                  // @ts-expect-error
+                  setEndpoint(endpoints[event!.target!.id]);
+                }}
+              />
+
+              {renderSwitch()}
+
+              {showSpinner ? (
+                <div className="d-flex justify-content-center">
+                  <MDBSpinner role="status" />
+                </div>
+              ) : null}
+            </MDBCol>
+            <Output
+              films={films as IFilm[]}
+              format={format}
+              formatChanged={formatChanged}
+              sharedSetSelectedFilmID={sharedSetSelectedFilmID}
             />
-
-            <FormatRadioGroup
-              onClick={(): void => {
-                setFormatChanged(true);
-                // @ts-expect-error id does exist on event.target
-                setFormat(event!.target!.id);
-              }}
-            />
-
-            <OperationRadioGroup
-              onClick={(): void => {
-                // @ts-expect-error
-                setEndpoint(endpoints[event!.target!.id]);
-              }}
-            />
-
-            {renderSwitch()}
-
-            {showSpinner ? (
-              <div className="d-flex justify-content-center">
-                <MDBSpinner role="status" />
-              </div>
-            ) : null}
-          </MDBCol>
-          <Output
-            films={films as IFilm[]}
-            format={format}
-            formatChanged={formatChanged}
-            sharedSetSelectedFilmID={sharedSetSelectedFilmID}
-          />
-        </>
-      ) : null}
-    </>
+          </>
+        ) : null}
+      </MDBRow>
+    </MDBContainer>
   );
 };
 
-export default SidePanel;
+export default Home;
