@@ -12,7 +12,7 @@ import IFilm from '../../../interfaces/IFilm';
 import Output from '../Output/Output';
 import classes from './ControlPanel.module.scss';
 
-const ControlPanel: React.FC = () => {
+const SidePanel: React.FC = () => {
   const [endpoint, setEndpoint] = useState('');
   const [films, setFilms] = useState(null as IFilm[] | string | null);
   const [fontReady, setFontReady] = useState(false);
@@ -325,4 +325,4 @@ const ControlPanel: React.FC = () => {
   );
 };
 
-export default ControlPanel;
+export default SidePanel;
