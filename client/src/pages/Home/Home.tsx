@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-globals */
 import { MDBCol, MDBContainer, MDBRow, MDBSpinner, MDBSwitch } from 'mdb-react-ui-kit';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import FormatRadioGroup from '../../components/RadioGroups/FormatRadioGroup/FormatRadioGroup';
 import OperationRadioGroup from '../../components/RadioGroups/OperationRadioGroup/OperationRadioGroup';
 import * as endpoints from '../../constants/endpoints';

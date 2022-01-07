@@ -1,5 +1,4 @@
 import { MDBBtn } from 'mdb-react-ui-kit';
-import React from 'react';
 import classes from './Button.module.scss';
 
 interface IProps {

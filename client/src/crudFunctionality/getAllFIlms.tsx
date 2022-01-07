@@ -26,7 +26,7 @@ const getAllFilms = async (
   }
 };
 
-export const renderGetAllFilmsUI = (onClick: () => void) => {
+export const renderGetAllFilmsUI = (onClick: () => void): JSX.Element => {
   return <Button onClick={onClick} text={'Get films'} />;
 };
 

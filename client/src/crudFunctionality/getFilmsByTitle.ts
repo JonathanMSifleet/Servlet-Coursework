@@ -20,10 +20,8 @@ const getFilmsByTitle = async (
     switch (format) {
       case 'xml':
         return await xmlRequest(url, 'GET');
-        break;
       case 'csv':
         return await csvRequest(url, 'GET');
-        break;
       default:
         return (await jsonRequest(url, 'GET')) as IFilm[];
     }

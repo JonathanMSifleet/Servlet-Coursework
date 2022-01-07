@@ -11,8 +11,8 @@ const updateFilm = async (
   format: string,
   updateFormData: IFilm,
   useREST: boolean
-) => {
-  let url = generateURL(endpoint, format, useREST);
+): Promise<void> => {
+  const url = generateURL(endpoint, format, useREST);
 
   try {
     switch (format) {
@@ -45,7 +45,7 @@ export const renderUpdateFilmUI = (
   selectedFilmID: number,
   selectedLabel: string,
   selectedAttributeVal: string | number
-) => {
+): JSX.Element => {
   return (
     <>
       {selectedFilm ? (

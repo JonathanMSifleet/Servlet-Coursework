@@ -2,8 +2,8 @@ import Button from '../components/Button/Button';
 import generateURL from '../utils/generateURL';
 import { jsonRequest } from '../utils/requests';
 
-const deleteFilm = async (endpoint: string, format: string, useREST: boolean) => {
-  let url = generateURL(endpoint, format, useREST);
+const deleteFilm = async (endpoint: string, format: string, useREST: boolean): Promise<void> => {
+  const url = generateURL(endpoint, format, useREST);
 
   try {
     await jsonRequest(url, 'DELETE');
@@ -12,7 +12,7 @@ const deleteFilm = async (endpoint: string, format: string, useREST: boolean) =>
   }
 };
 
-export const renderDeleteFilmUI = (onClick: () => void, selectedFilmID: number) => {
+export const renderDeleteFilmUI = (onClick: () => void, selectedFilmID: number): JSX.Element => {
   return (
     <>
       {selectedFilmID ? (

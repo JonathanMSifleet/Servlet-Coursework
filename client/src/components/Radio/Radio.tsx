@@ -1,5 +1,4 @@
 import { MDBRadio } from 'mdb-react-ui-kit';
-import React from 'react';
 import classes from './Radio.module.scss';
 
 interface IProps {

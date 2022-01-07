@@ -1,5 +1,4 @@
 import { MDBCol, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
-import React from 'react';
 import IFilm from '../../../interfaces/IFilm';
 import csvToJSON from '../../../utils/csvToJSON';
 import classes from './Output.module.scss';

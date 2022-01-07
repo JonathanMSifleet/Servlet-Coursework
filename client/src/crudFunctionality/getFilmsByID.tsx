@@ -40,7 +40,7 @@ export const renderGetFilmsByIDUI = (
   formChangedHandler: () => void,
   onClick: () => void,
   searchByTitleVal: string
-) => {
+): JSX.Element => {
   return (
     <>
       <Input label="Title" onChange={formChangedHandler} value={searchByTitleVal} />
