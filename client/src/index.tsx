@@ -3,12 +3,12 @@ import '@fontsource/roboto';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Home from './pages/Home/Home';
 import './styles/global.scss';
 
 ReactDOM.render(
   <StrictMode>
-    <App />
+    <Home />
   </StrictMode>,
   document.getElementById('app')
 );
