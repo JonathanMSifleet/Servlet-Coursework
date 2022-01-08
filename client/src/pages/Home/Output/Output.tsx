@@ -1,6 +1,7 @@
 import { MDBCol, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import IFilm from '../../../interfaces/IFilm';
-import csvToJSON from '../../../utils/csvToJSON';
+import { monoCSVFilmToJSON as csvToJSON } from '../../../utils/csvToJSON';
+import { polyXMLFilmToJSON as xmlToJSON } from '../../../utils/xmlToJSON';
 import classes from './Output.module.scss';
 
 interface IProps {
@@ -18,34 +19,13 @@ const Output: React.FC<IProps> = ({ films, format, formatChanged, setSelectedFil
       case 'xml':
         return printFilms(xmlToJSON(films as string));
       case 'csv':
-        return printFilms(convertCSVToJSON(films as string));
+        return printFilms(polyCSVToJSON(films as string));
       default:
         return printFilms(films as IFilm[]);
     }
   };
 
-  const xmlToJSON = (xmlToParse: string): IFilm[] => {
-    const parsedXML = new DOMParser().parseFromString(xmlToParse, 'application/xml');
-    const xmlDocument = parsedXML.getElementsByTagName('root')[0].children;
-
-    const json: IFilm[] = [];
-
-    for (let i = 0; i < xmlDocument.length; i++) {
-      const child = xmlDocument[i];
-
-      const id = parseInt(child.getElementsByTagName('id')[0].textContent!);
-      const title = child.getElementsByTagName('title')[0].textContent!;
-      const year = parseInt(child.getElementsByTagName('year')[0].textContent!);
-      const director = child.getElementsByTagName('director')[0].textContent!;
-      const stars = child.getElementsByTagName('stars')[0].textContent!;
-      const review = child.getElementsByTagName('review')[0].textContent!;
-
-      json.push({ id, title, year, director, stars, review });
-    }
-    return json;
-  };
-
-  const convertCSVToJSON = (csv: string): IFilm[] => {
+  const polyCSVToJSON = (csv: string): IFilm[] => {
     const lines = csv.split('\n');
     const json: IFilm[] = [];
 

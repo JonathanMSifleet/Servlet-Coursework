@@ -1,6 +1,6 @@
 import IFilm from '../interfaces/IFilm';
 
-const xmlToJSON = (xmlToParse: string): IFilm => {
+export const monoXMLFilmToJSON = (xmlToParse: string): IFilm => {
   const parsedXML = new DOMParser().parseFromString(xmlToParse, 'application/xml');
   const xmlDocument = parsedXML.getElementsByTagName('film')[0].children;
 
@@ -14,4 +14,23 @@ const xmlToJSON = (xmlToParse: string): IFilm => {
   return { id, title, year, director, stars, review };
 };
 
-export default xmlToJSON;
+export const polyXMLFilmToJSON = (xmlToParse: string): IFilm[] => {
+  const parsedXML = new DOMParser().parseFromString(xmlToParse, 'application/xml');
+  const xmlDocument = parsedXML.getElementsByTagName('root')[0].children;
+
+  const json: IFilm[] = [];
+
+  for (let i = 0; i < xmlDocument.length; i++) {
+    const child = xmlDocument[i];
+
+    const id = parseInt(child.getElementsByTagName('id')[0].textContent!);
+    const title = child.getElementsByTagName('title')[0].textContent!;
+    const year = parseInt(child.getElementsByTagName('year')[0].textContent!);
+    const director = child.getElementsByTagName('director')[0].textContent!;
+    const stars = child.getElementsByTagName('stars')[0].textContent!;
+    const review = child.getElementsByTagName('review')[0].textContent!;
+
+    json.push({ id, title, year, director, stars, review });
+  }
+  return json;
+};

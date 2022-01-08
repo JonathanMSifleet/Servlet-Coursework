@@ -1,6 +1,6 @@
 import IFilm from '../interfaces/IFilm';
 
-const csvToJSON = (csv: string): IFilm => {
+export const monoCSVFilmToJSON = (csv: string): IFilm => {
   const attributes = csv.split(',,');
 
   return {
@@ -12,5 +12,3 @@ const csvToJSON = (csv: string): IFilm => {
     review: attributes[5]
   };
 };
-
-export default csvToJSON;
