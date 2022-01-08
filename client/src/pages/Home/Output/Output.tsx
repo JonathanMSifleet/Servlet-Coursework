@@ -12,6 +12,17 @@ interface IProps {
 }
 
 const Output: React.FC<IProps> = ({ films, format, formatChanged, setSelectedFilmID }) => {
+  const polyCSVToJSON = (csv: string): IFilm[] => {
+    const lines = csv.split('\n');
+    const json: IFilm[] = [];
+
+    lines.forEach((csvFilm) => {
+      json.push(csvToJSON(csvFilm));
+    });
+
+    return json;
+  };
+
   const handleFormat = (): JSX.Element | null => {
     if (formatChanged) return null;
 
@@ -23,17 +34,6 @@ const Output: React.FC<IProps> = ({ films, format, formatChanged, setSelectedFil
       default:
         return printFilms(films as IFilm[]);
     }
-  };
-
-  const polyCSVToJSON = (csv: string): IFilm[] => {
-    const lines = csv.split('\n');
-    const json: IFilm[] = [];
-
-    lines.forEach((csvFilm) => {
-      json.push(csvToJSON(csvFilm));
-    });
-
-    return json;
   };
 
   const printFilms = (preparedFilms: IFilm[]): JSX.Element => {
