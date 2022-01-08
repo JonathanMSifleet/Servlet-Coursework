@@ -6,7 +6,7 @@ import OperationRadioGroup from '../../../components/RadioGroups/OperationRadioG
 import * as endpoints from '../../../constants/endpoints';
 import createFilm, { renderCreateFilmUI } from '../../../crudFunctionality/createFilm';
 import deleteFilm, { renderDeleteFilmUI } from '../../../crudFunctionality/deleteFilm';
-import getAllFilms, { renderGetAllFilmsUI } from '../../../crudFunctionality/getAllFIlms';
+import getAllFilms, { renderGetAllFilmsUI } from '../../../crudFunctionality/getAllFilms';
 import getFilmByID, { renderGetFilmsByIDUI } from '../../../crudFunctionality/getFilmsByID';
 import getFilmsByTitle from '../../../crudFunctionality/getFilmsByTitle';
 import updateFilm, { renderUpdateFilmUI } from '../../../crudFunctionality/updateFilm';
