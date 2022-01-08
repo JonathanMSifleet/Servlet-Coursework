@@ -20,7 +20,7 @@ import models.Film;
  * Servlet containing other servlet functionality
  */
 @WebServlet("/REST")
-public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
+public class REST extends HttpServlet implements interfaces.IFormatToPOJO, interfaces.IPolyPOJOToFormat, interfaces.IRequestHelpers {
 	private static final long serialVersionUID = -1942414154482873963L;
 
 	/**

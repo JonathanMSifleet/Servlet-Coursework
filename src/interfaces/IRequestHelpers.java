@@ -11,7 +11,7 @@ public interface IRequestHelpers {
 
 	/**
 	 * Send value of payload as a HTTP Response
-	 * 
+	 *
 	 * @param response servlet response
 	 * @param payload  body of HTTP request to send
 	 */
@@ -28,7 +28,7 @@ public interface IRequestHelpers {
 
 	/**
 	 * Sets headers for HTTP response
-	 * 
+	 *
 	 * @param response servlet response
 	 * @param method   HTTP method to be used
 	 * @return response with set headers
@@ -47,7 +47,7 @@ public interface IRequestHelpers {
 
 	/**
 	 * Gets HTTP request body
-	 * 
+	 *
 	 * @param request HTTP request
 	 * @return body of HTTP request
 	 */
@@ -64,7 +64,7 @@ public interface IRequestHelpers {
 
 	/**
 	 * Gets format from URL parameter
-	 * 
+	 *
 	 * @param request servlet request
 	 * @return format from URL parameter
 	 */

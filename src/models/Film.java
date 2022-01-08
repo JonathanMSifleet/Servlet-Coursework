@@ -15,11 +15,10 @@ public class Film {
 
 	/**
 	 * constructor sets film's attributes equal to builder's attributes
-	 * 
+	 *
 	 * @param builder the builder
 	 */
 	private Film(Builder builder) {
-
 		this.id = builder.id;
 		this.title = builder.title;
 		this.year = builder.year;
@@ -86,7 +85,6 @@ public class Film {
 	 * Implementation of Builder Pattern for Film model
 	 */
 	public static class Builder {
-
 		private int id;
 		private String title;
 		private int year;
@@ -100,7 +98,7 @@ public class Film {
 		 * overwritten, by passing the film, and chaining the setter method for the
 		 * attribute that you wish to overwrite
 		 *
-		 * @param film the film
+		 * @param film Film to be modified
 		 */
 		public Builder(Film film) {
 			if (film != null) {
@@ -115,7 +113,7 @@ public class Film {
 
 		/**
 		 * Id.
-		 * 
+		 *
 		 * @param id film's id
 		 * @return sets the film's id
 		 */
@@ -209,8 +207,6 @@ public class Film {
 	public ArrayList<Object> attributesToParamList() {
 		ArrayList<Object> paramVals = new ArrayList<>();
 
-		// convert film attributes to list of parameterS
-		// for SQL query
 		try {
 			paramVals.add(this.getId());
 			paramVals.add(this.getTitle());
@@ -222,7 +218,6 @@ public class Film {
 			e.printStackTrace();
 		}
 
-		// return list of parameters
 		return paramVals;
 	}
 

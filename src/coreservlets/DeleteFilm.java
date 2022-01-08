@@ -14,7 +14,6 @@ import interfaces.IRequestHelpers;
 @WebServlet("/deleteFilm")
 public class DeleteFilm extends HttpServlet implements interfaces.IRequestHelpers {
 
-	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -5107276414138521171L;
 
 	/**

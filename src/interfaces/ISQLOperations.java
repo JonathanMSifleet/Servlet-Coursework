@@ -17,10 +17,10 @@ public interface ISQLOperations {
 
 	/**
 	 * Executes a SELECT SQL Statement
-	 * 
+	 *
 	 * @param SQL       contains parameterised SQL statement
 	 * @param paramVals contains parameters for SQL statement
-	 * 
+	 *
 	 * @return List of Film objects
 	 */
 	static ArrayList<Film> sqlSelect(String SQL, ArrayList<Object> paramVals) {
@@ -28,10 +28,10 @@ public interface ISQLOperations {
 		// it succeeds or fails, freeing up connection to be reused
 		try (Connection conn = ConnectionPoolSingleton.getConnectionPool().getPool().getConnection()) {
 			// convert list of MySQL query parameter's into query
-			PreparedStatement statement = prepareStatement(conn.prepareStatement(SQL), paramVals);
+			PreparedStatement statement = generatePreparedStatement(conn.prepareStatement(SQL), paramVals);
 
 			// execute SQL query and convert to array list of films
-			ArrayList<Film> results = ISQLOperations.resultsToList(statement.executeQuery());
+			ArrayList<Film> results = resultsToList(statement.executeQuery());
 			statement.close();
 			return results;
 		} catch (Exception e) {
@@ -43,10 +43,10 @@ public interface ISQLOperations {
 
 	/**
 	 * Executes a non-SELECT SQL Statement
-	 * 
+	 *
 	 * @param SQL       contains parameterised SQL statement
 	 * @param paramVals contains parameters for SQL statement
-	 * 
+	 *
 	 * @return Number of affected rows due to SQL statement
 	 */
 	static int sqlManipulate(String SQL, ArrayList<Object> paramVals) {
@@ -56,7 +56,7 @@ public interface ISQLOperations {
 		// it succeeds or fails, freeing up connection to be reused
 		try (Connection conn = ConnectionPoolSingleton.getConnectionPool().getPool().getConnection()) {
 			// convert list of MySQL query parameter's into query
-			PreparedStatement statement = prepareStatement(conn.prepareStatement(SQL), paramVals);
+			PreparedStatement statement = generatePreparedStatement(conn.prepareStatement(SQL), paramVals);
 
 			// execute query that manipulates data
 			numResults = statement.executeUpdate();
@@ -70,15 +70,15 @@ public interface ISQLOperations {
 
 	/**
 	 * Converts statement into prepared statement
-	 * 
+	 *
 	 * @param SQL       statement
 	 * @param paramVals contains parameters for SQL statement
 	 * @return Prepared SQL statement
 	 */
-	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals) {
-		int paramIndex = 1;
-
+	static PreparedStatement generatePreparedStatement(PreparedStatement statement, ArrayList<Object> paramVals) {
 		if (paramVals == null) return null;
+
+		int paramIndex = 1;
 
 		// set statement's parameters equal to list of parameters
 		for (Object param : paramVals) {
@@ -97,37 +97,8 @@ public interface ISQLOperations {
 	}
 
 	/**
-	 * Generates new ID for film
-	 * 
-	 * @return integer of the largest film ID found + 1
-	 */
-	static int generateNewID() {
-		// select the largest ID from
-		String SQL = "SELECT(MAX(id)) FROM films";
-
-		// creating connection closes connection regardless of whether
-		// it succeeds or fails, freeing up connection to be reused
-		try (Connection conn = ConnectionPoolSingleton.getConnectionPool().getPool().getConnection()) {
-			// convert list of MySQL query parameter's into query
-			PreparedStatement statement = prepareStatement(conn.prepareStatement(SQL), null);
-
-			// execute SQL
-			ResultSet result = statement.executeQuery();
-
-			while (result.next()) {
-				// return new ID of value of largest ID + 1
-				return result.getInt(1) + 1;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return -1;
-	}
-
-	/**
 	 * Converts SQL ResultSet to list of Films
-	 * 
+	 *
 	 * @param results Results from SQL query
 	 * @return
 	 */
@@ -150,8 +121,8 @@ public interface ISQLOperations {
 	}
 
 	/**
-	 * Converts Singlular result to Film object
-	 * 
+	 * Converts Single result to Film object
+	 *
 	 * @param result SQL result
 	 * @return Film object
 	 */

@@ -106,6 +106,7 @@ const SidePanel: React.FC<IProps> = ({
       setShowSpinner(false);
       setShouldGetAllFilms(false);
     };
+
     if (shouldGetAllFilms) getFilms();
   }, [shouldGetAllFilms]);
 
@@ -257,10 +258,6 @@ const SidePanel: React.FC<IProps> = ({
 
             <OperationRadioGroup
               onClick={(): void => {
-                // @ts-expect-error
-                console.log('test', event!.target!.id);
-                // @ts-expect-error
-                console.log('test2', endpoints[event!.target!.id]);
                 // @ts-expect-error event does exist on event.target
                 setEndpoint(endpoints[event!.target!.id]);
               }}

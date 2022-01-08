@@ -50,8 +50,7 @@ public class GetFilmByID extends HttpServlet implements interfaces.IRequestHelpe
 				break;
 			case "csv":
 				response.setContentType("text/csv");
-				payload = film.getId() + ",," + film.getTitle() + ",," + film.getYear() + ",," + film.getDirector() + ",,"
-						+ film.getStars() + ",," + film.getReview();
+				payload = film.toString();
 				break;
 			default:
 				response.setContentType("application/json");

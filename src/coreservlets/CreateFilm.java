@@ -16,7 +16,7 @@ import models.Film;
  */
 @WebServlet("/createFilm")
 public class CreateFilm extends HttpServlet
-		implements interfaces.IRequestHelpers, interfaces.ISQLOperations, interfaces.IFormatToPOJO {
+		implements interfaces.IRequestHelpers, interfaces.IFormatToPOJO {
 
 	private static final long serialVersionUID = -1809220141023596490L;
 

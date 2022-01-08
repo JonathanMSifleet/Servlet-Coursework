@@ -16,8 +16,8 @@ import models.Film;
  * Get film by title servlet
  */
 @WebServlet("/getFilmByTitle")
-public class GetFilmByTitle extends HttpServlet implements interfaces.IRequestHelpers {
-	
+public class GetFilmByTitle extends HttpServlet implements interfaces.IPolyPOJOToFormat, interfaces.IRequestHelpers {
+
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -1809220141023596490L;
 

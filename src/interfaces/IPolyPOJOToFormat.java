@@ -15,7 +15,7 @@ public interface IPolyPOJOToFormat {
 
 	/**
 	 * Returns list of Film POJOs to JSON
-	 * 
+	 *
 	 * @param data List of Film POJOs
 	 * @return Film POJOs as JSON
 	 */
@@ -25,7 +25,7 @@ public interface IPolyPOJOToFormat {
 
 	/**
 	 * Convert list of Film POJOs to XML
-	 * 
+	 *
 	 * @param data List of Film POJOs
 	 * @return Film POJOs as XML
 	 */
@@ -45,7 +45,7 @@ public interface IPolyPOJOToFormat {
 
 	/**
 	 * Convert list of Film POJOs to CSV
-	 * 
+	 *
 	 * @param data List of Film POJOs
 	 * @return List of Film POJOs as CSV
 	 */

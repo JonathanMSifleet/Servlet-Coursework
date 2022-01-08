@@ -1,7 +1,12 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import connectionPool.ConnectionPoolSingleton;
 import interfaces.ISQLOperations;
 import models.Film;
 
@@ -58,10 +63,9 @@ public class FilmDAOSingleton {
 		String SQL = "SELECT * FROM films WHERE title LIKE ?";
 
 		try {
-			ArrayList<Object> paramVals = new ArrayList<>();
 			// percentage symbols acts as wild card allowing
 			// for any string before and after the value of title
-			paramVals.add("%" + title + "%");
+			ArrayList<Object> paramVals = new ArrayList<>(Arrays.asList("%" + title + "%"));
 
 			// execute sql with title as SQL parameter,
 			// convert results to usable list, then return list
@@ -83,10 +87,9 @@ public class FilmDAOSingleton {
 		// select first film (id is unique per film) all attributes
 		// from film table where film's id is equal to id parameter
 		String SQL = "SELECT * FROM films WHERE id = ? LIMIT 1";
-		ArrayList<Object> paramVals = new ArrayList<>();
 
 		try {
-			paramVals.add(id);
+			ArrayList<Object> paramVals = new ArrayList<>(Arrays.asList(id));
 
 			// execute sql with title as SQL parameter
 			// convert result to usable film POJO, then return film
@@ -105,7 +108,6 @@ public class FilmDAOSingleton {
 	 * @return Integer specifying number of affected row, i.e. 1 = success
 	 */
 	public int createFilm(Film film) {
-		// create new film
 		String SQL = "INSERT INTO films VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
@@ -133,7 +135,7 @@ public class FilmDAOSingleton {
 	public int updateFilm(Film film) {
 		// front-end returns entire film so set each film attributes equal to
 		// film parameter's attributes
-		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, " + "director = ?, stars = ?, review = ? WHERE id = ?";
+		String SQL = "UPDATE films SET id = ?, title = ?, year = ?, director = ?, stars = ?, review = ? WHERE id = ?";
 
 		try {
 			// convert film's parameters to array list
@@ -174,6 +176,38 @@ public class FilmDAOSingleton {
 		}
 
 		return -1;
+	}
+
+	/**
+	 * Generates new ID for film
+	 *
+	 * @return integer of the largest film ID found + 1
+	 */
+	public int generateNewID() {
+		int id = -1;
+
+		// select the largest ID from
+		String SQL = "SELECT(MAX(id)) FROM films";
+
+		// creating connection closes connection regardless of whether
+		// it succeeds or fails, freeing up connection to be reused
+		try (Connection conn = ConnectionPoolSingleton.getConnectionPool().getPool().getConnection()) {
+			Statement statement = conn.createStatement();
+
+			// execute SQL
+			ResultSet result = statement.executeQuery(SQL);
+
+			while (result.next()) {
+				// set ID to value of largest ID + 1
+				id = result.getInt(1) + 1;
+				statement.close();
+				continue;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return id;
 	}
 
 }

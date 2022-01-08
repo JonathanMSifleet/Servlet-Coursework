@@ -3,7 +3,9 @@ package interfaces;
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 
+import dao.FilmDAOSingleton;
 import models.Film;
+import models.Film.Builder;
 
 /**
  * Functionality for converting specific Format to singular Film POJO
@@ -12,27 +14,27 @@ public interface IFormatToPOJO {
 
 	/**
 	 * Convert JSON to Film POJO
-	 * 
+	 *
 	 * @param jsonString Film as JSON
 	 * @param newFilm    Boolean specifying whether new ID for film should be
 	 *                   generated
 	 * @return Film POJO
 	 */
 	static Film jsonToFilm(String jsonString, Boolean newFilm) {
-
 		// if result is a new film then create a new film POJO
 		// from JSON but generate new ID, otherwise create a
 		// new film POJO from JSON using existing ID
-		if (newFilm) {
-			return new Film.Builder(new Gson().fromJson(jsonString, Film.class)).id(ISQLOperations.generateNewID()).build();
-		} else {
-			return new Film.Builder(new Gson().fromJson(jsonString, Film.class)).build();
-		}
+
+		Builder film = new Film.Builder(new Gson().fromJson(jsonString, Film.class));
+
+		if (newFilm) film.id(FilmDAOSingleton.getFilmDAO().generateNewID());
+
+		return film.build();
 	}
 
 	/**
 	 * Converts XML to Film POJO
-	 * 
+	 *
 	 * @param xmlString Film as XML
 	 * @param newFilm   Boolean specifying whether new ID for film should be
 	 *                  generated
@@ -43,21 +45,16 @@ public interface IFormatToPOJO {
 		xstream.allowTypes(new Class[] { Film.class });
 		xstream.processAnnotations(Film.class);
 
-		try {
-			if (newFilm) {
-				return new Film.Builder((Film) xstream.fromXML(xmlString)).id(ISQLOperations.generateNewID()).build();
-			} else {
-				return new Film.Builder((Film) xstream.fromXML(xmlString)).build();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		Builder film = new Film.Builder((Film) xstream.fromXML(xmlString));
+
+		if (newFilm) film.id(FilmDAOSingleton.getFilmDAO().generateNewID());
+
+		return film.build();
 	}
 
 	/**
 	 * Convert CSV to Film POJO
-	 * 
+	 *
 	 * @param csvFilm Film as CSV
 	 * @param newFilm Boolean specifying whether new ID for film should be generated
 	 * @return Film POJO
@@ -66,13 +63,13 @@ public interface IFormatToPOJO {
 		String[] filmAttributes = csvFilm.split(",,");
 
 		// remove quotations from all attributes
-		for (int i = 0; i < filmAttributes.length; i++) {
-			filmAttributes[i] = filmAttributes[i].replace("\"", "");
+		for (String attribute : filmAttributes) {
+			attribute = attribute.replace("\"", "");
 		}
 
 		// same as above jsonToFilm method except using CSV rather than JSON
 		if (newFilm) {
-			return new Film.Builder(null).id(ISQLOperations.generateNewID()).title(filmAttributes[0])
+			return new Film.Builder(null).id(FilmDAOSingleton.getFilmDAO().generateNewID()).title(filmAttributes[0])
 					.year(Integer.valueOf(filmAttributes[1])).director(filmAttributes[2]).stars(filmAttributes[3])
 					.review(filmAttributes[4]).build();
 		} else {
