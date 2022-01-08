@@ -4,13 +4,13 @@ import csvToJSON from '../../../utils/csvToJSON';
 import classes from './Output.module.scss';
 
 interface IProps {
-  films: string | IFilm[];
+  films: string | IFilm[] | null;
   format: string;
   formatChanged: boolean;
-  sharedSetSelectedFilmID: (id: number) => void;
+  setSelectedFilmID: (id: number) => void;
 }
 
-const Output: React.FC<IProps> = ({ films, format, formatChanged, sharedSetSelectedFilmID }) => {
+const Output: React.FC<IProps> = ({ films, format, formatChanged, setSelectedFilmID }) => {
   const handleFormat = (): JSX.Element | null => {
     if (formatChanged) return null;
 
@@ -85,7 +85,7 @@ const Output: React.FC<IProps> = ({ films, format, formatChanged, sharedSetSelec
           {preparedFilms
             ? preparedFilms.map((film: IFilm) => {
                 return (
-                  <tr key={film.id} onClick={(): void => sharedSetSelectedFilmID(film.id!)}>
+                  <tr key={film.id} onClick={(): void => setSelectedFilmID(film.id!)}>
                     <td className={classes.IDCell}>{film.id}</td>
                     <td className={classes.TitleCell}>{film.title}</td>
                     <td className={classes.YearCell}>{film.year}</td>
