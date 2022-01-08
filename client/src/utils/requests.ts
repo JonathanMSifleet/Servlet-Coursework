@@ -3,16 +3,9 @@ import IFilm from '../interfaces/IFilm';
 export const jsonRequest = async (
   url: string,
   method: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  body?: any
+  body?: IFilm | IFilm[]
 ): Promise<IFilm[] | IFilm> => {
-  let options;
-
-  if (body) {
-    options = { method, body: JSON.stringify(body) };
-  } else {
-    options = { method };
-  }
+  const options = body ? { method, body: JSON.stringify(body) } : { method };
 
   const response = await fetch(url, options);
   return await response.json();

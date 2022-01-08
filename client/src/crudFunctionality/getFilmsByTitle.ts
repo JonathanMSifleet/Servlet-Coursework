@@ -12,9 +12,7 @@ const getFilmsByTitle = async (
 
   let url = generateURL(endpoint, format, useREST);
   url = `${url}&title=${searchByTitleVal}`;
-  if (useREST) {
-    url = `${url}&getType=title`;
-  }
+  if (useREST) url = `${url}&getType=title`;
 
   try {
     switch (format) {

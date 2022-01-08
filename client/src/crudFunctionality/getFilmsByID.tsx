@@ -14,10 +14,7 @@ const getFilmByID = async (
 ): Promise<IFilm | null> => {
   let url = generateURL(endpoint, format, useREST);
   url = `${url}&id=${selectedFilmID}`;
-
-  if (useREST) {
-    url = `${url}&getType=id`;
-  }
+  if (useREST) url = `${url}&getType=id`;
 
   try {
     switch (format) {
