@@ -5,13 +5,24 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import ConnectionPool.ConnectionPoolSingleton;
+import connectionPool.ConnectionPoolSingleton;
 import models.Film;
 
 import java.sql.ResultSet;
 
+/**
+ * Responsible for SQL related functionality
+ */
 public interface ISQLOperations {
 
+	/**
+	 * Executes a SELECT SQL Statement
+	 * 
+	 * @param SQL       contains parameterised SQL statement
+	 * @param paramVals contains parameters for SQL statement
+	 * 
+	 * @return List of Film objects
+	 */
 	static ArrayList<Film> sqlSelect(String SQL, ArrayList<Object> paramVals) {
 		// creating connection closes connection regardless of whether
 		// it succeeds or fails, freeing up connection to be reused
@@ -30,6 +41,14 @@ public interface ISQLOperations {
 		return null;
 	}
 
+	/**
+	 * Executes a non-SELECT SQL Statement
+	 * 
+	 * @param SQL       contains parameterised SQL statement
+	 * @param paramVals contains parameters for SQL statement
+	 * 
+	 * @return Number of affected rows due to SQL statement
+	 */
 	static int sqlManipulate(String SQL, ArrayList<Object> paramVals) {
 		int numResults = -1;
 
@@ -49,6 +68,13 @@ public interface ISQLOperations {
 		return numResults;
 	}
 
+	/**
+	 * Converts statement into prepared statement
+	 * 
+	 * @param SQL       statement
+	 * @param paramVals contains parameters for SQL statement
+	 * @return Prepared SQL statement
+	 */
 	static PreparedStatement prepareStatement(PreparedStatement statement, ArrayList<Object> paramVals) {
 		int paramIndex = 1;
 
@@ -70,6 +96,11 @@ public interface ISQLOperations {
 		return statement;
 	}
 
+	/**
+	 * Generates new ID for film
+	 * 
+	 * @return integer of the largest film ID found + 1
+	 */
 	static int generateNewID() {
 		// select the largest ID from
 		String SQL = "SELECT(MAX(id)) FROM films";
@@ -94,6 +125,12 @@ public interface ISQLOperations {
 		return -1;
 	}
 
+	/**
+	 * Converts SQL ResultSet to list of Films
+	 * 
+	 * @param results Results from SQL query
+	 * @return
+	 */
 	static ArrayList<Film> resultsToList(ResultSet results) {
 		ArrayList<Film> films = new ArrayList<>();
 
@@ -112,6 +149,12 @@ public interface ISQLOperations {
 		return null;
 	}
 
+	/**
+	 * Converts Singlular result to Film object
+	 * 
+	 * @param result SQL result
+	 * @return Film object
+	 */
 	static Film resultToFilm(ResultSet result) {
 		// create new film POJO from result parameter
 		try {

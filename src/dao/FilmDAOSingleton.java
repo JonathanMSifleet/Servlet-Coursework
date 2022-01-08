@@ -5,20 +5,33 @@ import java.util.ArrayList;
 import interfaces.ISQLOperations;
 import models.Film;
 
+/**
+ * Implement Data Access Object pattern with Singleton pattern
+ */
 public class FilmDAOSingleton {
-
 	private static FilmDAOSingleton filmDAO;
 
-	// prevent other classes instantiating DAO
+	/**
+	 * Prevents other classes from instantiating a new film DAO singleton.
+	 */
 	private FilmDAOSingleton() {
 	}
 
+	/**
+	 * Instantiates a new film DAO singleton if it doesn't already exist
+	 *
+	 * @return the film DAO
+	 */
 	public static synchronized FilmDAOSingleton getFilmDAO() {
-		// instantiate new film DAO singleton if it doesn't already exist
 		if (filmDAO == null) filmDAO = new FilmDAOSingleton();
 		return filmDAO;
 	}
 
+	/**
+	 * Gets all films from the database
+	 *
+	 * @return All films from Database as List of Film POJOs
+	 */
 	public ArrayList<Film> getAllFilms() {
 		// select all fields and attributes from film table
 		String SQL = "SELECT * FROM films";
@@ -33,6 +46,12 @@ public class FilmDAOSingleton {
 		return null;
 	}
 
+	/**
+	 * Gets all films from database by specific title.
+	 *
+	 * @param title Title to search for
+	 * @return the List of Film POJOs containing specified title
+	 */
 	public ArrayList<Film> getFilmsByTitle(String title) {
 		// select all films and attributes where film's title contains
 		// value of title parameter
@@ -54,6 +73,12 @@ public class FilmDAOSingleton {
 		return null;
 	}
 
+	/**
+	 * Gets film from database with specific ID
+	 *
+	 * @param id ID to search for
+	 * @return Film POJO with specified ID
+	 */
 	public Film getFilmByID(int id) {
 		// select first film (id is unique per film) all attributes
 		// from film table where film's id is equal to id parameter
@@ -73,7 +98,13 @@ public class FilmDAOSingleton {
 		return null;
 	}
 
-	public int insertFilm(Film film) {
+	/**
+	 * Insert new film into database
+	 *
+	 * @param film Film POJO to insert
+	 * @return Integer specifying number of affected row, i.e. 1 = success
+	 */
+	public int createFilm(Film film) {
 		// create new film
 		String SQL = "INSERT INTO films VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -83,7 +114,7 @@ public class FilmDAOSingleton {
 			if (film.getId() == -1) throw new Exception("Invalid film ID");
 
 			// convert film attributes to list of parameters for insert statement
-			ArrayList<Object> paramVals = filmAttributesToParamList(film);
+			ArrayList<Object> paramVals = film.attributesToParamList();
 			// execute SQL
 			return ISQLOperations.sqlManipulate(SQL, paramVals);
 		} catch (Exception e) {
@@ -93,6 +124,12 @@ public class FilmDAOSingleton {
 		return -1;
 	}
 
+	/**
+	 * Update film in database
+	 *
+	 * @param film Film POJO containing updated film
+	 * @return Integer specifying number of affected row, i.e. 1 = success
+	 */
 	public int updateFilm(Film film) {
 		// front-end returns entire film so set each film attributes equal to
 		// film parameter's attributes
@@ -100,7 +137,7 @@ public class FilmDAOSingleton {
 
 		try {
 			// convert film's parameters to array list
-			ArrayList<Object> paramVals = filmAttributesToParamList(film);
+			ArrayList<Object> paramVals = film.attributesToParamList();
 
 			// set last parameter in list equal to films id
 			// to fulfil WHERE clause
@@ -115,6 +152,12 @@ public class FilmDAOSingleton {
 		return -1;
 	}
 
+	/**
+	 * Delete film from database
+	 *
+	 * @param id ID of film to delete
+	 * @return Integer specifying number of affected row, i.e. 1 = success
+	 */
 	public int deleteFilm(int id) {
 		// delete film from table where film's ID
 		// is equal to id parameter's value
@@ -133,23 +176,4 @@ public class FilmDAOSingleton {
 		return -1;
 	}
 
-	private ArrayList<Object> filmAttributesToParamList(Film film) {
-		ArrayList<Object> paramVals = new ArrayList<>();
-
-		// convert film attributes to list of parameterS
-		// for SQL query
-		try {
-			paramVals.add(film.getId());
-			paramVals.add(film.getTitle());
-			paramVals.add(film.getYear());
-			paramVals.add(film.getDirector());
-			paramVals.add(film.getStars());
-			paramVals.add(film.getReview());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// return list of parameters
-		return paramVals;
-	}
 }

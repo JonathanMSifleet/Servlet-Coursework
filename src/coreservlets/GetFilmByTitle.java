@@ -12,10 +12,21 @@ import interfaces.IRequestHelpers;
 import interfaces.IPolyPOJOToFormat;
 import models.Film;
 
+/**
+ * Get film by title servlet
+ */
 @WebServlet("/getFilmByTitle")
 public class GetFilmByTitle extends HttpServlet implements interfaces.IRequestHelpers {
+	
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -1809220141023596490L;
 
+	/**
+	 * Get film by title functionality
+	 *
+	 * @param request the request
+	 * @param response the response
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 

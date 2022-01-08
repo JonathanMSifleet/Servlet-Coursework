@@ -12,11 +12,21 @@ import interfaces.IRequestHelpers;
 import interfaces.IPolyPOJOToFormat;
 import models.Film;
 
+/**
+ * GetAllFilms servlet
+ */
 @WebServlet("/getAllFilms")
-public class GetAllFilms extends HttpServlet
-		implements interfaces.IRequestHelpers, interfaces.IPolyPOJOToFormat {
+public class GetAllFilms extends HttpServlet implements interfaces.IRequestHelpers, interfaces.IPolyPOJOToFormat {
+
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -1809220141023596490L;
 
+	/**
+	 * Get all films functionality
+	 *
+	 * @param request  HTTP request
+	 * @param response HTTP response
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers

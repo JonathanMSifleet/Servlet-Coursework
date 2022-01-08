@@ -25,7 +25,7 @@ const OperationRadioGroup: React.FC<IProps> = ({ onClick }) => {
       />
       <Radio
         className={classes.TopOperationRadio}
-        id="INSERT_FILM"
+        id="CREATE_FILM"
         label="Add new film"
         name="operationGroup"
         onClick={onClick}

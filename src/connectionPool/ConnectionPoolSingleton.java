@@ -1,19 +1,28 @@
-package ConnectionPool;
+package connectionPool;
 
 import javax.sql.DataSource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+/**
+ * Responsible for maintaining ConnectionPool.
+ */
 public class ConnectionPoolSingleton {
-
 	private static ConnectionPoolSingleton connectionPool;
 	private static DataSource pool;
 
-	// prevent other classes instantiating Connection pool
+	/**
+	 * Prevent other classes instantiating Connection pool.
+	 */
 	private ConnectionPoolSingleton() {
 	}
 
+	/**
+	 * Gets the connection pool, or creates one if it doesn't exist.
+	 *
+	 * @return Connection Pool
+	 */
 	public static synchronized ConnectionPoolSingleton getConnectionPool() {
 		if (connectionPool == null) connectionPool = new ConnectionPoolSingleton();
 		setPool(createConnectionPool());
@@ -21,6 +30,11 @@ public class ConnectionPoolSingleton {
 		return connectionPool;
 	}
 
+	/**
+	 * Creates new connection pool based on configuration.
+	 *
+	 * @return New connection pool
+	 */
 	private static DataSource createConnectionPool() {
 		HikariConfig config = new HikariConfig();
 
@@ -50,10 +64,20 @@ public class ConnectionPoolSingleton {
 		return new HikariDataSource(config);
 	}
 
+	/**
+	 * Gets the pool.
+	 *
+	 * @return the pool
+	 */
 	public DataSource getPool() {
 		return pool;
 	}
 
+	/**
+	 * Sets the pool.
+	 *
+	 * @param pool the new pool
+	 */
 	private static void setPool(DataSource pool) {
 		ConnectionPoolSingleton.pool = pool;
 	}

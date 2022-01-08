@@ -1,6 +1,7 @@
 package coreservlets;
 
 import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,11 +11,22 @@ import interfaces.IFormatToPOJO;
 import interfaces.IRequestHelpers;
 import models.Film;
 
-@WebServlet("/insertFilm")
-public class InsertFilm extends HttpServlet implements interfaces.IRequestHelpers, interfaces.ISQLOperations,
-		interfaces.IFormatToPOJO {
+/**
+ * Create film functionality
+ */
+@WebServlet("/createFilm")
+public class CreateFilm extends HttpServlet
+		implements interfaces.IRequestHelpers, interfaces.ISQLOperations, interfaces.IFormatToPOJO {
+
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -1809220141023596490L;
 
+	/**
+	 * Create film functionality
+	 *
+	 * @param request  HTTP request
+	 * @param response HTTP response
+	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
@@ -40,8 +52,8 @@ public class InsertFilm extends HttpServlet implements interfaces.IRequestHelper
 				film = IFormatToPOJO.jsonToFilm(requestBodyFilm, true);
 		};
 
-		// send response containing number of rows affected by inserting new film
-		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().insertFilm(film));
+		// send response containing number of rows affected by creating new film
+		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().createFilm(film));
 	}
 
 }

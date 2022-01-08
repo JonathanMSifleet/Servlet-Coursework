@@ -12,10 +12,19 @@ import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
 import models.Film;
 
+/**
+ * Get film by ID servlet
+ */
 @WebServlet("/getFilmByID")
 public class GetFilmByID extends HttpServlet implements interfaces.IRequestHelpers {
 	private static final long serialVersionUID = -1809220141023596490L;
 
+	/**
+	 * Get film by ID functionality
+	 *
+	 * @param request  HTTP request
+	 * @param response HTTP response
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 

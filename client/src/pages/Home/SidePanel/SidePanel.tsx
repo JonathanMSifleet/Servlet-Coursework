@@ -198,7 +198,7 @@ const SidePanel: React.FC<IProps> = ({
           (): void => setShouldGetFilmByTitle(true),
           searchByTitleVal
         );
-      case endpoints.INSERT_FILM:
+      case endpoints.CREATE_FILM:
         return renderCreateFilmUI(
           (): void => {
             formChangedHandler(

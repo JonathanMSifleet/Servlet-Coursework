@@ -5,8 +5,19 @@ import com.thoughtworks.xstream.XStream;
 
 import models.Film;
 
+/**
+ * Functionality for converting specific Format to singular Film POJO
+ */
 public interface IFormatToPOJO {
 
+	/**
+	 * Convert JSON to Film POJO
+	 * 
+	 * @param jsonString Film as JSON
+	 * @param newFilm    Boolean specifying whether new ID for film should be
+	 *                   generated
+	 * @return Film POJO
+	 */
 	static Film jsonToFilm(String jsonString, Boolean newFilm) {
 
 		// if result is a new film then create a new film POJO
@@ -19,6 +30,14 @@ public interface IFormatToPOJO {
 		}
 	}
 
+	/**
+	 * Converts XML to Film POJO
+	 * 
+	 * @param xmlString Film as XML
+	 * @param newFilm   Boolean specifying whether new ID for film should be
+	 *                  generated
+	 * @return Film POJO
+	 */
 	static Film xmlToFilm(String xmlString, Boolean newFilm) {
 		XStream xstream = new XStream();
 		xstream.allowTypes(new Class[] { Film.class });
@@ -36,6 +55,13 @@ public interface IFormatToPOJO {
 		return null;
 	}
 
+	/**
+	 * Convert CSV to Film POJO
+	 * 
+	 * @param csvFilm Film as CSV
+	 * @param newFilm Boolean specifying whether new ID for film should be generated
+	 * @return Film POJO
+	 */
 	static Film csvToFilm(String csvFilm, Boolean newFilm) {
 		String[] filmAttributes = csvFilm.split(",,");
 

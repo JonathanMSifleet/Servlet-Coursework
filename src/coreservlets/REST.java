@@ -16,10 +16,19 @@ import interfaces.IFormatToPOJO;
 import interfaces.IPolyPOJOToFormat;
 import models.Film;
 
+/**
+ * Servlet containing other servlet functionality
+ */
 @WebServlet("/REST")
 public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 	private static final long serialVersionUID = -1942414154482873963L;
 
+	/**
+	 * Functionality for GET requests
+	 *
+	 * @param request  HTTP request
+	 * @param response HTTP response
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
@@ -52,6 +61,12 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 		IRequestHelpers.sendResponse(response, payload);
 	}
 
+	/**
+	 * Functionality for POST requests
+	 *
+	 * @param request  HTTP request
+	 * @param response HTTP response
+	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
@@ -76,11 +91,17 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 				film = IFormatToPOJO.jsonToFilm(requestBodyFilm, true);
 		};
 
-		// send response containing number of rows affected by inserting
+		// send response containing number of rows affected by creating
 		// new film
-		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().insertFilm(film));
+		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().createFilm(film));
 	}
 
+	/**
+	 * Functionality for PUT requests
+	 *
+	 * @param request  HTTP request
+	 * @param response HTTP response
+	 */
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
@@ -109,6 +130,12 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().updateFilm(film));
 	}
 
+	/**
+	 * Functionality for DELETE request
+	 *
+	 * @param request  HTTP request
+	 * @param response HTTP response
+	 */
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
@@ -120,18 +147,43 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().deleteFilm(id));
 	}
 
+	/**
+	 * Return formatted list of all films
+	 *
+	 * @param filmDAO  Film DAO object
+	 * @param format   Format for Films
+	 * @param response HTTP response
+	 * @return List of all Films in specified format
+	 */
 	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {
-		// return formatted list of all films
-		return handleGetAllOrByTitleFormat(filmDAO.getAllFilms(), format, response);
+		return formatFilms(filmDAO.getAllFilms(), format, response);
 	}
 
+	/**
+	 * Return formatted list of films containing specified title.
+	 *
+	 * @param filmDAO  Film DAO object
+	 * @param format   Format for Films
+	 * @param title    Title of film to search for
+	 * @param response HTTP response
+	 * @return List of Films containing specified title in specified format
+	 */
 	private static Object getFilmByTitle(FilmDAOSingleton filmDAO, String format, String title,
 			HttpServletResponse response) {
 		// return formatted list of all films with a title
 		// containing the value of the title parameter
-		return handleGetAllOrByTitleFormat(filmDAO.getFilmsByTitle(title), format, response);
+		return formatFilms(filmDAO.getFilmsByTitle(title), format, response);
 	}
 
+	/**
+	 * Gets the film by ID.
+	 *
+	 * @param filmDAO  Film DAO object
+	 * @param format   Format for Films
+	 * @param id       ID of film to search for
+	 * @param response HTTP response
+	 * @return Film in specified format
+	 */
 	private static Object getFilmByID(FilmDAOSingleton filmDAO, String format, int id, HttpServletResponse response) {
 		// get film by ID parameter
 		Film film = filmDAO.getFilmByID(id);
@@ -160,11 +212,17 @@ public class REST extends HttpServlet implements interfaces.IPolyPOJOToFormat {
 		return payload;
 	}
 
-	private static Object handleGetAllOrByTitleFormat(ArrayList<Film> films, String format,
-			HttpServletResponse response) {
+	/**
+	 * Format films by appropriate format
+	 *
+	 * @param films    List of Film POJOs
+	 * @param format   Format for Films
+	 * @param response HTTP response
+	 * @return List of films in specified format
+	 */
+	private static Object formatFilms(ArrayList<Film> films, String format, HttpServletResponse response) {
 		Object payload;
 
-		// format list of films by appropriate format
 		switch (format) {
 			case "xml":
 				response.setContentType("text/xml");

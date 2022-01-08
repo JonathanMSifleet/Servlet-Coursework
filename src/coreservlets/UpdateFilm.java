@@ -10,10 +10,19 @@ import interfaces.IRequestHelpers;
 import interfaces.IFormatToPOJO;
 import models.Film;
 
+/**
+ * Update Film Servlet
+ */
 @WebServlet("/updateFilm")
 public class UpdateFilm extends HttpServlet implements interfaces.IRequestHelpers, interfaces.IFormatToPOJO {
 	private static final long serialVersionUID = -909062916095173117L;
 
+	/**
+	 * Servlet with Update film functionality
+	 *
+	 * @param request  HTTP request
+	 * @param response HTTP response
+	 */
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) {
 
