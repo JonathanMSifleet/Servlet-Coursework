@@ -20,17 +20,13 @@ const Home: React.FC = () => {
           setFilms={(films: IFilm[] | string | null): void => setFilms(films)}
           setFormat={(format: string): void => setFormat(format)}
           setFormatChanged={(formatChanged: boolean): void => setFormatChanged(formatChanged)}
-          setSelectedFilmID={(selectedFilmID: number | null): void =>
-            setSelectedFilmID(selectedFilmID)
-          }
+          setSelectedFilmID={(selectedFilmID: number | null): void => setSelectedFilmID(selectedFilmID)}
         />
         <Output
           films={films as IFilm[] | string | null}
           format={format}
           formatChanged={formatChanged}
-          setSelectedFilmID={(selectedFilmID: number | null): void =>
-            setSelectedFilmID(selectedFilmID)
-          }
+          setSelectedFilmID={(selectedFilmID: number | null): void => setSelectedFilmID(selectedFilmID)}
         />
       </MDBRow>
     </MDBContainer>

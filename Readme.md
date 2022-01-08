@@ -26,7 +26,7 @@ $ gcloud app logs tail -s default
 
 To view your application in the web browser run: - "gcloud app browse --project=servletcoursework-336513"
 
-11. After accessing the backend URL, open the file from the project root/client/src/constants/endpoints.js
+11. After accessing the backend URL, open the file from the 'project root/client/src/components/RadioGroups/OperationRadioGroup/OperationRadioGroup.tsx'
 12. Replace the existing URL in the root constant to the value of the copied URL with no forward slashes appended to the end of the URL
     - const root = 'https://industrial-pad-336114.nw.r.appspot.com';
     - becomes:
@@ -78,7 +78,7 @@ To view your application in the web browser run: - "gcloud app browse --project=
     - Click "Import"
 13. Scroll down to the section "Connect to this instance"
 14. Copy the text under "Connection name", e.g. "servletcoursework-336513:europe-west2:servletcourseworkdb2"
-15. Open the file found in the project root/src/ConnectionPool/ConnectionPoolSingleton.java
+15. Open the file found in the project root/src/connectionPool/ConnectionPoolSingleton.java
 16. Replace the variable "connectionName" with the previously copied connection name
 17. Replace the variable "databaseName" with the name of the database, it should be "servletcoursework" if step 10 was followed correctly
 18. Replace the variable "password" with the password generated in step 5

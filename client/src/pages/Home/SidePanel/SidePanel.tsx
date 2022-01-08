@@ -7,8 +7,8 @@ import * as endpoints from '../../../constants/endpoints';
 import createFilm, { renderCreateFilmUI } from '../../../crudFunctionality/createFilm';
 import deleteFilm, { renderDeleteFilmUI } from '../../../crudFunctionality/deleteFilm';
 import getAllFilms, { renderGetAllFilmsUI } from '../../../crudFunctionality/getAllFilms';
-import getFilmByID, { renderGetFilmsByIDUI } from '../../../crudFunctionality/getFilmsByID';
-import getFilmsByTitle from '../../../crudFunctionality/getFilmsByTitle';
+import getFilmByID from '../../../crudFunctionality/getFilmsByID';
+import getFilmsByTitle, { renderGetFilmsByTitleUI } from '../../../crudFunctionality/getFilmsByTitle';
 import updateFilm, { renderUpdateFilmUI } from '../../../crudFunctionality/updateFilm';
 import IFilm from '../../../interfaces/IFilm';
 import classes from './SidePanel.module.scss';
@@ -34,9 +34,7 @@ const SidePanel: React.FC<IProps> = ({
   const [fontReady, setFontReady] = useState(false);
   const [formData, setFormData] = useState(null as IFilm | null);
   const [searchByTitleVal, setSearchByTitleVal] = useState('');
-  const [selectedAttributeVal, setSelectedAttributeVal] = useState(
-    null as unknown as number | string
-  );
+  const [selectedAttributeVal, setSelectedAttributeVal] = useState(null as unknown as number | string);
   const [selectedFilm, setSelectedFilm] = useState(null as IFilm | null);
   const [selectedLabel, setSelectedLabel] = useState('Title');
   const [shouldDeleteFilm, setShouldDeleteFilm] = useState(false);
@@ -131,7 +129,7 @@ const SidePanel: React.FC<IProps> = ({
   useEffect(() => {
     const getFilm = async (): Promise<void> => {
       setShowSpinner(true);
-      setSelectedFilm(await getFilmByID(endpoint, format, selectedFilmID!, useREST));
+      setSelectedFilm(await getFilmByID(endpoints.GET_FILM_BY_ID, format, selectedFilmID!, useREST));
 
       setShowSpinner(false);
       setShouldGetFilmByID(false);
@@ -159,7 +157,7 @@ const SidePanel: React.FC<IProps> = ({
     const putFilm = async (): Promise<void> => {
       setShowSpinner(true);
 
-      await updateFilm(endpoints.updateFilm, format, updateFormData!, useREST);
+      await updateFilm(endpoint, format, updateFormData!, useREST);
 
       setUpdateFormData(null);
       setShowSpinner(false);
@@ -186,10 +184,10 @@ const SidePanel: React.FC<IProps> = ({
 
   const renderSwitch = (): JSX.Element | null => {
     switch (endpoint) {
-      case endpoints.getAllFilms:
+      case endpoints.GET_ALL_FILMS:
         return renderGetAllFilmsUI((): void => setShouldGetAllFilms(true));
-      case endpoints.getFilmByTitle:
-        return renderGetFilmsByIDUI(
+      case endpoints.GET_FILM_BY_TITLE:
+        return renderGetFilmsByTitleUI(
           (): void => {
             formChangedHandler(
               event as unknown as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -200,7 +198,7 @@ const SidePanel: React.FC<IProps> = ({
           (): void => setShouldGetFilmByTitle(true),
           searchByTitleVal
         );
-      case endpoints.insertFilm:
+      case endpoints.INSERT_FILM:
         return renderCreateFilmUI(
           (): void => {
             formChangedHandler(
@@ -212,8 +210,7 @@ const SidePanel: React.FC<IProps> = ({
           },
           (): void => setShouldPostFilm(true)
         );
-      // actually the update method
-      case endpoints.getFilmByID:
+      case endpoints.UPDATE_FILM:
         return renderUpdateFilmUI(
           (): void =>
             formChangedHandler(
@@ -229,7 +226,7 @@ const SidePanel: React.FC<IProps> = ({
           selectedLabel,
           selectedAttributeVal
         );
-      case endpoints.deleteFilm:
+      case endpoints.DELETE_FILM:
         return renderDeleteFilmUI((): void => setShouldDeleteFilm(true), selectedFilmID!);
       default:
         return null;
@@ -261,6 +258,10 @@ const SidePanel: React.FC<IProps> = ({
             <OperationRadioGroup
               onClick={(): void => {
                 // @ts-expect-error
+                console.log('test', event!.target!.id);
+                // @ts-expect-error
+                console.log('test2', endpoints[event!.target!.id]);
+                // @ts-expect-error event does exist on event.target
                 setEndpoint(endpoints[event!.target!.id]);
               }}
             />

@@ -11,35 +11,35 @@ const OperationRadioGroup: React.FC<IProps> = ({ onClick }) => {
     <MDBBtnGroup className={classes.OperationRadioGroup}>
       <Radio
         className={classes.TopOperationRadio}
-        id="getAllFilms"
+        id="GET_ALL_FILMS"
         label="Get all films"
         name="operationGroup"
         onClick={onClick}
       />
       <Radio
         className={classes.TopOperationRadio}
-        id="getFilmByTitle"
+        id="GET_FILM_BY_TITLE"
         label="Get film by title"
         name="operationGroup"
         onClick={onClick}
       />
       <Radio
         className={classes.TopOperationRadio}
-        id="insertFilm"
+        id="INSERT_FILM"
         label="Add new film"
         name="operationGroup"
         onClick={onClick}
       />
       <Radio
         className={classes.BottomOperationRadio}
-        id="getFilmByID"
+        id="UPDATE_FILM"
         label="Update film"
         name="operationGroup"
         onClick={onClick}
       />
       <Radio
         className={classes.BottomOperationRadio}
-        id="deleteFilm"
+        id="DELETE_FILM"
         label="Delete film"
         name="operationGroup"
         onClick={onClick}
