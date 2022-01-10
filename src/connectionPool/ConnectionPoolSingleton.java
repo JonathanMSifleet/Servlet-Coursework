@@ -24,8 +24,10 @@ public class ConnectionPoolSingleton {
 	 * @return Connection Pool
 	 */
 	public static synchronized ConnectionPoolSingleton getConnectionPool() {
-		if (connectionPool == null) connectionPool = new ConnectionPoolSingleton();
-		setPool(createConnectionPool());
+		if (connectionPool == null) {
+			connectionPool = new ConnectionPoolSingleton();
+			pool = createConnectionPool();
+		}
 
 		return connectionPool;
 	}
@@ -52,14 +54,14 @@ public class ConnectionPoolSingleton {
 		config.addDataSourceProperty("cloudSqlInstance", connectionName);
 
 		config.setMaximumPoolSize(99);
-		config.setMinimumIdle(5);
+		config.setMinimumIdle(1);
 
 		// establish connection timeout: 10 seconds
 		config.setConnectionTimeout(10 * 1000);
-		// timeout: 5 minutes
-		config.setIdleTimeout(5 * 60 * 1000);
-		// max connection length: 30 minutes
-		config.setMaxLifetime(30 * 60 * 1000);
+		// time before connection can be reused: 5 seconds
+		config.setIdleTimeout(30 * 1000);
+		// max connection length: 2 minutes
+		config.setMaxLifetime(2 * 60 * 1000);
 
 		return new HikariDataSource(config);
 	}
@@ -71,15 +73,6 @@ public class ConnectionPoolSingleton {
 	 */
 	public DataSource getPool() {
 		return pool;
-	}
-
-	/**
-	 * Sets the pool.
-	 *
-	 * @param pool the new pool
-	 */
-	private static void setPool(DataSource pool) {
-		ConnectionPoolSingleton.pool = pool;
 	}
 
 }

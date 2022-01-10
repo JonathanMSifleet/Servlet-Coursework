@@ -18,7 +18,6 @@ import models.Film;
 public class CreateFilm extends HttpServlet
 		implements interfaces.IRequestHelpers, interfaces.ISQLOperations, interfaces.IFormatToPOJO {
 
-	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	/**
