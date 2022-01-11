@@ -1,4 +1,4 @@
-package formatStrategy;
+package pojoFormatStrategy;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -6,7 +6,7 @@ import dao.FilmDAOSingleton;
 import models.Film;
 import models.Film.Builder;
 
-public class XmlToPOJO implements Strategy {
+public class XmlToPOJO implements PojoFormatStrategy {
 	/**
 	 * Converts XML to Film POJO
 	 *

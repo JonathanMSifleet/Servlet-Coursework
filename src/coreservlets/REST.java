@@ -12,15 +12,19 @@ import com.thoughtworks.xstream.XStream;
 
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
-import interfaces.IFormatToPOJO;
 import interfaces.IPolyPOJOToFormat;
 import models.Film;
+import pojoFormatStrategy.PojoFormatContext;
+import pojoFormatStrategy.CsvToPOJO;
+import pojoFormatStrategy.JsonToPOJO;
+import pojoFormatStrategy.XmlToPOJO;
 
 /**
  * Servlet containing other servlet functionality
  */
 @WebServlet("/REST")
-public class REST extends HttpServlet implements interfaces.IFormatToPOJO, interfaces.IPolyPOJOToFormat, interfaces.IRequestHelpers {
+public class REST extends HttpServlet
+		implements interfaces.IPolyPOJOToFormat, interfaces.IRequestHelpers {
 	private static final long serialVersionUID = -1942414154482873963L;
 
 	/**
@@ -34,10 +38,12 @@ public class REST extends HttpServlet implements interfaces.IFormatToPOJO, inter
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "GET");
 
-		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
-		Object payload = null;
+		
+		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
+
+		Object films = null;
 
 		// get get type from url
 		String getType = request.getParameter("getType");
@@ -46,19 +52,19 @@ public class REST extends HttpServlet implements interfaces.IFormatToPOJO, inter
 		// based on get type from url
 		switch (getType) {
 			case "all":
-				payload = getAllFilms(filmDAO, format, response);
+				films = getAllFilms(filmDAO, format, response);
 				break;
 			case "title":
 				String title = request.getParameter("title");
-				payload = getFilmByTitle(filmDAO, format, title, response);
+				films = getFilmByTitle(filmDAO, format, title, response);
 				break;
 			case "id":
 				int id = Integer.parseInt(request.getParameter("id"));
-				payload = getFilmByID(filmDAO, format, id, response);
+				films = getFilmByID(filmDAO, format, id, response);
 		}
 
 		// send response containing film(s)
-		IRequestHelpers.sendResponse(response, payload);
+		IRequestHelpers.sendResponse(response, films);
 	}
 
 	/**
@@ -72,24 +78,15 @@ public class REST extends HttpServlet implements interfaces.IFormatToPOJO, inter
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "POST");
 
-		// get film from HTTP body
-		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
 
+		// get film from HTTP body
+		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
+
 		// set film equal to film object converted based on
 		// relevant format
-		Film film;
-		switch (format) {
-			case "xml":
-				film = IFormatToPOJO.xmlToFilm(requestBodyFilm, true);
-				break;
-			case "csv":
-				film = IFormatToPOJO.csvToFilm(requestBodyFilm, true);
-				break;
-			default:
-				film = IFormatToPOJO.jsonToFilm(requestBodyFilm, true);
-		};
+		Film film = formatFilm(format, requestBodyFilm);
 
 		// send response containing number of rows affected by creating
 		// new film
@@ -107,24 +104,15 @@ public class REST extends HttpServlet implements interfaces.IFormatToPOJO, inter
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "PUT");
 
-		// get film from HTTP body
-		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
 
+		// get film from HTTP body
+		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
+
 		// set film equal to film object converted based on
 		// relevant format
-		Film film;
-		switch (format) {
-			case "xml":
-				film = IFormatToPOJO.xmlToFilm(requestBodyFilm, false);
-				break;
-			case "csv":
-				film = IFormatToPOJO.csvToFilm(requestBodyFilm, false);
-				break;
-			default:
-				film = IFormatToPOJO.jsonToFilm(requestBodyFilm, false);
-		};
+		Film film = formatFilm(format, requestBodyFilm);
 
 		// print number of affected rows due to updating film
 		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().updateFilm(film));
@@ -156,7 +144,7 @@ public class REST extends HttpServlet implements interfaces.IFormatToPOJO, inter
 	 * @return List of all Films in specified format
 	 */
 	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {
-		return formatFilms(filmDAO.getAllFilms(), format, response);
+		return formatMultipleFilms(filmDAO.getAllFilms(), format, response);
 	}
 
 	/**
@@ -172,7 +160,7 @@ public class REST extends HttpServlet implements interfaces.IFormatToPOJO, inter
 			HttpServletResponse response) {
 		// return formatted list of all films with a title
 		// containing the value of the title parameter
-		return formatFilms(filmDAO.getFilmsByTitle(title), format, response);
+		return formatMultipleFilms(filmDAO.getFilmsByTitle(title), format, response);
 	}
 
 	/**
@@ -211,6 +199,17 @@ public class REST extends HttpServlet implements interfaces.IFormatToPOJO, inter
 		return payload;
 	}
 
+	private Film formatFilm(String format, String requestBodyFilm) {
+		switch (format) {
+			case "xml":
+				return new PojoFormatContext(new XmlToPOJO()).convertToPOJO(requestBodyFilm, true);
+			case "csv":
+				return new PojoFormatContext(new CsvToPOJO()).convertToPOJO(requestBodyFilm, true);
+			default:
+				return new PojoFormatContext(new JsonToPOJO()).convertToPOJO(requestBodyFilm, true);
+		}
+	}
+
 	/**
 	 * Format films by appropriate format
 	 *
@@ -219,7 +218,7 @@ public class REST extends HttpServlet implements interfaces.IFormatToPOJO, inter
 	 * @param response HTTP response
 	 * @return List of films in specified format
 	 */
-	private static Object formatFilms(ArrayList<Film> films, String format, HttpServletResponse response) {
+	private static Object formatMultipleFilms(ArrayList<Film> films, String format, HttpServletResponse response) {
 		Object payload;
 
 		switch (format) {

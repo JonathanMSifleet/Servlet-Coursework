@@ -29,10 +29,13 @@ public class GetAllFilms extends HttpServlet implements interfaces.IRequestHelpe
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "GET");
-		// get all films from data access object
-		ArrayList<Film> films = FilmDAOSingleton.getFilmDAO().getAllFilms();
+		
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
+		
+		// get all films from data access object
+		ArrayList<Film> films = FilmDAOSingleton.getFilmDAO().getAllFilms();
+
 		Object formattedFilms = formatFilms(format, films, response);
 
 		// send response containing formatted list of all films

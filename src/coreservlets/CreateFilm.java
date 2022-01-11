@@ -7,16 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
-import interfaces.IFormatToPOJO;
 import interfaces.IRequestHelpers;
 import models.Film;
+import pojoFormatStrategy.PojoFormatContext;
+import pojoFormatStrategy.CsvToPOJO;
+import pojoFormatStrategy.JsonToPOJO;
+import pojoFormatStrategy.XmlToPOJO;
 
 /**
  * Create film functionality
  */
 @WebServlet("/createFilm")
-public class CreateFilm extends HttpServlet
-		implements interfaces.IRequestHelpers, interfaces.IFormatToPOJO {
+public class CreateFilm extends HttpServlet implements interfaces.IRequestHelpers {
 
 	private static final long serialVersionUID = -1809220141023596490L;
 
@@ -32,27 +34,29 @@ public class CreateFilm extends HttpServlet
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "POST");
 
-		// get film from HTTP body
-		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
 
+		// get film from HTTP body
+		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
+
 		// set film equal to film object converted based on
 		// relevant format
-		Film film;
-		switch (format) {
-			case "xml":
-				film = IFormatToPOJO.xmlToFilm(requestBodyFilm, true);
-				break;
-			case "csv":
-				film = IFormatToPOJO.csvToFilm(requestBodyFilm, true);
-				break;
-			default:
-				film = IFormatToPOJO.jsonToFilm(requestBodyFilm, true);
-		};
+		Film film = formatFilm(format, requestBodyFilm);
 
 		// send response containing number of rows affected by creating new film
 		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().createFilm(film));
+	}
+
+	private Film formatFilm(String format, String requestBodyFilm) {
+		switch (format) {
+			case "xml":
+				return new PojoFormatContext(new XmlToPOJO()).convertToPOJO(requestBodyFilm, true);
+			case "csv":
+				return new PojoFormatContext(new CsvToPOJO()).convertToPOJO(requestBodyFilm, true);
+			default:
+				return new PojoFormatContext(new JsonToPOJO()).convertToPOJO(requestBodyFilm, true);
+		}
 	}
 
 }

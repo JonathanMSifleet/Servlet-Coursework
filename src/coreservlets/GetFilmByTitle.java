@@ -24,7 +24,7 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IPolyPOJOT
 	/**
 	 * Get film by title functionality
 	 *
-	 * @param request the request
+	 * @param request  the request
 	 * @param response the response
 	 */
 	@Override
@@ -32,34 +32,35 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IPolyPOJOT
 
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "GET");
+		
+		// get format from url
+		String format = IRequestHelpers.getFormat(request);
 
 		// get film title from url
 		String title = request.getParameter("title");
 
 		// get films with title containing title from url
 		ArrayList<Film> films = FilmDAOSingleton.getFilmDAO().getFilmsByTitle(title);
-		// get format from url
-		String format = IRequestHelpers.getFormat(request);
 
-		Object payload;
+		Object formattedFilms = formatFilms(format, films, response);
 
+		// send response containing formatted list of films
+		IRequestHelpers.sendResponse(response, formattedFilms);
+	}
+
+	private Object formatFilms(String format, ArrayList<Film> films, HttpServletResponse response) {
 		// convert film array list to relevant data type
 		// and set appropriate header for HTTP response
 		switch (format) {
 			case "xml":
 				response.setContentType("text/xml");
-				payload = IPolyPOJOToFormat.filmsToXMLArray(films);
-				break;
+				return IPolyPOJOToFormat.filmsToXMLArray(films);
 			case "csv":
 				response.setContentType("text/csv");
-				payload = IPolyPOJOToFormat.filmsToCSVArray(films);
-				break;
+				return IPolyPOJOToFormat.filmsToCSVArray(films);
 			default:
 				response.setContentType("application/json");
-				payload = IPolyPOJOToFormat.filmsToJSONArray(films);
+				return IPolyPOJOToFormat.filmsToJSONArray(films);
 		}
-
-		// send response containing formatted list of films
-		IRequestHelpers.sendResponse(response, payload);
 	}
 }

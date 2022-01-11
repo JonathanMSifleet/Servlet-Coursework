@@ -1,4 +1,4 @@
-package formatStrategy;
+package pojoFormatStrategy;
 
 import com.google.gson.Gson;
 
@@ -6,7 +6,7 @@ import dao.FilmDAOSingleton;
 import models.Film;
 import models.Film.Builder;
 
-public class JsonToPOJO implements Strategy {
+public class JsonToPOJO implements PojoFormatStrategy {
 	/**
 	 * Convert JSON to Film POJO
 	 *

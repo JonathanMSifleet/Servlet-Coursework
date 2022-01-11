@@ -31,33 +31,35 @@ public class GetFilmByID extends HttpServlet implements interfaces.IRequestHelpe
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "GET");
 
+		// get format from URL
+		String format = IRequestHelpers.getFormat(request);
+
 		// get ID from URL
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		// get film by ID from data access object
 		Film film = FilmDAOSingleton.getFilmDAO().getFilmByID(id);
-		// get format from URL
-		String format = IRequestHelpers.getFormat(request);
 
-		Object payload;
+		Object formattedFilm = formatFilm(format, film, response);
+
+		// send response containing formatted film
+		IRequestHelpers.sendResponse(response, formattedFilm);
+	}
+
+	private Object formatFilm(String format, Film film, HttpServletResponse response) {
 		// format film based upon relevant format
 		switch (format) {
 			case "xml":
 				response.setContentType("text/xml");
 				XStream xstream = new XStream();
 				xstream.alias("film", Film.class);
-				payload = xstream.toXML(film);
-				break;
+				return xstream.toXML(film);
 			case "csv":
 				response.setContentType("text/csv");
-				payload = film.toString();
-				break;
+				return film.toString();
 			default:
 				response.setContentType("application/json");
-				payload = new Gson().toJson(film);
+				return new Gson().toJson(film);
 		}
-
-		// send response containing formatted film
-		IRequestHelpers.sendResponse(response, payload);
 	}
 }
