@@ -9,14 +9,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
-import interfaces.IPolyPOJOToFormat;
 import models.Film;
+import multiplePOJOFormatStrategy.FilmsToXMLArray;
+import multiplePOJOFormatStrategy.MultiplePOJOFormatContext;
 
 /**
  * Get film by title servlet
  */
 @WebServlet("/getFilmByTitle")
-public class GetFilmByTitle extends HttpServlet implements interfaces.IPolyPOJOToFormat, interfaces.IRequestHelpers {
+public class GetFilmByTitle extends HttpServlet implements interfaces.IRequestHelpers {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -1809220141023596490L;
@@ -54,13 +55,13 @@ public class GetFilmByTitle extends HttpServlet implements interfaces.IPolyPOJOT
 		switch (format) {
 			case "xml":
 				response.setContentType("text/xml");
-				return IPolyPOJOToFormat.filmsToXMLArray(films);
+				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
 			case "csv":
 				response.setContentType("text/csv");
-				return IPolyPOJOToFormat.filmsToCSVArray(films);
+				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
 			default:
 				response.setContentType("application/json");
-				return IPolyPOJOToFormat.filmsToJSONArray(films);
+				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
 		}
 	}
 }

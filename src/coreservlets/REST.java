@@ -12,8 +12,9 @@ import com.thoughtworks.xstream.XStream;
 
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
-import interfaces.IPolyPOJOToFormat;
 import models.Film;
+import multiplePOJOFormatStrategy.FilmsToXMLArray;
+import multiplePOJOFormatStrategy.MultiplePOJOFormatContext;
 import pojoFormatStrategy.PojoFormatContext;
 import pojoFormatStrategy.CsvToPOJO;
 import pojoFormatStrategy.JsonToPOJO;
@@ -24,7 +25,7 @@ import pojoFormatStrategy.XmlToPOJO;
  */
 @WebServlet("/REST")
 public class REST extends HttpServlet
-		implements interfaces.IPolyPOJOToFormat, interfaces.IRequestHelpers {
+		implements interfaces.IRequestHelpers {
 	private static final long serialVersionUID = -1942414154482873963L;
 
 	/**
@@ -219,23 +220,16 @@ public class REST extends HttpServlet
 	 * @return List of films in specified format
 	 */
 	private static Object formatMultipleFilms(ArrayList<Film> films, String format, HttpServletResponse response) {
-		Object payload;
-
 		switch (format) {
 			case "xml":
 				response.setContentType("text/xml");
-				payload = IPolyPOJOToFormat.filmsToXMLArray(films);
-				break;
+				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
 			case "csv":
 				response.setContentType("text/csv");
-				payload = IPolyPOJOToFormat.filmsToCSVArray(films);
-				break;
+				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
 			default:
 				response.setContentType("application/json");
-				payload = IPolyPOJOToFormat.filmsToJSONArray(films);
+				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
 		}
-
-		// return formatted films
-		return payload;
 	}
 }

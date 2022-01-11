@@ -3,9 +3,9 @@ package pojoFormatStrategy;
 import models.Film;
 
 public class PojoFormatContext {
-	private PojoFormatStrategy strategy;
+	private IPojoFormatStrategy strategy;
 
-	public PojoFormatContext(PojoFormatStrategy strategy) {
+	public PojoFormatContext(IPojoFormatStrategy strategy) {
 		this.strategy = strategy;
 	}
 

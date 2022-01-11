@@ -6,7 +6,7 @@ import dao.FilmDAOSingleton;
 import models.Film;
 import models.Film.Builder;
 
-public class XmlToPOJO implements PojoFormatStrategy {
+public class XmlToPOJO implements IPojoFormatStrategy {
 	/**
 	 * Converts XML to Film POJO
 	 *

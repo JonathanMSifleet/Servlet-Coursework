@@ -6,7 +6,7 @@ import dao.FilmDAOSingleton;
 import models.Film;
 import models.Film.Builder;
 
-public class JsonToPOJO implements PojoFormatStrategy {
+public class JsonToPOJO implements IPojoFormatStrategy {
 	/**
 	 * Convert JSON to Film POJO
 	 *
