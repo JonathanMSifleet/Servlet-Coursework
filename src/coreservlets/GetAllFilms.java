@@ -33,23 +33,25 @@ public class GetAllFilms extends HttpServlet implements interfaces.IRequestHelpe
 		ArrayList<Film> films = FilmDAOSingleton.getFilmDAO().getAllFilms();
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
-		Object payload;
+		Object formattedFilms = formatFilms(format, films, response);
+
+		// send response containing formatted list of all films
+		IRequestHelpers.sendResponse(response, formattedFilms);
+	}
+	
+	private Object formatFilms(String format, ArrayList<Film> films, HttpServletResponse response) {
 		// convert film array list to relevant data type
 		// and set appropriate header for HTTP response
 		switch (format) {
 			case "xml":
 				response.setContentType("text/xml");
-				payload = IPolyPOJOToFormat.filmsToXMLArray(films);
-				break;
+				return IPolyPOJOToFormat.filmsToXMLArray(films);
 			case "csv":
 				response.setContentType("text/csv");
-				payload = IPolyPOJOToFormat.filmsToCSVArray(films);
-				break;
+				return IPolyPOJOToFormat.filmsToCSVArray(films);
 			default:
 				response.setContentType("application/json");
-				payload = IPolyPOJOToFormat.filmsToJSONArray(films);
+				return IPolyPOJOToFormat.filmsToJSONArray(films);
 		}
-		// send response containing formatted list of all films
-		IRequestHelpers.sendResponse(response, payload);
 	}
 }
