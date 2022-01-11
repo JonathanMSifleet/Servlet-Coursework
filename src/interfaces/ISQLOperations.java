@@ -76,11 +76,10 @@ public interface ISQLOperations {
 	 * @return Prepared SQL statement
 	 */
 	static PreparedStatement generatePreparedStatement(PreparedStatement statement, ArrayList<Object> paramVals) {
-		if (paramVals == null) return null;
-
 		int paramIndex = 1;
 
 		// set statement's parameters equal to list of parameters
+		// else, returns statement (required for select statements without parameters)
 		if (paramVals != null) {
 			for (Object param : paramVals) {
 				try {
