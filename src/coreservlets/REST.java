@@ -13,12 +13,12 @@ import com.thoughtworks.xstream.XStream;
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
 import models.Film;
-import multiplePOJOFormatStrategy.FilmsToXMLArray;
-import multiplePOJOFormatStrategy.MultiplePOJOFormatContext;
-import pojoFormatStrategy.PojoFormatContext;
-import pojoFormatStrategy.CsvToPOJO;
-import pojoFormatStrategy.JsonToPOJO;
-import pojoFormatStrategy.XmlToPOJO;
+import strategies.CsvToPOJO;
+import strategies.FilmsToXMLArray;
+import strategies.JsonToPOJO;
+import strategies.XmlToPOJO;
+import strategyContexts.MultiplePOJOFormatContext;
+import strategyContexts.PojoFormatContext;
 
 /**
  * Servlet containing other servlet functionality

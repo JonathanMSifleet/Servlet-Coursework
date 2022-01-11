@@ -1,4 +1,4 @@
-package multiplePOJOFormatStrategy;
+package interfaces;
 
 import java.util.ArrayList;
 

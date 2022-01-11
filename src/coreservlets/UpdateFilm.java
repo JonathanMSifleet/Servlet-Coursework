@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
 import models.Film;
-import pojoFormatStrategy.PojoFormatContext;
-import pojoFormatStrategy.CsvToPOJO;
-import pojoFormatStrategy.JsonToPOJO;
-import pojoFormatStrategy.XmlToPOJO;
+import strategies.CsvToPOJO;
+import strategies.JsonToPOJO;
+import strategies.XmlToPOJO;
+import strategyContexts.PojoFormatContext;
 
 /**
  * Update Film Servlet

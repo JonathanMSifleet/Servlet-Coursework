@@ -1,8 +1,9 @@
-package pojoFormatStrategy;
+package strategies;
 
 import com.thoughtworks.xstream.XStream;
 
 import dao.FilmDAOSingleton;
+import interfaces.IPojoFormatStrategy;
 import models.Film;
 import models.Film.Builder;
 

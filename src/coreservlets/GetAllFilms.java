@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
 import models.Film;
-import multiplePOJOFormatStrategy.FilmsToCSVArray;
-import multiplePOJOFormatStrategy.FilmsToJSONArray;
-import multiplePOJOFormatStrategy.FilmsToXMLArray;
-import multiplePOJOFormatStrategy.MultiplePOJOFormatContext;
+import strategies.FilmsToCSVArray;
+import strategies.FilmsToJSONArray;
+import strategies.FilmsToXMLArray;
+import strategyContexts.MultiplePOJOFormatContext;
 
 /**
  * GetAllFilms servlet

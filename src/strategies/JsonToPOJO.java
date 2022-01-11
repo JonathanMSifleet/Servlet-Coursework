@@ -1,8 +1,9 @@
-package pojoFormatStrategy;
+package strategies;
 
 import com.google.gson.Gson;
 
 import dao.FilmDAOSingleton;
+import interfaces.IPojoFormatStrategy;
 import models.Film;
 import models.Film.Builder;
 

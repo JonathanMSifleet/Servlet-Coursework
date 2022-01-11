@@ -1,10 +1,11 @@
-package multiplePOJOFormatStrategy;
+package strategies;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
 
+import interfaces.IMultiplePOJOFormatStrategy;
 import models.Film;
 
 public class FilmsToXMLArray implements IMultiplePOJOFormatStrategy {

@@ -1,7 +1,8 @@
-package multiplePOJOFormatStrategy;
+package strategies;
 
 import java.util.ArrayList;
 
+import interfaces.IMultiplePOJOFormatStrategy;
 import models.Film;
 
 public class FilmsToCSVArray implements IMultiplePOJOFormatStrategy {

@@ -1,7 +1,8 @@
-package multiplePOJOFormatStrategy;
+package strategyContexts;
 
 import java.util.ArrayList;
 
+import interfaces.IMultiplePOJOFormatStrategy;
 import models.Film;
 
 public class MultiplePOJOFormatContext {

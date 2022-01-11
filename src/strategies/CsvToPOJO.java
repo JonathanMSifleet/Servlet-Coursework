@@ -1,6 +1,7 @@
-package pojoFormatStrategy;
+package strategies;
 
 import dao.FilmDAOSingleton;
+import interfaces.IPojoFormatStrategy;
 import models.Film;
 
 public class CsvToPOJO implements IPojoFormatStrategy {

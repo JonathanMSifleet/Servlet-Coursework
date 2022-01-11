@@ -1,5 +1,6 @@
-package pojoFormatStrategy;
+package strategyContexts;
 
+import interfaces.IPojoFormatStrategy;
 import models.Film;
 
 public class PojoFormatContext {

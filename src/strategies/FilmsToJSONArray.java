@@ -1,9 +1,10 @@
-package multiplePOJOFormatStrategy;
+package strategies;
 
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
+import interfaces.IMultiplePOJOFormatStrategy;
 import models.Film;
 
 public class FilmsToJSONArray implements IMultiplePOJOFormatStrategy {

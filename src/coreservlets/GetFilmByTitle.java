@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
 import models.Film;
-import multiplePOJOFormatStrategy.FilmsToXMLArray;
-import multiplePOJOFormatStrategy.MultiplePOJOFormatContext;
+import strategies.FilmsToXMLArray;
+import strategyContexts.MultiplePOJOFormatContext;
 
 /**
  * Get film by title servlet
