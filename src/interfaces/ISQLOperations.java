@@ -81,17 +81,19 @@ public interface ISQLOperations {
 		int paramIndex = 1;
 
 		// set statement's parameters equal to list of parameters
-		for (Object param : paramVals) {
-			try {
-				if (param instanceof String) {
-					statement.setString(paramIndex, (String) param);
-				} else if (param instanceof Integer) {
-					statement.setInt(paramIndex, (int) param);
+		if (paramVals != null) {
+			for (Object param : paramVals) {
+				try {
+					if (param instanceof String) {
+						statement.setString(paramIndex, (String) param);
+					} else if (param instanceof Integer) {
+						statement.setInt(paramIndex, (int) param);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+				paramIndex++;
 			}
-			paramIndex++;
 		}
 		return statement;
 	}
