@@ -1,31 +1,23 @@
 package coreservlets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-import com.thoughtworks.xstream.XStream;
-
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
+import interfaces.ISharedFormatMethods;
 import models.Film;
-import strategies.CsvToPOJO;
-import strategies.FilmsToXMLArray;
-import strategies.JsonToPOJO;
-import strategies.XmlToPOJO;
-import strategyContexts.MultiplePOJOFormatContext;
-import strategyContexts.PojoFormatContext;
 
 /**
  * Servlet containing other servlet functionality
  */
 @WebServlet("/REST")
-public class REST extends HttpServlet
-		implements interfaces.IRequestHelpers {
+public class REST extends HttpServlet implements interfaces.IRequestHelpers, ISharedFormatMethods {
 	private static final long serialVersionUID = -1942414154482873963L;
 
 	/**
@@ -41,27 +33,26 @@ public class REST extends HttpServlet
 
 		// get format from url
 		String format = IRequestHelpers.getFormat(request);
-		
-		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 
-		Object films = null;
+		FilmDAOSingleton filmDAO = FilmDAOSingleton.getFilmDAO();
 
 		// get get type from url
 		String getType = request.getParameter("getType");
 
-		// determine which type of get function to use
-		// based on get type from url
+		Object films;
+
+		// determine which type of get function to use based on get type from url
 		switch (getType) {
-			case "all":
-				films = getAllFilms(filmDAO, format, response);
-				break;
 			case "title":
 				String title = request.getParameter("title");
-				films = getFilmByTitle(filmDAO, format, title, response);
+				films = ISharedFormatMethods.filmPOJOsToFormat(filmDAO.getFilmsByTitle(title), format);
 				break;
 			case "id":
 				int id = Integer.parseInt(request.getParameter("id"));
 				films = getFilmByID(filmDAO, format, id, response);
+				break;
+			default:
+				films = ISharedFormatMethods.filmPOJOsToFormat(filmDAO.getAllFilms(), format);
 		}
 
 		// send response containing film(s)
@@ -85,9 +76,8 @@ public class REST extends HttpServlet
 		// get film from HTTP body
 		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 
-		// set film equal to film object converted based on
-		// relevant format
-		Film film = formatFilm(format, requestBodyFilm);
+		// set film equal to film object converted based on relevant format
+		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm);
 
 		// send response containing number of rows affected by creating
 		// new film
@@ -111,9 +101,8 @@ public class REST extends HttpServlet
 		// get film from HTTP body
 		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 
-		// set film equal to film object converted based on
-		// relevant format
-		Film film = formatFilm(format, requestBodyFilm);
+		// set film equal to film object converted based on relevant format
+		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm);
 
 		// print number of affected rows due to updating film
 		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().updateFilm(film));
@@ -137,34 +126,6 @@ public class REST extends HttpServlet
 	}
 
 	/**
-	 * Return formatted list of all films
-	 *
-	 * @param filmDAO  Film DAO object
-	 * @param format   Format for Films
-	 * @param response HTTP response
-	 * @return List of all Films in specified format
-	 */
-	private static Object getAllFilms(FilmDAOSingleton filmDAO, String format, HttpServletResponse response) {
-		return formatMultipleFilms(filmDAO.getAllFilms(), format, response);
-	}
-
-	/**
-	 * Return formatted list of films containing specified title.
-	 *
-	 * @param filmDAO  Film DAO object
-	 * @param format   Format for Films
-	 * @param title    Title of film to search for
-	 * @param response HTTP response
-	 * @return List of Films containing specified title in specified format
-	 */
-	private static Object getFilmByTitle(FilmDAOSingleton filmDAO, String format, String title,
-			HttpServletResponse response) {
-		// return formatted list of all films with a title
-		// containing the value of the title parameter
-		return formatMultipleFilms(filmDAO.getFilmsByTitle(title), format, response);
-	}
-
-	/**
 	 * Gets the film by ID.
 	 *
 	 * @param filmDAO  Film DAO object
@@ -177,59 +138,7 @@ public class REST extends HttpServlet
 		// get film by ID parameter
 		Film film = filmDAO.getFilmByID(id);
 
-		Object payload = null;
-
 		// format film by appropriate format
-		switch (format) {
-			case "xml":
-				response.setContentType("text/xml");
-				XStream xstream = new XStream();
-				xstream.alias("film", Film.class);
-				payload = xstream.toXML(film);
-				break;
-			case "csv":
-				response.setContentType("text/csv");
-				payload = film.toString();
-				break;
-			default:
-				response.setContentType("application/json");
-				payload = new Gson().toJson(film);
-		}
-
-		// return formatted film
-		return payload;
-	}
-
-	private Film formatFilm(String format, String requestBodyFilm) {
-		switch (format) {
-			case "xml":
-				return new PojoFormatContext(new XmlToPOJO()).convertToPOJO(requestBodyFilm, true);
-			case "csv":
-				return new PojoFormatContext(new CsvToPOJO()).convertToPOJO(requestBodyFilm, true);
-			default:
-				return new PojoFormatContext(new JsonToPOJO()).convertToPOJO(requestBodyFilm, true);
-		}
-	}
-
-	/**
-	 * Format films by appropriate format
-	 *
-	 * @param films    List of Film POJOs
-	 * @param format   Format for Films
-	 * @param response HTTP response
-	 * @return List of films in specified format
-	 */
-	private static Object formatMultipleFilms(ArrayList<Film> films, String format, HttpServletResponse response) {
-		switch (format) {
-			case "xml":
-				response.setContentType("text/xml");
-				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
-			case "csv":
-				response.setContentType("text/csv");
-				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
-			default:
-				response.setContentType("application/json");
-				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
-		}
+		return ISharedFormatMethods.filmPOJOsToFormat(new ArrayList<Film>(Arrays.asList(film)), format);
 	}
 }

@@ -201,7 +201,6 @@ public class Film {
 	/**
 	 * Film attributes to param list.
 	 *
-	 * @param film the film
 	 * @return the array list
 	 */
 	public ArrayList<Object> attributesToParamList() {

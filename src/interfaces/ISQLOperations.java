@@ -74,8 +74,10 @@ public interface ISQLOperations {
 	 * @param SQL       statement
 	 * @param paramVals contains parameters for SQL statement
 	 * @return Prepared SQL statement
+	 * @throws SQLException
 	 */
-	static PreparedStatement generatePreparedStatement(PreparedStatement statement, ArrayList<Object> paramVals) {
+	static PreparedStatement generatePreparedStatement(PreparedStatement statement, ArrayList<Object> paramVals)
+			throws SQLException {
 		if (paramVals == null) return statement;
 
 		int paramIndex = 1;
@@ -83,14 +85,10 @@ public interface ISQLOperations {
 		// set statement's parameters equal to list of parameters
 		// else, returns statement (required for select statements without parameters)
 		for (Object param : paramVals) {
-			try {
-				if (param instanceof String) {
-					statement.setString(paramIndex, (String) param);
-				} else if (param instanceof Integer) {
-					statement.setInt(paramIndex, (int) param);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			if (param instanceof String) {
+				statement.setString(paramIndex, (String) param);
+			} else if (param instanceof Integer) {
+				statement.setInt(paramIndex, (int) param);
 			}
 			paramIndex++;
 		}

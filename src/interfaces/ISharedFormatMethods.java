@@ -15,27 +15,6 @@ import strategyContexts.PojoFormatContext;
 public interface ISharedFormatMethods {
 
 	/**
-	 * Format film POJO to specified format, when POJO is retrieved via getFilmById method
-	 *
-	 * @param format Format to convert POJO to
-	 * @param film   Film POJO to be converted
-	 * @return Film POJO in specified format
-	 */
-	static Object filmByIDToFormat(String format, Film film) {
-		// format film based upon relevant format
-		switch (format) {
-			case "xml":
-				context = new PojoFormatContext(new XmlToPOJO());
-			case "csv":
-				context = new PojoFormatContext(new CsvToPOJO());
-			default:
-				context = new PojoFormatContext(new JsonToPOJO());
-		}
-
-		return context.convertToPOJO(requestBodyFilm, true);
-	}
-
-	/**
 	 * Format multiple film POJOs by appropriate format
 	 *
 	 * @param films    List of Film POJOs
@@ -52,6 +31,28 @@ public interface ISharedFormatMethods {
 			default:
 				return new MultiplePOJOFormatContext(new FilmsToJSONArray()).convertArrayToFormat(films);
 		}
+	}
+
+	/**
+	 * Format film based upon relevant format
+	 *
+	 * @param format          Format to convert film from
+	 * @param requestBodyFilm Film retrieved from request's body
+	 * @return Film POJO
+	 */
+	static Film formatToFilmPOJO(String format, String requestBodyFilm) {
+		PojoFormatContext context;
+
+		switch (format) {
+			case "xml":
+				context = new PojoFormatContext(new XmlToPOJO());
+			case "csv":
+				context = new PojoFormatContext(new CsvToPOJO());
+			default:
+				context = new PojoFormatContext(new JsonToPOJO());
+		}
+
+		return context.convertToPOJO(requestBodyFilm, true);
 	}
 
 }

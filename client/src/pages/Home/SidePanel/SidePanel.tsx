@@ -75,9 +75,6 @@ const SidePanel: React.FC<IProps> = ({
           [inputName]: event.target.value!
         });
         break;
-      case 'searchByTitleForm':
-        setSearchByTitleVal(event.target.value!);
-        break;
       case 'updateForm':
         setUpdateFormData({
           ...selectedFilm!,
@@ -190,11 +187,8 @@ const SidePanel: React.FC<IProps> = ({
       case endpoints.GET_FILM_BY_TITLE:
         return renderGetFilmsByTitleUI(
           (): void => {
-            formChangedHandler(
-              event as unknown as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-              'title',
-              'searchByTitleForm'
-            );
+            // @ts-expect-error value does exist on event.target
+            setSearchByTitleVal(event!.target!.value!);
           },
           (): void => setShouldGetFilmByTitle(true),
           searchByTitleVal
@@ -234,7 +228,6 @@ const SidePanel: React.FC<IProps> = ({
     }
   };
 
-  // only render if font has loaded
   return (
     <>
       {fontReady ? (

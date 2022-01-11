@@ -23,7 +23,6 @@ public interface IRequestHelpers {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**

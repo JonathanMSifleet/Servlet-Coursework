@@ -6,4 +6,5 @@
 .idea
 /target/
 client/.serverless
+client/build
 client/node_modules

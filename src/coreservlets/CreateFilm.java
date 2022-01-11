@@ -8,18 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAOSingleton;
 import interfaces.IRequestHelpers;
+import interfaces.ISharedFormatMethods;
 import models.Film;
-import strategies.CsvToPOJO;
-import strategies.JsonToPOJO;
-import strategies.XmlToPOJO;
-import strategyContexts.PojoFormatContext;
 
 /**
  * Create film functionality
  */
 @WebServlet("/createFilm")
 public class CreateFilm extends HttpServlet implements interfaces.IRequestHelpers {
-
 	private static final long serialVersionUID = -1809220141023596490L;
 
 	/**
@@ -30,7 +26,6 @@ public class CreateFilm extends HttpServlet implements interfaces.IRequestHelper
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "POST");
 
@@ -40,23 +35,11 @@ public class CreateFilm extends HttpServlet implements interfaces.IRequestHelper
 		// get film from HTTP body
 		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 
-		// set film equal to film object converted based on
-		// relevant format
-		Film film = formatFilm(format, requestBodyFilm);
+		// set film equal to film object converted based on relevant format
+		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm);
 
 		// send response containing number of rows affected by creating new film
 		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().createFilm(film));
-	}
-
-	private Film formatFilm(String format, String requestBodyFilm) {
-		switch (format) {
-			case "xml":
-				return new PojoFormatContext(new XmlToPOJO()).convertToPOJO(requestBodyFilm, true);
-			case "csv":
-				return new PojoFormatContext(new CsvToPOJO()).convertToPOJO(requestBodyFilm, true);
-			default:
-				return new PojoFormatContext(new JsonToPOJO()).convertToPOJO(requestBodyFilm, true);
-		}
 	}
 
 }

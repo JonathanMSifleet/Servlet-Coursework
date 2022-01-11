@@ -19,7 +19,6 @@ const createFilm = async (endpoint: string, format: string, formData: IFilm, use
         break;
       default:
         await jsonRequest(url, 'POST', formData);
-        break;
     }
   } catch (e) {
     console.error(e);

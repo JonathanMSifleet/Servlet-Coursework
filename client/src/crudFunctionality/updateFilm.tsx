@@ -20,7 +20,6 @@ const updateFilm = async (endpoint: string, format: string, updateFormData: IFil
         break;
       default:
         await jsonRequest(url, 'PUT', updateFormData);
-        break;
     }
   } catch (e) {
     console.error(e);

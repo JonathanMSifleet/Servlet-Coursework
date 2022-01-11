@@ -15,7 +15,6 @@
     "lib": ["dom", "dom.iterable", "es2020"],
     "module": "ES2020",
     "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "lib",

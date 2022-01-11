@@ -25,7 +25,7 @@ public class DeleteFilm extends HttpServlet implements interfaces.IRequestHelper
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 		// set relevant headers
 		response = IRequestHelpers.setHeaders(response, "DELETE");
-		
+
 		// get id from url
 		int id = Integer.parseInt(request.getParameter("id"));
 
