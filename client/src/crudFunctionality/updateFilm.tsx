@@ -6,12 +6,7 @@ import generateURL from '../utils/generateURL';
 import { csvRequest, jsonRequest, xmlRequest } from '../utils/requests';
 import classes from './scss/updateFilm.module.scss';
 
-const updateFilm = async (
-  endpoint: string,
-  format: string,
-  updateFormData: IFilm,
-  useREST: boolean
-): Promise<void> => {
+const updateFilm = async (endpoint: string, format: string, updateFormData: IFilm, useREST: boolean): Promise<void> => {
   const url = generateURL(endpoint, format, useREST);
 
   try {
@@ -21,11 +16,7 @@ const updateFilm = async (
         await xmlRequest(url, 'PUT', `<Film>${xmlFilm}</Film>`);
         break;
       case 'csv':
-        await csvRequest(
-          url,
-          'PUT',
-          new json2csv({ header: false, delimiter: ',,' }).parse(updateFormData!)
-        );
+        await csvRequest(url, 'PUT', new json2csv({ header: false, delimiter: ',,' }).parse(updateFormData!));
         break;
       default:
         await jsonRequest(url, 'PUT', updateFormData);
@@ -66,27 +57,19 @@ export const renderUpdateFilmUI = (
             {selectedLabel !== 'Review' ? (
               <input
                 className={classes.SelectInput}
-                placeholder={
-                  selectedAttributeVal ? String(selectedAttributeVal) : selectedFilm.title
-                }
+                placeholder={selectedAttributeVal ? String(selectedAttributeVal) : selectedFilm.title}
                 onChange={formChangedHandler}
                 type="text"
               />
             ) : (
               <textarea
                 className={`${classes.SelectInput} ${classes.ReviewInput}`}
-                placeholder={
-                  selectedAttributeVal ? String(selectedAttributeVal) : selectedFilm.title
-                }
+                placeholder={selectedAttributeVal ? String(selectedAttributeVal) : selectedFilm.title}
                 onChange={formChangedHandler}
               />
             )}
           </div>
-          <Button
-            className={classes.UpdateFilmButton}
-            onClick={onClickUpdate}
-            text={'Update Film'}
-          />
+          <Button className={classes.UpdateFilmButton} onClick={onClickUpdate} text={'Update Film'} />
         </>
       ) : null}
       {!selectedFilm && selectedFilmID ? (
@@ -100,8 +83,8 @@ export const renderUpdateFilmUI = (
       ) : null}
       {!selectedFilm && !selectedFilmID ? (
         <p>
-          In order to update a film, you must click a film&apos;s ID from the table, which can be
-          retrieved via getting all films, or getting a film by its title
+          In order to update a film, you must click a film&apos;s ID from the table, which can be retrieved via getting
+          all films, or getting a film by its title
         </p>
       ) : null}
     </>

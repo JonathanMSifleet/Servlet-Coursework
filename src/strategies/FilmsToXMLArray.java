@@ -18,10 +18,9 @@ public class FilmsToXMLArray implements IMultiplePOJOFormatStrategy {
 	@Override
 	public String convertArrayToFormat(ArrayList<Film> data) {
 		XStream xstream = new XStream();
-		// change xml tag name from class name to value of
-		// first function parameter
+		// change xml tag name from class name to value of first function parameter
 		xstream.alias("root", List.class);
-		xstream.alias("film", models.Film.class);
+		xstream.alias("film", Film.class);
 
 		// convert films to XML
 		String xmlString = xstream.toXML(data);

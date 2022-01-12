@@ -6,12 +6,7 @@ import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
 import { csvRequest, jsonRequest, xmlRequest } from '../utils/requests';
 
-const createFilm = async (
-  endpoint: string,
-  format: string,
-  formData: IFilm,
-  useREST: boolean
-): Promise<void> => {
+const createFilm = async (endpoint: string, format: string, formData: IFilm, useREST: boolean): Promise<void> => {
   const url = generateURL(endpoint, format, useREST);
 
   try {
@@ -20,11 +15,7 @@ const createFilm = async (
         await xmlRequest(url, 'POST', `<Film>${jsonToXML(formData)}</Film>`);
         break;
       case 'csv':
-        await csvRequest(
-          url,
-          'POST',
-          new jsonToCSV({ header: false, delimiter: ',,' }).parse(formData!)
-        );
+        await csvRequest(url, 'POST', new jsonToCSV({ header: false, delimiter: ',,' }).parse(formData!));
         break;
       default:
         await jsonRequest(url, 'POST', formData);
@@ -35,10 +26,7 @@ const createFilm = async (
   }
 };
 
-export const renderCreateFilmUI = (
-  formChangedHandler: () => void,
-  onClick: () => void
-): JSX.Element => {
+export const renderCreateFilmUI = (formChangedHandler: () => void, onClick: () => void): JSX.Element => {
   return (
     <>
       <h3>Film attributes:</h3>

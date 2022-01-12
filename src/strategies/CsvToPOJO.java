@@ -3,6 +3,7 @@ package strategies;
 import dao.FilmDAOSingleton;
 import interfaces.IPojoFormatStrategy;
 import models.Film;
+import models.Film.Builder;
 
 public class CsvToPOJO implements IPojoFormatStrategy {
 	/**
@@ -21,16 +22,16 @@ public class CsvToPOJO implements IPojoFormatStrategy {
 			attribute = attribute.replace("\"", "");
 		}
 
-		// same as above jsonToFilm method except using CSV rather than JSON
+		// create film object from csv values
+		Builder film = new Film.Builder(null);
 		if (newFilm) {
-			return new Film.Builder(null).id(FilmDAOSingleton.getFilmDAO().generateNewID()).title(filmAttributes[0])
+			film.id(FilmDAOSingleton.getFilmDAO().generateNewID()).title(filmAttributes[0])
 					.year(Integer.valueOf(filmAttributes[1])).director(filmAttributes[2]).stars(filmAttributes[3])
-					.review(filmAttributes[4]).build();
+					.review(filmAttributes[4]);
 		} else {
-			return new Film.Builder(null).id(Integer.valueOf(filmAttributes[0])).title(filmAttributes[1])
-					.year(Integer.valueOf(filmAttributes[2])).director(filmAttributes[3]).stars(filmAttributes[4])
-					.review(filmAttributes[5]).build();
+			film.id(Integer.valueOf(filmAttributes[0])).title(filmAttributes[1]).year(Integer.valueOf(filmAttributes[2]))
+					.director(filmAttributes[3]).stars(filmAttributes[4]).review(filmAttributes[5]);
 		}
-
+		return film.build();
 	}
 }

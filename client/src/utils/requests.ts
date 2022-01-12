@@ -1,10 +1,6 @@
 import IFilm from '../interfaces/IFilm';
 
-export const jsonRequest = async (
-  url: string,
-  method: string,
-  body?: IFilm | IFilm[]
-): Promise<IFilm[] | IFilm> => {
+export const jsonRequest = async (url: string, method: string, body?: IFilm | IFilm[]): Promise<IFilm[] | IFilm> => {
   const options = body ? { method, body: JSON.stringify(body) } : { method };
 
   const response = await fetch(url, options);
