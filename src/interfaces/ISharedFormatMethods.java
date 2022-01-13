@@ -23,14 +23,20 @@ public interface ISharedFormatMethods {
 	 * @return List of films in specified format
 	 */
 	static Object filmPOJOsToFormat(ArrayList<Film> films, String format) {
+		MultiplePOJOFormatContext context;
+
 		switch (format) {
 			case "xml":
-				return new MultiplePOJOFormatContext(new FilmsToXMLArray()).convertArrayToFormat(films);
+				context = new MultiplePOJOFormatContext(new FilmsToXMLArray());
+				break;
 			case "csv":
-				return new MultiplePOJOFormatContext(new FilmsToCSVArray()).convertArrayToFormat(films);
+				context = new MultiplePOJOFormatContext(new FilmsToCSVArray());
+				break;
 			default:
-				return new MultiplePOJOFormatContext(new FilmsToJSONArray()).convertArrayToFormat(films);
+				context = new MultiplePOJOFormatContext(new FilmsToJSONArray());
 		}
+		
+		return context.convertArrayToFormat(films);
 	}
 
 	/**
@@ -46,8 +52,10 @@ public interface ISharedFormatMethods {
 		switch (format) {
 			case "xml":
 				context = new PojoFormatContext(new XmlToPOJO());
+				break;
 			case "csv":
 				context = new PojoFormatContext(new CsvToPOJO());
+				break;
 			default:
 				context = new PojoFormatContext(new JsonToPOJO());
 		}
