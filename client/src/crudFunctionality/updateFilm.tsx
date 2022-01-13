@@ -69,7 +69,7 @@ export const renderUpdateFilmUI = (
               />
             )}
           </div>
-          <Button className={classes.UpdateFilmButton} onClick={onClickUpdate} text={'Update Film'} />
+          <Button onClick={onClickUpdate} text={'Update Film'} />
         </>
       ) : null}
       {!selectedFilm && selectedFilmID ? (

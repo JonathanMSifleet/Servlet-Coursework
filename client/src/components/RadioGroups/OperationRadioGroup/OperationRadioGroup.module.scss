@@ -7,8 +7,12 @@
   margin-right: 2%;
   padding: 2%;
   width: 96%;
-}
 
-.TopOperationRadio {
-  height: 22vh;
+  .TopOperationRadio {
+    height: 22vh;
+  }
+
+  .BottomOperationRadio {
+    height: auto;
+  }
 }

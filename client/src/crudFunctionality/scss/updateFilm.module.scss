@@ -3,28 +3,23 @@
   min-height: 1px;
   overflow: hidden;
   width: 100%;
-}
 
-.Select,
-.SelectInput {
-  height: 4vh;
-  padding: 1%;
-}
+  .Select, .SelectInput {
+    height: 4vh;
+    padding: 1%;
+  }
 
-.SelectInput {
-  width: auto;
-}
+  .SelectInput {
+    width: auto;
+  }
 
-.Select {
-  width: fit-content;
-}
+  .Select {
+    width: fit-content;
+  }
 
-.ReviewInput {
-  clear: left;
-  min-height: 20vh;
-  width: 98%;
-}
-
-.UpdateFilmButton {
-  margin-top: 6%;
+  .ReviewInput {
+    clear: left;
+    min-height: 20vh;
+    width: 98%;
+  }
 }

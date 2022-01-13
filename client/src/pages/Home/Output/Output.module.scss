@@ -6,16 +6,16 @@
   height: 100%;
   padding: 1% !important;
   padding-top: 0 !important;
-}
 
-.Header {
-  color: $mdbootstrapBlue;
-  margin: 0;
-}
+  .Header {
+    color: $mdbootstrapBlue;
+    margin: 0;
+  }
 
-.List {
-  padding: 0;
-  list-style-type: none;
+  .List {
+    padding: 0;
+    list-style-type: none;
+  }
 }
 
 .Card {
@@ -31,43 +31,43 @@
 
 .FilmTable {
   table-layout: fixed;
-}
 
-.IDCell,
-.TitleCell,
-.YearCell,
-.DirectorCell,
-.StarsCell {
-  padding: 1% !important;
-}
+  .IDCell,
+  .TitleCell,
+  .YearCell,
+  .DirectorCell,
+  .StarsCell {
+    padding: 1% !important;
+  }
 
-.IDCell,
-.YearCell {
-  width: 4vw;
-}
+  .IDCell,
+  .YearCell {
+    width: 4vw;
+  }
 
-.IDCell {
-  cursor: pointer;
-}
+  .IDCell {
+    cursor: pointer;
+  }
 
-.TitleCell {
-  width: 10vw;
-}
+  .TitleCell {
+    width: 10vw;
+  }
 
-.DirectorCell {
-  width: 7vw;
-}
+  .DirectorCell {
+    width: 7vw;
+  }
 
-.StarsCell {
-  width: 9vw;
-}
+  .StarsCell {
+    width: 9vw;
+  }
 
-.ReviewTextCell {
-  padding: 1% !important;
-}
+  .ReviewTextCell {
+    padding: 1% !important;
 
-.ReviewText {
-  max-height: 13.5vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+    .ReviewText {
+      max-height: 13.5vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
 }
