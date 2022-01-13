@@ -41,7 +41,7 @@ const SidePanel: React.FC<IProps> = ({
   const [shouldGetAllFilms, setShouldGetAllFilms] = useState(false);
   const [shouldGetFilmByID, setShouldGetFilmByID] = useState(false);
   const [shouldGetFilmByTitle, setShouldGetFilmByTitle] = useState(false);
-  const [shouldPostFilm, setShouldPostFilm] = useState(false);
+  const [shouldCreateFilm, setShouldCreateFilm] = useState(false);
   const [shouldUpdateFilm, setShouldUpdateFilm] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   const [updateFormData, setUpdateFormData] = useState(null as IFilm | null);
@@ -143,12 +143,12 @@ const SidePanel: React.FC<IProps> = ({
 
       await createFilm(endpoint, format, formData!, useREST);
 
-      setShouldPostFilm(false);
+      setShouldCreateFilm(false);
       setShowSpinner(false);
     };
 
-    if (shouldPostFilm) postFilm();
-  }, [shouldPostFilm]);
+    if (shouldCreateFilm) postFilm();
+  }, [shouldCreateFilm]);
 
   // update film
   useEffect(() => {
@@ -203,7 +203,7 @@ const SidePanel: React.FC<IProps> = ({
               'filmForm'
             );
           },
-          (): void => setShouldPostFilm(true)
+          (): void => setShouldCreateFilm(true)
         );
       case endpoints.UPDATE_FILM:
         return renderUpdateFilmUI(

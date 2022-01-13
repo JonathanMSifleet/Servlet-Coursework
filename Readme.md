@@ -26,11 +26,11 @@ $ gcloud app logs tail -s default
 
 To view your application in the web browser run: - "gcloud app browse --project=servletcoursework-336513"
 
-11. After accessing the backend URL, open the file from the 'project root/client/src/components/RadioGroups/OperationRadioGroup/OperationRadioGroup.tsx'
+11. After accessing the backend URL, open the file from the 'project root/client/src/constants/endpoints.ts'
 12. Replace the existing URL in the root constant to the value of the copied URL with no forward slashes appended to the end of the URL
-    - const root = 'https://industrial-pad-336114.nw.r.appspot.com';
+    - const ROOT = 'https://industrial-pad-336114.nw.r.appspot.com';
     - becomes:
-    - const root = 'https://servletcoursework-336513.nw.r.appspot.com';
+    - const ROOT = 'https://servletcoursework-336513.nw.r.appspot.com';
 
 ## Database
 
@@ -85,8 +85,6 @@ To view your application in the web browser run: - "gcloud app browse --project=
 19. Repeat step 9 from the Back-end setup section
 
 ## Front-end
-
-Pre-setup:
 
 1. Access the file with the path: "Servlet-Coursework/client/serverless.yml"
 2. Under the "custom" section, modify the property under ClientBucket, name

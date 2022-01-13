@@ -1,12 +1,10 @@
-import * as endpoints from '../constants/endpoints';
+import { REST, ROOT } from '../constants/endpoints';
 
 const generateURL = (endpoint: string, format: string, useREST: boolean): string => {
-  const url = 'https://servletcoursework-336513.nw.r.appspot.com';
-
   if (useREST) {
-    return `${url}/${endpoints.REST}?format=${format}`;
+    return `${ROOT}/${REST}?format=${format}`;
   } else {
-    return `${url}/${endpoint}?format=${format}`;
+    return `${ROOT}/${endpoint}?format=${format}`;
   }
 };
 

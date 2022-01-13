@@ -1,3 +1,5 @@
+export const ROOT = 'https://servletcoursework-336513.nw.r.appspot.com';
+
 export const DELETE_FILM = 'deleteFilm';
 export const GET_ALL_FILMS = 'getAllFilms';
 export const GET_FILM_BY_ID = 'getFilmByID';

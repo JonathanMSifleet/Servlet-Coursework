@@ -59,9 +59,9 @@ public class ConnectionPoolSingleton {
 		// establish connection timeout: 10 seconds
 		config.setConnectionTimeout(10 * 1000);
 		// time before connection can be reused: 5 seconds
-		config.setIdleTimeout(30 * 1000);
-		// max connection length: 2 minutes
-		config.setMaxLifetime(2 * 60 * 1000);
+		config.setIdleTimeout(5 * 1000);
+		// max connection length: 5 minutes
+		config.setMaxLifetime(5 * 60 * 1000);
 
 		return new HikariDataSource(config);
 	}
