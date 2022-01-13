@@ -2,7 +2,7 @@ import { XMLParser as xmlToJSON } from 'fast-xml-parser';
 import IFilm from '../interfaces/IFilm';
 import { monoCSVToJSON as csvToJSON } from '../utils/csvToJSON';
 import generateURL from '../utils/generateURL';
-import { jsonRequest, textRequest as csvRequest, textRequest as xmlRequest } from '../utils/requests';
+import { jsonRequest, textRequest } from '../utils/requests';
 
 const getFilmByID = async (
   endpoint: string,
@@ -17,9 +17,10 @@ const getFilmByID = async (
   try {
     switch (format) {
       case 'xml':
-        return new xmlToJSON().parse(await xmlRequest(url, 'GET')).root.film;
+        const film = await textRequest(url, 'GET');
+        return new xmlToJSON().parse(film).root.film;
       case 'csv':
-        return csvToJSON(await csvRequest(url, 'GET'));
+        return csvToJSON(await textRequest(url, 'GET'));
       default:
         return (await jsonRequest(url, 'GET')) as IFilm;
     }

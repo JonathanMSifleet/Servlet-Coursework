@@ -4,7 +4,7 @@ import Button from '../components/Button/Button';
 import Input from '../components/Input/Input';
 import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
-import { jsonRequest, textRequest as csvRequest, textRequest as xmlRequest } from '../utils/requests';
+import { jsonRequest, textRequest } from '../utils/requests';
 
 const createFilm = async (endpoint: string, format: string, formData: IFilm, useREST: boolean): Promise<void> => {
   const url = generateURL(endpoint, format, useREST);
@@ -12,10 +12,12 @@ const createFilm = async (endpoint: string, format: string, formData: IFilm, use
   try {
     switch (format) {
       case 'xml':
-        await xmlRequest(url, 'POST', `<Film>${jsonToXML(formData)}</Film>`);
+        const xmlFilm = `<Film>${jsonToXML(formData)}</Film>`;
+        await textRequest(url, 'POST', xmlFilm);
         break;
       case 'csv':
-        await csvRequest(url, 'POST', new jsonToCSV({ header: false, delimiter: ',,' }).parse(formData!));
+        const csvFilm = new jsonToCSV({ header: false, delimiter: ',,' }).parse(formData!);
+        await textRequest(url, 'POST', csvFilm);
         break;
       default:
         await jsonRequest(url, 'POST', formData);

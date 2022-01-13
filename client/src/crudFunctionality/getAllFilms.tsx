@@ -1,7 +1,7 @@
 import Button from '../components/Button/Button';
 import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
-import { jsonRequest, textRequest as csvRequest, textRequest as xmlRequest } from '../utils/requests';
+import { jsonRequest, textRequest } from '../utils/requests';
 
 const getAllFilms = async (endpoint: string, format: string, useREST: boolean): Promise<string | IFilm[] | null> => {
   let url = generateURL(endpoint, format, useREST);
@@ -10,9 +10,9 @@ const getAllFilms = async (endpoint: string, format: string, useREST: boolean): 
   try {
     switch (format) {
       case 'xml':
-        return await xmlRequest(url, 'GET');
+        return await textRequest(url, 'GET');
       case 'csv':
-        return await csvRequest(url, 'GET');
+        return await textRequest(url, 'GET');
       default:
         return (await jsonRequest(url, 'GET')) as IFilm[];
     }

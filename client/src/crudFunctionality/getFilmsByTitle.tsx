@@ -2,7 +2,7 @@ import Button from '../components/Button/Button';
 import Input from '../components/Input/Input';
 import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
-import { jsonRequest, textRequest as csvRequest, textRequest as xmlRequest } from '../utils/requests';
+import { jsonRequest, textRequest } from '../utils/requests';
 
 const getFilmsByTitle = async (
   endpoint: string,
@@ -19,9 +19,9 @@ const getFilmsByTitle = async (
   try {
     switch (format) {
       case 'xml':
-        return await xmlRequest(url, 'GET');
+        return await textRequest(url, 'GET');
       case 'csv':
-        return await csvRequest(url, 'GET');
+        return await textRequest(url, 'GET');
       default:
         return (await jsonRequest(url, 'GET')) as IFilm[];
     }

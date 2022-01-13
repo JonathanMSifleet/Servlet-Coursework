@@ -3,7 +3,7 @@ import jsonToXML from 'jsontoxml';
 import Button from '../components/Button/Button';
 import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
-import { jsonRequest, textRequest as csvRequest, textRequest as xmlRequest } from '../utils/requests';
+import { jsonRequest, textRequest } from '../utils/requests';
 import classes from './scss/updateFilm.module.scss';
 
 const updateFilm = async (endpoint: string, format: string, updateFormData: IFilm, useREST: boolean): Promise<void> => {
@@ -13,10 +13,11 @@ const updateFilm = async (endpoint: string, format: string, updateFormData: IFil
     switch (format) {
       case 'xml':
         const xmlFilm = jsonToXML(updateFormData);
-        await xmlRequest(url, 'PUT', `<Film>${xmlFilm}</Film>`);
+        await textRequest(url, 'PUT', `<Film>${xmlFilm}</Film>`);
         break;
       case 'csv':
-        await csvRequest(url, 'PUT', new jsonToCSV({ header: false, delimiter: ',,' }).parse(updateFormData!));
+        const csvFilm = new jsonToCSV({ header: false, delimiter: ',,' }).parse(updateFormData!);
+        await textRequest(url, 'PUT', csvFilm);
         break;
       default:
         await jsonRequest(url, 'PUT', updateFormData);
