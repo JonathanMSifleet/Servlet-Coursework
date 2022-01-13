@@ -76,10 +76,7 @@ const SidePanel: React.FC<IProps> = ({
         });
         break;
       case 'updateForm':
-        setUpdateFormData({
-          ...selectedFilm!,
-          [inputName]: event.target.value!
-        });
+        setUpdateFormData({ ...selectedFilm!, [inputName]: event.target.value! });
         break;
     }
   };
@@ -127,6 +124,7 @@ const SidePanel: React.FC<IProps> = ({
   useEffect(() => {
     const getFilm = async (): Promise<void> => {
       setShowSpinner(true);
+
       setSelectedFilm(await getFilmByID(endpoints.GET_FILM_BY_ID, format, selectedFilmID!, useREST));
 
       setShowSpinner(false);

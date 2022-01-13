@@ -199,9 +199,7 @@ public class FilmDAOSingleton {
 
 			while (result.next()) {
 				// set ID to value of largest ID + 1
-				id = result.getInt(1) + 1;
-				statement.close();
-				continue;
+				return result.getInt(1) + 1;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
