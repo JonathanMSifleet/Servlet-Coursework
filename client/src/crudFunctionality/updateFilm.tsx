@@ -1,5 +1,5 @@
-import { Parser as json2csv } from 'json2csv';
-import jsontoxml from 'jsontoxml';
+import { Parser as jsonToCSV } from 'json2csv';
+import jsonToXML from 'jsontoxml';
 import Button from '../components/Button/Button';
 import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
@@ -12,11 +12,11 @@ const updateFilm = async (endpoint: string, format: string, updateFormData: IFil
   try {
     switch (format) {
       case 'xml':
-        const xmlFilm = jsontoxml(updateFormData);
+        const xmlFilm = jsonToXML(updateFormData);
         await xmlRequest(url, 'PUT', `<Film>${xmlFilm}</Film>`);
         break;
       case 'csv':
-        await csvRequest(url, 'PUT', new json2csv({ header: false, delimiter: ',,' }).parse(updateFormData!));
+        await csvRequest(url, 'PUT', new jsonToCSV({ header: false, delimiter: ',,' }).parse(updateFormData!));
         break;
       default:
         await jsonRequest(url, 'PUT', updateFormData);

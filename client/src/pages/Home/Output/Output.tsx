@@ -1,7 +1,7 @@
+import { XMLParser as xmlToJSON } from 'fast-xml-parser';
 import { MDBCol, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import IFilm from '../../../interfaces/IFilm';
-import { monoCSVFilmToJSON as csvToJSON } from '../../../utils/csvToJSON';
-import { polyXMLFilmToJSON as xmlToJSON } from '../../../utils/xmlToJSON';
+import { polyCSVToJSON as csvToJSON } from '../../../utils/csvToJSON';
 import classes from './Output.module.scss';
 
 interface IProps {
@@ -12,25 +12,14 @@ interface IProps {
 }
 
 const Output: React.FC<IProps> = ({ films, format, formatChanged, setSelectedFilmID }) => {
-  const polyCSVToJSON = (csv: string): IFilm[] => {
-    const lines = csv.split('\n');
-    const json: IFilm[] = [];
-
-    lines.forEach((csvFilm) => {
-      json.push(csvToJSON(csvFilm));
-    });
-
-    return json;
-  };
-
   const handleFormat = (): JSX.Element | null => {
     if (formatChanged) return null;
 
     switch (format) {
       case 'xml':
-        return printFilms(xmlToJSON(films as string));
+        return printFilms(new xmlToJSON().parse(films as string).root.film);
       case 'csv':
-        return printFilms(polyCSVToJSON(films as string));
+        return printFilms(csvToJSON(films as string));
       default:
         return printFilms(films as IFilm[]);
     }

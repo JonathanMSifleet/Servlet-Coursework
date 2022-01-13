@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fontsource/roboto": "^4.5.1",
+    "fast-xml-parser": "^4.0.1",
     "json2csv": "^5.0.6",
     "jsontoxml": "^1.0.1",
     "mdb-react-ui-kit": "^2.0.0",
