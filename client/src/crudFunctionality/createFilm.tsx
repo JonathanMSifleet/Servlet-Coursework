@@ -16,7 +16,7 @@ const createFilm = async (endpoint: string, format: string, formData: IFilm, use
         await textRequest(url, 'POST', xmlFilm);
         break;
       case 'csv':
-        const csvFilm = new jsonToCSV({ header: false, delimiter: ',,' }).parse(formData!);
+        const csvFilm = new jsonToCSV({ header: false, delimiter: ',,', quote: '' }).parse(formData!);
         await textRequest(url, 'POST', csvFilm);
         break;
       default:
