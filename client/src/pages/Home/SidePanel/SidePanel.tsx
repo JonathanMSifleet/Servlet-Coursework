@@ -171,7 +171,7 @@ const SidePanel: React.FC<IProps> = ({
     const deleteFilmByID = async (): Promise<void> => {
       setShowSpinner(true);
 
-      await deleteFilm(endpoint, format, useREST);
+      await deleteFilm(endpoint, format, selectedFilmID, useREST);
 
       setShowSpinner(false);
       setShouldDeleteFilm(false);

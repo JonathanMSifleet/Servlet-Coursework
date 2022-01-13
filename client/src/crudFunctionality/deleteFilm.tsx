@@ -2,8 +2,14 @@ import Button from '../components/Button/Button';
 import generateURL from '../utils/generateURL';
 import { jsonRequest } from '../utils/requests';
 
-const deleteFilm = async (endpoint: string, format: string, useREST: boolean): Promise<void> => {
-  const url = generateURL(endpoint, format, useREST);
+const deleteFilm = async (
+  endpoint: string,
+  format: string,
+  selectedFilmID: number,
+  useREST: boolean
+): Promise<void> => {
+  let url = generateURL(endpoint, format, useREST);
+  url = `${url}&id=${selectedFilmID}`;
 
   try {
     await jsonRequest(url, 'DELETE');
