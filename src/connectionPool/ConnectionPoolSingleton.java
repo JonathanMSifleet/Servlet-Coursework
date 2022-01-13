@@ -57,9 +57,9 @@ public class ConnectionPoolSingleton {
 		config.setMinimumIdle(1);
 
 		// establish connection timeout: 10 seconds
-		config.setConnectionTimeout(10 * 1000);
+		config.setConnectionTimeout(15 * 1000);
 		// time before connection can be reused: 5 seconds
-		config.setIdleTimeout(5 * 1000);
+		config.setIdleTimeout(30 * 1000);
 		// max connection length: 5 minutes
 		config.setMaxLifetime(5 * 60 * 1000);
 

@@ -17,7 +17,8 @@ const Output: React.FC<IProps> = ({ films, format, formatChanged, setSelectedFil
 
     switch (format) {
       case 'xml':
-        return printFilms(new xmlToJSON().parse(films as string).root.film);
+        const xmlFilms = new xmlToJSON().parse(films as string).root.film;
+        return printFilms(xmlFilms);
       case 'csv':
         return printFilms(csvToJSON(films as string));
       default:

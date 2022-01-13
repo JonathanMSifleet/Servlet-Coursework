@@ -44,7 +44,7 @@ To view your application in the web browser run: - "gcloud app browse --project=
    - Database version: "MySQL 5.7"
    - Region: "euroupe-west2"
    - Zonal availibility: "Single Zone"
-   - Machine type: "Standard", "1 vCPU, 1.7 GB"
+   - Machine type: "Standard", "1 vCPU, 3.75 GB"
    - Storage type: "SSD"
    - Storage capacity: "10 GB"
    - Connections: "Public IP"
@@ -114,3 +114,7 @@ To view your application in the web browser run: - "gcloud app browse --project=
 17. Ensure that your terminal is still inside the client folder
 18. Enter "npm deploy"
 19. Front-end can now be accessed via the URL from step 9
+
+# Troubleshooting
+
+- If Eclipse throws an error that there are errors in the project when attempting to deploy to App Engine, right click the project in project explorer -> Maven -> Update Project -> OK. If this does not work Clean the project in Eclipse and try again.

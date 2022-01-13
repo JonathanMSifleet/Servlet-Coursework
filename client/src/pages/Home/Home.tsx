@@ -26,7 +26,7 @@ const Home: React.FC = () => {
           films={films as IFilm[] | string | null}
           format={format}
           formatChanged={formatChanged}
-          setSelectedFilmID={(selectedFilmID: number | null): void => setSelectedFilmID(selectedFilmID)}
+          setSelectedFilmID={(selectedFilmID: number): void => setSelectedFilmID(selectedFilmID)}
         />
       </MDBRow>
     </MDBContainer>
