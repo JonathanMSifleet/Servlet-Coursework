@@ -3,7 +3,7 @@ import jsonToXML from 'jsontoxml';
 import Button from '../components/Button/Button';
 import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
-import { csvRequest, jsonRequest, xmlRequest } from '../utils/requests';
+import { jsonRequest, textRequest as csvRequest, textRequest as xmlRequest } from '../utils/requests';
 import classes from './scss/updateFilm.module.scss';
 
 const updateFilm = async (endpoint: string, format: string, updateFormData: IFilm, useREST: boolean): Promise<void> => {

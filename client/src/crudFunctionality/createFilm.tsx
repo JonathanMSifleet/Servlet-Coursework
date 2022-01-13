@@ -4,7 +4,7 @@ import Button from '../components/Button/Button';
 import Input from '../components/Input/Input';
 import IFilm from '../interfaces/IFilm';
 import generateURL from '../utils/generateURL';
-import { csvRequest, jsonRequest, xmlRequest } from '../utils/requests';
+import { jsonRequest, textRequest as csvRequest, textRequest as xmlRequest } from '../utils/requests';
 
 const createFilm = async (endpoint: string, format: string, formData: IFilm, useREST: boolean): Promise<void> => {
   const url = generateURL(endpoint, format, useREST);
