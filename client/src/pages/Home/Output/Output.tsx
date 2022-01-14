@@ -27,6 +27,14 @@ const Output: React.FC<IProps> = ({ films, format, formatChanged, setSelectedFil
   };
 
   const printFilms = (preparedFilms: IFilm[]): JSX.Element => {
+    // fix handling of singular film:
+    try {
+      if (preparedFilms.length === undefined) {
+        // @ts-expect-error
+        preparedFilms = [preparedFilms];
+      }
+    } catch (e) {}
+
     return (
       <MDBTable className={classes.FilmTable} striped>
         <MDBTableHead>
