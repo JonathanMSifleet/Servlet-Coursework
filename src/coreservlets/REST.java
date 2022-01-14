@@ -77,7 +77,7 @@ public class REST extends HttpServlet implements interfaces.IRequestHelpers, ISh
 		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 
 		// set film equal to film object converted based on relevant format
-		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm);
+		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm, true);
 
 		// send response containing number of rows affected by creating
 		// new film
@@ -102,7 +102,7 @@ public class REST extends HttpServlet implements interfaces.IRequestHelpers, ISh
 		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 
 		// set film equal to film object converted based on relevant format
-		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm);
+		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm, false);
 
 		// print number of affected rows due to updating film
 		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().updateFilm(film));

@@ -46,7 +46,7 @@ public interface ISharedFormatMethods {
 	 * @param requestBodyFilm Film retrieved from request's body
 	 * @return Film POJO
 	 */
-	static Film formatToFilmPOJO(String format, String requestBodyFilm) {
+	static Film formatToFilmPOJO(String format, String requestBodyFilm, boolean newFilm) {
 		PojoFormatContext context;
 
 		switch (format) {
@@ -60,7 +60,7 @@ public interface ISharedFormatMethods {
 				context = new PojoFormatContext(new JsonToPOJO());
 		}
 
-		return context.convertToPOJO(requestBodyFilm, true);
+		return context.convertToPOJO(requestBodyFilm, newFilm);
 	}
 
 }

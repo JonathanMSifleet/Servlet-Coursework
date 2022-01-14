@@ -36,7 +36,7 @@ public class CreateFilm extends HttpServlet implements interfaces.IRequestHelper
 		String requestBodyFilm = IRequestHelpers.getRequestBody(request);
 
 		// set film equal to film object converted based on relevant format
-		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm);
+		Film film = ISharedFormatMethods.formatToFilmPOJO(format, requestBodyFilm, true);
 
 		// send response containing number of rows affected by creating new film
 		IRequestHelpers.sendResponse(response, FilmDAOSingleton.getFilmDAO().createFilm(film));

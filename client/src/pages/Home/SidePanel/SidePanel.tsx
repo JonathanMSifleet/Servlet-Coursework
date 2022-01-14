@@ -76,7 +76,7 @@ const SidePanel: React.FC<IProps> = ({
         });
         break;
       case 'updateForm':
-        setUpdateFormData({ ...selectedFilm, [inputName]: event.target.value! } as IFilm );
+        setUpdateFormData({ ...selectedFilm, [inputName]: event.target.value! } as IFilm);
         break;
     }
   };
