@@ -17,12 +17,13 @@ const getFilmByID = async (
   try {
     switch (format) {
       case 'xml':
-        const film = await textRequest(url, 'GET');
-        return new xmlToJSON().parse(film).root.film;
+        const xmlFilm = await textRequest(url, 'GET');
+        return new xmlToJSON().parse(xmlFilm).root.film;
       case 'csv':
         return csvToJSON(await textRequest(url, 'GET'));
       default:
-        return (await jsonRequest(url, 'GET')) as IFilm;
+        // @ts-expect-error film is nested
+        return (await jsonRequest(url, 'GET'))[0] as IFilm;
     }
   } catch (e) {
     console.error(e);
