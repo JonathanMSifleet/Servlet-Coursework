@@ -1,7 +1,10 @@
+# Context
+University coursework. Grade: 98%
+
 # Miscellaneous
 
-- Frontend: https://d2icepsfo58cxr.cloudfront.net/
-- Backend: https://servletcoursework-336513.nw.r.appspot.com/
+- Frontend: No longer available
+- Backend: No longer available
 
 # Setup
 
